@@ -15,12 +15,12 @@ import { fileURLToPath } from 'node:url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDlvW1FFJg0aTYOPUcIrlYxU6L7B6kdwwU",
-  authDomain: "slidev-demo-course.firebaseapp.com",
-  projectId: "slidev-demo-course",
-  storageBucket: "slidev-demo-course.firebasestorage.app",
-  messagingSenderId: "339581398931",
-  appId: "1:339581398931:web:3b3a1b76a2d9e46e398266"
+  apiKey: "AIzaSyC3rqcUG2HEMeTWQ4iC0aq_gc9tJFfEAuA",
+  authDomain: "faceprep-algorithms-course.firebaseapp.com",
+  projectId: "faceprep-algorithms-course",
+  storageBucket: "faceprep-algorithms-course.firebasestorage.app",
+  messagingSenderId: "290906504548",
+  appId: "1:290906504548:web:3b8511d8a3c41e931a4e71"
 };
 
 const app = getApps().find(a => a.name === 'slidev-pro') ?? initializeApp(firebaseConfig, 'slidev-pro')

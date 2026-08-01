@@ -22,12 +22,12 @@ const hasTemplateSystem = fs.existsSync(templatesDir)
 if (!fs.existsSync(resolvedDeck)) {
   console.error(`Error: Slide deck not found: ${resolvedDeck}`)
   console.error(`Available sessions:`)
-  
+
   try {
     const srcDir = path.join(root, 'src')
     const files = fs.readdirSync(srcDir)
     const sessionFiles = files.filter(f => f.match(/^\d{2}-.+\.md$/))
-    
+
     if (sessionFiles.length > 0) {
       sessionFiles.forEach(file => {
         const sessionNum = file.match(/^(\d{2})-/)[1]
@@ -45,7 +45,7 @@ if (!fs.existsSync(resolvedDeck)) {
   } catch (error) {
     console.error('   Could not list available sessions')
   }
-  
+
   process.exit(1)
 }
 
@@ -60,7 +60,7 @@ if (action === 'dev') {
   if (!extraArgs.includes('--no-open') && !extraArgs.includes('--open')) {
     baseArgs.push('--open')
   }
-  
+
   // Add --host flag for network access if requested
   if (extraArgs.includes('--host') && !extraArgs.some(arg => arg.startsWith('--host='))) {
     const hostIndex = baseArgs.indexOf('--host')
@@ -68,7 +68,7 @@ if (action === 'dev') {
       baseArgs[hostIndex] = '--host=0.0.0.0'
     }
   }
-  
+
   // Add --port flag if specified
   const portArg = extraArgs.find(arg => arg.startsWith('--port='))
   if (portArg) {
@@ -108,7 +108,7 @@ const child = spawn(slidevBin, [slidevMjs, ...baseArgs], {
 child.on('exit', (code) => {
   if (code !== 0) {
     console.error(`\nSlide ${action} failed with exit code ${code}`)
-    
+
     if (action === 'dev') {
       console.error('Try the following troubleshooting steps:')
       console.error('1. Check that the slide file syntax is valid')
@@ -122,6 +122,6 @@ child.on('exit', (code) => {
       }
     }
   }
-  
+
   process.exit(code ?? 0)
 })
