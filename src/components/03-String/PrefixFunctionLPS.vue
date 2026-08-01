@@ -10,15 +10,22 @@ const CODES = {
   java: [
     ['', 'class PrefixFunctionLPS {'],
     ['c_entry', '    int[] computeLPSArray(String pattern) {'],
-    ['c_init', '        int m = pattern.length(); int[] lps = new int[m]; int len = 0; lps[0] = 0; int i = 1;'],
+    ['c_init', '        int m = pattern.length();'],
+    ['c_init', '        int[] lps = new int[m];'],
+    ['c_init', '        int len = 0;'],
+    ['c_init', '        lps[0] = 0;'],
+    ['c_init', '        int i = 1;'],
     ['c_while', '        while (i < m) {'],
     ['c_match_check', '            if (pattern.charAt(i) == pattern.charAt(len)) {'],
-    ['c_match_body', '                len++; lps[i] = len; i++;'],
+    ['c_match_body', '                len++;'],
+    ['c_match_body', '                lps[i] = len;'],
+    ['c_match_body', '                i++;'],
     ['c_mismatch_else', '            } else {'],
     ['c_fallback_check', '                if (len != 0) {'],
     ['c_fallback_body', '                    len = lps[len - 1];'],
     ['', '                } else {'],
-    ['c_zero_lps', '                    lps[i] = 0; i++;'],
+    ['c_zero_lps', '                    lps[i] = 0;'],
+    ['c_zero_lps', '                    i++;'],
     ['', '                }'],
     ['', '            }'],
     ['', '        }'],
@@ -28,33 +35,45 @@ const CODES = {
   ],
   c: [
     ['c_entry', 'void computeLPSArray(const char* pattern, int m, int* lps) {'],
-    ['c_init', '    int len = 0; lps[0] = 0; int i = 1;'],
+    ['c_init', '    int len = 0;'],
+    ['c_init', '    lps[0] = 0;'],
+    ['c_init', '    int i = 1;'],
     ['c_while', '    while (i < m) {'],
     ['c_match_check', '        if (pattern[i] == pattern[len]) {'],
-    ['c_match_body', '            len++; lps[i] = len; i++;'],
-    ['', '        } else {'],
+    ['c_match_body', '            len++;'],
+    ['c_match_body', '            lps[i] = len;'],
+    ['c_match_body', '            i++;'],
+    ['c_mismatch_else', '        } else {'],
     ['c_fallback_check', '            if (len != 0) {'],
     ['c_fallback_body', '                len = lps[len - 1];'],
     ['', '            } else {'],
-    ['c_zero_lps', '                lps[i] = 0; i++;'],
+    ['c_zero_lps', '                lps[i] = 0;'],
+    ['c_zero_lps', '                i++;'],
     ['', '            }'],
     ['', '        }'],
     ['', '    }'],
+    ['c_return', '    return;'],
     ['c_done', '}']
   ],
   cpp: [
     ['', 'class PrefixFunctionLPS {'],
     ['', 'public:'],
     ['c_entry', '    vector<int> computeLPSArray(string pattern) {'],
-    ['c_init', '        int m = pattern.length(); vector<int> lps(m, 0); int len = 0; int i = 1;'],
+    ['c_init', '        int m = pattern.length();'],
+    ['c_init', '        vector<int> lps(m, 0);'],
+    ['c_init', '        int len = 0;'],
+    ['c_init', '        int i = 1;'],
     ['c_while', '        while (i < m) {'],
     ['c_match_check', '            if (pattern[i] == pattern[len]) {'],
-    ['c_match_body', '                len++; lps[i] = len; i++;'],
-    ['', '            } else {'],
+    ['c_match_body', '                len++;'],
+    ['c_match_body', '                lps[i] = len;'],
+    ['c_match_body', '                i++;'],
+    ['c_mismatch_else', '            } else {'],
     ['c_fallback_check', '                if (len != 0) {'],
     ['c_fallback_body', '                    len = lps[len - 1];'],
     ['', '                } else {'],
-    ['c_zero_lps', '                    lps[i] = 0; i++;'],
+    ['c_zero_lps', '                    lps[i] = 0;'],
+    ['c_zero_lps', '                    i++;'],
     ['', '                }'],
     ['', '            }'],
     ['', '        }'],
@@ -64,31 +83,43 @@ const CODES = {
   ],
   python: [
     ['', 'class PrefixFunctionLPS:'],
-    ['c_entry', '    def compute_lps_array(self, pattern):'],
-    ['c_init', '        m = len(pattern); lps = [0] * m; length = 0; i = 1'],
+    ['c_entry', '    def compute_lps_array(self, pattern: str):'],
+    ['c_init', '        m = len(pattern)'],
+    ['c_init', '        lps = [0] * m'],
+    ['c_init', '        length = 0'],
+    ['c_init', '        i = 1'],
     ['c_while', '        while i < m:'],
     ['c_match_check', '            if pattern[i] == pattern[length]:'],
-    ['c_match_body', '                length += 1; lps[i] = length; i += 1'],
-    ['', '            else:'],
+    ['c_match_body', '                length += 1'],
+    ['c_match_body', '                lps[i] = length'],
+    ['c_match_body', '                i += 1'],
+    ['c_mismatch_else', '            else:'],
     ['c_fallback_check', '                if length != 0:'],
     ['c_fallback_body', '                    length = lps[length - 1]'],
     ['', '                else:'],
-    ['c_zero_lps', '                    lps[i] = 0; i += 1'],
+    ['c_zero_lps', '                    lps[i] = 0'],
+    ['c_zero_lps', '                    i += 1'],
     ['c_return', '        return lps'],
     ['c_done', '']
   ],
   javascript: [
     ['', 'class PrefixFunctionLPS {'],
     ['c_entry', '  computeLPSArray(pattern) {'],
-    ['c_init', '    const m = pattern.length; const lps = new Array(m).fill(0); let len = 0, i = 1;'],
+    ['c_init', '    const m = pattern.length;'],
+    ['c_init', '    const lps = new Array(m).fill(0);'],
+    ['c_init', '    let len = 0;'],
+    ['c_init', '    let i = 1;'],
     ['c_while', '    while (i < m) {'],
     ['c_match_check', '      if (pattern[i] === pattern[len]) {'],
-    ['c_match_body', '        len++; lps[i] = len; i++;'],
-    ['', '      } else {'],
+    ['c_match_body', '        len++;'],
+    ['c_match_body', '        lps[i] = len;'],
+    ['c_match_body', '        i++;'],
+    ['c_mismatch_else', '      } else {'],
     ['c_fallback_check', '        if (len !== 0) {'],
     ['c_fallback_body', '          len = lps[len - 1];'],
     ['', '        } else {'],
-    ['c_zero_lps', '          lps[i] = 0; i++;'],
+    ['c_zero_lps', '          lps[i] = 0;'],
+    ['c_zero_lps', '          i++;'],
     ['', '        }'],
     ['', '      }'],
     ['', '    }'],
@@ -128,14 +159,19 @@ function buildSteps(initialPattern) {
   function getCells(curI = -1, curLen = -1, isMatch = false, isMismatch = false) {
     const patCells = pattern.split('').map((val, idx) => {
       let state = 'normal';
-      if (idx === curI) state = isMismatch ? 'mismatch' : (isMatch ? 'match' : 'cur_i');
-      else if (idx === curLen) state = isMismatch ? 'mismatch' : (isMatch ? 'match' : 'cur_len');
+      if (curI >= 0 && curLen >= 0 && idx === curI && idx === curLen) {
+        state = isMismatch ? 'mismatch' : (isMatch ? 'match' : 'cur_i');
+      } else if (curI >= 0 && idx === curI) {
+        state = isMismatch ? 'mismatch' : (isMatch ? 'match' : 'cur_i');
+      } else if (curLen >= 0 && idx === curLen) {
+        state = isMismatch ? 'mismatch' : (isMatch ? 'match' : 'cur_len');
+      }
       return { idx, val, state };
     });
 
     const lpsCells = lps.map((val, idx) => {
       let state = 'normal';
-      if (idx === curI) state = isMismatch ? 'mismatch' : (isMatch ? 'match' : 'cur_i');
+      if (curI >= 0 && idx === curI) state = isMismatch ? 'mismatch' : (isMatch ? 'match' : 'cur_i');
       return { idx, val: val !== null ? val : '-', state };
     });
 
@@ -298,7 +334,6 @@ function buildSteps(initialPattern) {
 
   return steps;
 }
-
 const inpPattern = ref('AAACAAAA');
 const lang = ref('java');
 const speed = ref(650);
@@ -462,8 +497,8 @@ onBeforeUnmount(() => {
                       <div class="ll-arr-track">
                         <div v-for="cell in s.patCells" :key="'p-' + cell.idx" class="ll-arr-cell-wrap">
                           <div class="ll-ptr-tag-wrap">
-                            <span v-if="cell.idx === s.i" class="ll-ptr-lbl ll-lbl-blue">i</span>
-                            <span v-if="cell.idx === s.len" class="ll-ptr-lbl ll-lbl-purple">len</span>
+                            <span v-if="s.i >= 0 && cell.idx === s.i" class="ll-ptr-lbl ll-lbl-blue">i</span>
+                            <span v-if="s.len >= 0 && cell.idx === s.len" class="ll-ptr-lbl ll-lbl-purple">len</span>
                           </div>
                           <div class="ll-arr-box" :class="{ 'll-box-i': cell.state === 'cur_i', 'll-box-len': cell.state === 'cur_len', 'll-box-match': cell.state === 'match', 'll-box-mismatch': cell.state === 'mismatch' }">
                             {{ cell.val }}

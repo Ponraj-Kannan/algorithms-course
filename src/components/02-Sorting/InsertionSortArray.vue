@@ -165,6 +165,7 @@ function buildSteps(initialValues) {
     });
 
     const key = arr[i];
+
     steps.push({
       badge: `int key = arr[${i}] → key set to ${key}`,
       code: 'c_key',
@@ -323,7 +324,7 @@ watch(playing, v => {
 
 function cellLabel(cell) {
   const tags = [];
-  if (s.value.i === cell.idx) tags.push('i (key)');
+  if (s.value.i === cell.idx) tags.push('i');
   if (s.value.j === cell.idx) tags.push('j');
   if (tags.length) return tags.join(', ') + ' \u2192';
   if (cell.state === 'sorted') return 'sorted';
@@ -420,22 +421,15 @@ onBeforeUnmount(() => {
                     <div class="ll-ptr-chip">Pass i = <b class="ll-c-blue">{{ s.i >= 0 ? s.i : 'N/A' }}</b></div>
                     <div class="ll-ptr-chip">key = <b class="ll-c-amber">{{ s.key !== null ? s.key : 'N/A' }}</b></div>
                     <div class="ll-ptr-chip">j = <b class="ll-c-purple">{{ s.j >= 0 ? s.j : 'N/A' }}</b></div>
-                    <div class="ll-ptr-chip">Shifts = <b class="ll-c-green">{{ s.shifts }}</b></div>
                   </div>
 
                   <!-- Visual Diagram - Pastel Flat Cards -->
                   <div class="ll-arr-track">
                     <template v-for="cell in s.cells" :key="cell.idx">
                       <div class="ll-arr-cell-wrap">
-                        <div
-                          class="ll-who"
-                          :class="{
-                            'll-c-amber': cell.state === 'cur',
-                            'll-c-purple': cell.state === 'shift',
-                            'll-c-green': cell.state === 'sorted'
-                          }"
-                        >
-                          {{ cellLabel(cell) }}
+                        <div class="ll-ptr-tag-wrap">
+                          <span v-if="s.i === cell.idx" class="ll-ptr-lbl ll-lbl-blue">i</span>
+                          <span v-if="s.j === cell.idx" class="ll-ptr-lbl ll-lbl-purple">j</span>
                         </div>
                         <div
                           class="ll-arr-box"
@@ -621,7 +615,14 @@ onBeforeUnmount(() => {
 /* Pastel Flat Visual Diagram Box System */
 .ll-arr-track { display: flex; align-items: flex-start; flex-wrap: wrap; padding: 10px 16px 8px; min-height: 100px; gap: 10px; width: 100%; box-sizing: border-box; min-width: 0; }
 .ll-arr-cell-wrap { display: flex; flex-direction: column; align-items: center; min-width: 0; }
-.ll-who { font-size: 11px; font-weight: 700; height: 16px; margin-bottom: 2px; text-align: center; font-family: monospace; }
+.ll-ptr-tag-wrap { height: 28px; display: flex; align-items: flex-end; justify-content: center; gap: 4px; margin-bottom: 2px; }
+.ll-ptr-lbl { font-size: 12px; font-weight: 800; font-family: 'Consolas', 'Fira Code', monospace; display: inline-flex; flex-direction: column; align-items: center; line-height: 1; gap: 1px; white-space: nowrap; animation: ll-pop 0.2s ease; }
+.ll-ptr-lbl::after { content: '↓'; font-size: 11px; font-weight: 900; line-height: 1; margin-top: 1px; }
+.ll-lbl-blue { color: #3b82f6; }
+.ll-lbl-orange { color: #f97316; }
+.ll-lbl-purple { color: #9333ea; }
+.ll-lbl-green { color: #10b981; }
+.ll-lbl-red { color: #ef4444; }
 .ll-arr-box { width: 54px; height: 54px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--blue); border-radius: var(--radius); background: #eff6ff; color: #1e293b; font-weight: 700; font-size: 16px; box-shadow: var(--shadow-sm); transition: all 0.25s ease; animation: ll-pop .3s ease; }
 .ll-box-cur { border-color: #f59e0b !important; background: #fef3c7 !important; color: #92400e !important; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25) !important; transform: translateY(-3px); }
 .ll-box-shift { border-color: #8b5cf6 !important; background: #f3e8ff !important; color: #5b21b6 !important; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25) !important; transform: translateX(3px); }

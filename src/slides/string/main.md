@@ -38,7 +38,7 @@ import ManachersAlgorithm from '../../components/03-String/ManachersAlgorithm.vu
 
 ---
 
-<StringRotation topic="String Rotation Algorithm" subTopic="Concatenation & Substring Search" />
+<!-- <StringRotation topic="String Rotation Algorithm" subTopic="Concatenation & Substring Search" />
 
 ---
 
@@ -82,4 +82,4 @@ import ManachersAlgorithm from '../../components/03-String/ManachersAlgorithm.vu
 
 ---
 
-<ManachersAlgorithm topic="Manacher's Algorithm" subTopic="O(N) Longest Palindromic Substring with Center Mirroring" />
+<ManachersAlgorithm topic="Manacher's Algorithm" subTopic="O(N) Longest Palindromic Substring with Center Mirroring" /> -->

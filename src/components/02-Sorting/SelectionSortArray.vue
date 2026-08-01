@@ -131,7 +131,7 @@ function buildSteps(initialValues) {
       frame(fnLabel, [['arr', '[' + arr.join(', ') + ']']])
     ],
     cells: currentCellStates(0, -1, -1, -1),
-    i: -1, j: -1, minIdx: -1, n, comparisons: 0, swaps: 0
+    i: -1, j: -1, minIdx: -1, temp: null, n, comparisons: 0, swaps: 0
   });
 
   if (n === 0) {
@@ -140,7 +140,7 @@ function buildSteps(initialValues) {
       code: 'c_done',
       vars: [frame('main()', []), frame(fnLabel, [['n', '0']])],
       cells: [],
-      i: -1, j: -1, minIdx: -1, n: 0, comparisons: 0, swaps: 0
+      i: -1, j: -1, minIdx: -1, temp: null, n: 0, comparisons: 0, swaps: 0
     });
     return steps;
   }
@@ -154,7 +154,7 @@ function buildSteps(initialValues) {
       frame(fnLabel, [['n', String(n)], ['arr', '[' + arr.join(', ') + ']']])
     ],
     cells: currentCellStates(0, -1, -1, -1),
-    i: -1, j: -1, minIdx: -1, n, comparisons: 0, swaps: 0
+    i: -1, j: -1, minIdx: -1, temp: null, n, comparisons: 0, swaps: 0
   });
 
   let comparisons = 0;
@@ -170,7 +170,7 @@ function buildSteps(initialValues) {
         frame(fnLabel, [['n', String(n)], ['i', String(i)]])
       ],
       cells: currentCellStates(i, i, -1, -1),
-      i, j: -1, minIdx: -1, n, comparisons, swaps
+      i, j: -1, minIdx: -1, temp: null, n, comparisons, swaps
     });
 
     let minIdx = i;
@@ -182,7 +182,7 @@ function buildSteps(initialValues) {
         frame(fnLabel, [['i', String(i)], ['minIdx', String(minIdx)], ['arr[minIdx]', String(arr[minIdx])]])
       ],
       cells: currentCellStates(i, i, -1, minIdx),
-      i, j: -1, minIdx, n, comparisons, swaps
+      i, j: -1, minIdx, temp: null, n, comparisons, swaps
     });
 
     // Inner loop to find minimum element in arr[i..n-1]
@@ -197,7 +197,7 @@ function buildSteps(initialValues) {
           frame(fnLabel, [['i', String(i)], ['minIdx', String(minIdx)], ['j', String(j)]])
         ],
         cells: currentCellStates(i, i, j, minIdx),
-        i, j, minIdx, n, comparisons, swaps
+        i, j, minIdx, temp: null, n, comparisons, swaps
       });
 
       const condition = arr[j] < arr[minIdx];
@@ -209,7 +209,7 @@ function buildSteps(initialValues) {
           frame(fnLabel, [['i', String(i)], ['minIdx', String(minIdx)], ['j', String(j)], ['arr[j]', String(arr[j])], ['arr[minIdx]', String(arr[minIdx])]])
         ],
         cells: currentCellStates(i, i, j, minIdx),
-        i, j, minIdx, n, comparisons, swaps
+        i, j, minIdx, temp: null, n, comparisons, swaps
       });
 
       if (condition) {
@@ -222,7 +222,7 @@ function buildSteps(initialValues) {
             frame(fnLabel, [['i', String(i)], ['minIdx', String(minIdx)], ['arr[minIdx]', String(arr[minIdx])]])
           ],
           cells: currentCellStates(i, i, j, minIdx),
-          i, j, minIdx, n, comparisons, swaps
+          i, j, minIdx, temp: null, n, comparisons, swaps
         });
       }
     }
@@ -237,7 +237,7 @@ function buildSteps(initialValues) {
         frame(fnLabel, [['i', String(i)], ['minIdx', String(minIdx)], ['temp', String(temp)]])
       ],
       cells: currentCellStates(i, i, -1, minIdx, [i, minIdx]),
-      i, j: -1, minIdx, n, comparisons, swaps
+      i, j: -1, minIdx, temp, n, comparisons, swaps
     });
 
     arr[minIdx] = arr[i];
@@ -246,10 +246,10 @@ function buildSteps(initialValues) {
       code: 'c_swap_w1',
       vars: [
         frame('main()', []),
-        frame(fnLabel, [['i', String(i)], ['minIdx', String(minIdx)], ['arr[minIdx]', String(arr[minIdx])]])
+        frame(fnLabel, [['i', String(i)], ['minIdx', String(minIdx)], ['temp', String(temp)], ['arr[minIdx]', String(arr[minIdx])]])
       ],
       cells: currentCellStates(i, i, -1, minIdx, [i, minIdx]),
-      i, j: -1, minIdx, n, comparisons, swaps
+      i, j: -1, minIdx, temp, n, comparisons, swaps
     });
 
     arr[i] = temp;
@@ -259,10 +259,10 @@ function buildSteps(initialValues) {
       code: 'c_swap_w2',
       vars: [
         frame('main()', []),
-        frame(fnLabel, [['i', String(i)], ['minIdx', String(minIdx)], ['arr[i]', String(temp)]])
+        frame(fnLabel, [['i', String(i)], ['minIdx', String(minIdx)], ['temp', String(temp)], ['arr[i]', String(temp)]])
       ],
       cells: currentCellStates(i + 1, -1, -1, -1),
-      i, j: -1, minIdx, n, comparisons, swaps
+      i, j: -1, minIdx, temp, n, comparisons, swaps
     });
   }
 
@@ -274,7 +274,7 @@ function buildSteps(initialValues) {
       frame(fnLabel, [['status', 'complete'], ['comparisons', String(comparisons)], ['swaps', String(swaps)]])
     ],
     cells: arr.map((v, idx) => ({ idx, val: v, state: 'sorted' })),
-    i: n - 1, j: -1, minIdx: -1, n, comparisons, swaps
+    i: n - 1, j: -1, minIdx: -1, temp: null, n, comparisons, swaps
   });
 
   return steps;
@@ -440,22 +440,17 @@ onBeforeUnmount(() => {
                     <div class="ll-ptr-chip">Pass i = <b class="ll-c-blue">{{ s.i >= 0 ? s.i : 'N/A' }}</b></div>
                     <div class="ll-ptr-chip">minIdx = <b class="ll-c-green">{{ s.minIdx >= 0 ? s.minIdx : 'N/A' }}</b></div>
                     <div class="ll-ptr-chip">j = <b class="ll-c-orange">{{ s.j >= 0 ? s.j : 'N/A' }}</b></div>
-                    <div class="ll-ptr-chip">Swaps = <b class="ll-c-purple">{{ s.swaps }}</b></div>
+                    <div class="ll-ptr-chip">temp = <b class="ll-c-purple">{{ s.temp !== null ? s.temp : 'N/A' }}</b></div>
                   </div>
 
                   <!-- Visual Diagram - Pastel Flat Cards -->
                   <div class="ll-arr-track">
                     <template v-for="cell in s.cells" :key="cell.idx">
                       <div class="ll-arr-cell-wrap">
-                        <div
-                          class="ll-who"
-                          :class="{
-                            'll-c-orange': cell.state === 'cur',
-                            'll-c-green': cell.state === 'min' || cell.state === 'sorted',
-                            'll-c-red': cell.state === 'swap'
-                          }"
-                        >
-                          {{ cellLabel(cell) }}
+                        <div class="ll-ptr-tag-wrap">
+                          <span v-if="s.i === cell.idx" class="ll-ptr-lbl ll-lbl-blue">i</span>
+                          <span v-if="s.minIdx === cell.idx" class="ll-ptr-lbl ll-lbl-green">min</span>
+                          <span v-if="s.j === cell.idx" class="ll-ptr-lbl ll-lbl-orange">j</span>
                         </div>
                         <div
                           class="ll-arr-box"
@@ -643,7 +638,14 @@ onBeforeUnmount(() => {
 /* Pastel Flat Visual Diagram Box System */
 .ll-arr-track { display: flex; align-items: flex-start; flex-wrap: wrap; padding: 10px 16px 8px; min-height: 100px; gap: 10px; width: 100%; box-sizing: border-box; min-width: 0; }
 .ll-arr-cell-wrap { display: flex; flex-direction: column; align-items: center; min-width: 0; }
-.ll-who { font-size: 11px; font-weight: 700; height: 16px; margin-bottom: 2px; text-align: center; font-family: monospace; }
+.ll-ptr-tag-wrap { height: 28px; display: flex; align-items: flex-end; justify-content: center; gap: 4px; margin-bottom: 2px; }
+.ll-ptr-lbl { font-size: 12px; font-weight: 800; font-family: 'Consolas', 'Fira Code', monospace; display: inline-flex; flex-direction: column; align-items: center; line-height: 1; gap: 1px; white-space: nowrap; animation: ll-pop 0.2s ease; }
+.ll-ptr-lbl::after { content: '↓'; font-size: 11px; font-weight: 900; line-height: 1; margin-top: 1px; }
+.ll-lbl-blue { color: #3b82f6; }
+.ll-lbl-orange { color: #f97316; }
+.ll-lbl-purple { color: #9333ea; }
+.ll-lbl-green { color: #10b981; }
+.ll-lbl-red { color: #ef4444; }
 .ll-arr-box { width: 54px; height: 54px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--blue); border-radius: var(--radius); background: #eff6ff; color: #1e293b; font-weight: 700; font-size: 16px; box-shadow: var(--shadow-sm); transition: all 0.25s ease; animation: ll-pop .3s ease; }
 .ll-box-cur { border-color: #f59e0b !important; background: #fef3c7 !important; color: #92400e !important; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25) !important; transform: translateY(-2px); }
 .ll-box-min { border-color: #10b981 !important; background: #dcfce7 !important; color: #065f46 !important; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25) !important; transform: translateY(-3px); }

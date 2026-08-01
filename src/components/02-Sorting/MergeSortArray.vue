@@ -18,20 +18,20 @@ const CODES = {
     ['', '        }'],
     ['c_done', '    }'],
     ['', ''],
-    ['c_merge_fn', '    void merge(int[] arr, int l, int m, int r) {'],
-    ['c_temp_copy', '        int n1 = m - l + 1, n2 = r - m;'],
-    ['c_temp_copy', '        int[] L = new int[n1], R = new int[n2];'],
-    ['c_temp_copy', '        for (int i=0; i<n1; i++) L[i] = arr[l + i];'],
-    ['c_temp_copy', '        for (int j=0; j<n2; j++) R[j] = arr[m + 1 + j];'],
-    ['c_merge_compare', '        int i = 0, j = 0, k = l;'],
-    ['c_merge_compare', '        while (i < n1 && j < n2) {'],
-    ['c_merge_write', '            if (L[i] <= R[j]) arr[k++] = L[i++];'],
-    ['c_merge_write', '            else arr[k++] = R[j++];'],
-    ['', '        }'],
-    ['c_merge_write', '        while (i < n1) arr[k++] = L[i++];'],
-    ['c_merge_write', '        while (j < n2) arr[k++] = R[j++];'],
-    ['', '    }'],
-    ['', '}']
+    ['c_merge_fn',    '    void merge(int[] arr, int l, int m, int r) {'],
+    ['c_n1_n2',       '        int n1 = m - l + 1, n2 = r - m;'],
+    ['c_alloc',       '        int[] L = new int[n1], R = new int[n2];'],
+    ['c_copy_l',      '        for (int i = 0; i < n1; i++) L[i] = arr[l + i];'],
+    ['c_copy_r',      '        for (int j = 0; j < n2; j++) R[j] = arr[m + 1 + j];'],
+    ['c_ijk_init',    '        int i = 0, j = 0, k = l;'],
+    ['c_merge_while', '        while (i < n1 && j < n2) {'],
+    ['c_merge_if_l',  '            if (L[i] <= R[j]) arr[k++] = L[i++];'],
+    ['c_merge_else_r','            else             arr[k++] = R[j++];'],
+    ['',              '        }'],
+    ['c_remain_l',    '        while (i < n1) arr[k++] = L[i++];'],
+    ['c_remain_r',    '        while (j < n2)  arr[k++] = R[j++];'],
+    ['',              '    }'],
+    ['',              '}']
   ],
   c: [
     ['c_entry', 'void mergeSort(int arr[], int l, int r) {'],
@@ -41,7 +41,23 @@ const CODES = {
     ['c_rec_right', '        mergeSort(arr, m + 1, r);'],
     ['c_merge_call', '        merge(arr, l, m, r);'],
     ['', '    }'],
-    ['c_done', '}']
+    ['c_done', '}'],
+    ['', ''],
+    ['c_merge_fn',    'void merge(int arr[], int l, int m, int r) {'],
+    ['c_n1_n2',       '    int n1 = m - l + 1, n2 = r - m;'],
+    ['c_alloc',       '    int *L = malloc(n1 * sizeof(int));'],
+    ['c_alloc',       '    int *R = malloc(n2 * sizeof(int));'],
+    ['c_copy_l',      '    for (int i = 0; i < n1; i++) L[i] = arr[l + i];'],
+    ['c_copy_r',      '    for (int j = 0; j < n2; j++) R[j] = arr[m + 1 + j];'],
+    ['c_ijk_init',    '    int i = 0, j = 0, k = l;'],
+    ['c_merge_while', '    while (i < n1 && j < n2) {'],
+    ['c_merge_if_l',  '        if (L[i] <= R[j]) arr[k++] = L[i++];'],
+    ['c_merge_else_r','        else             arr[k++] = R[j++];'],
+    ['',              '    }'],
+    ['c_remain_l',    '    while (i < n1) arr[k++] = L[i++];'],
+    ['c_remain_r',    '    while (j < n2) arr[k++] = R[j++];'],
+    ['',              '    free(L); free(R);'],
+    ['',              '}']
   ],
   cpp: [
     ['', 'class MergeSort {'],
@@ -54,6 +70,19 @@ const CODES = {
     ['c_merge_call', '            merge(arr, l, m, r);'],
     ['', '        }'],
     ['c_done', '    }'],
+    ['', ''],
+    ['c_merge_fn',    '    void merge(vector<int>& arr, int l, int m, int r) {'],
+    ['c_n1_n2',       '        int n1 = m - l + 1, n2 = r - m;'],
+    ['c_alloc',       '        vector<int> L(arr.begin() + l, arr.begin() + m + 1);'],
+    ['c_alloc',       '        vector<int> R(arr.begin() + m + 1, arr.begin() + r + 1);'],
+    ['c_ijk_init',    '        int i = 0, j = 0, k = l;'],
+    ['c_merge_while', '        while (i < n1 && j < n2) {'],
+    ['c_merge_if_l',  '            if (L[i] <= R[j]) arr[k++] = L[i++];'],
+    ['c_merge_else_r','            else             arr[k++] = R[j++];'],
+    ['',              '        }'],
+    ['c_remain_l',    '        while (i < n1) arr[k++] = L[i++];'],
+    ['c_remain_r',    '        while (j < n2)  arr[k++] = R[j++];'],
+    ['',              '    }'],
     ['', '};']
   ],
   python: [
@@ -64,7 +93,25 @@ const CODES = {
     ['c_rec_left', '            self.merge_sort(arr, l, m)'],
     ['c_rec_right', '            self.merge_sort(arr, m + 1, r)'],
     ['c_merge_call', '            self.merge(arr, l, m, r)'],
-    ['c_done', '']
+    ['c_done', ''],
+    ['', ''],
+    ['c_merge_fn',    '    def merge(self, arr, l, m, r):'],
+    ['c_n1_n2',       '        n1 = m - l + 1'],
+    ['c_n1_n2',       '        n2 = r - m'],
+    ['c_copy_l',      '        L = arr[l : m + 1]'],
+    ['c_copy_r',      '        R = arr[m + 1 : r + 1]'],
+    ['c_ijk_init',    '        i = j = 0'],
+    ['c_ijk_init',    '        k = l'],
+    ['c_merge_while', '        while i < n1 and j < n2:'],
+    ['c_merge_if_l',  '            if L[i] <= R[j]:'],
+    ['c_merge_if_l',  '                arr[k] = L[i]; i += 1'],
+    ['c_merge_else_r','            else:'],
+    ['c_merge_else_r','                arr[k] = R[j]; j += 1'],
+    ['',              '            k += 1'],
+    ['c_remain_l',    '        while i < n1:'],
+    ['c_remain_l',    '            arr[k] = L[i]; i += 1; k += 1'],
+    ['c_remain_r',    '        while j < n2:'],
+    ['c_remain_r',    '            arr[k] = R[j]; j += 1; k += 1']
   ],
   javascript: [
     ['', 'class MergeSort {'],
@@ -76,17 +123,41 @@ const CODES = {
     ['c_merge_call', '      this.merge(arr, l, m, r);'],
     ['', '    }'],
     ['c_done', '  }'],
+    ['', ''],
+    ['c_merge_fn',    '  merge(arr, l, m, r) {'],
+    ['c_n1_n2',       '    const n1 = m - l + 1, n2 = r - m;'],
+    ['c_copy_l',      '    const L = arr.slice(l, m + 1);'],
+    ['c_copy_r',      '    const R = arr.slice(m + 1, r + 1);'],
+    ['c_ijk_init',    '    let i = 0, j = 0, k = l;'],
+    ['c_merge_while', '    while (i < n1 && j < n2) {'],
+    ['c_merge_if_l',  '      if (L[i] <= R[j]) arr[k++] = L[i++];'],
+    ['c_merge_else_r','      else             arr[k++] = R[j++];'],
+    ['',              '    }'],
+    ['c_remain_l',    '    while (i < n1) arr[k++] = L[i++];'],
+    ['c_remain_r',    '    while (j < n2)  arr[k++] = R[j++];'],
+    ['',              '  }'],
     ['', '}']
   ]
 };
 
 const PSEUDOCODE = [
-  'function mergeSort(arr, left, right):',
-  '    if left < right:',
-  '        mid = floor((left + right) / 2)',
-  '        mergeSort(arr, left, mid)        // Recursively sort left half',
-  '        mergeSort(arr, mid + 1, right)   // Recursively sort right half',
-  '        merge(arr, left, mid, right)     // Merge sorted halves',
+  'function mergeSort(arr, l, r):',
+  '    if l < r:',
+  '        m = (l + r) / 2',
+  '        mergeSort(arr, l, m)          // Sort left half',
+  '        mergeSort(arr, m+1, r)        // Sort right half',
+  '        merge(arr, l, m, r)           // Merge sorted halves',
+  '',
+  'function merge(arr, l, m, r):',
+  '    n1 = m-l+1;  n2 = r-m',
+  '    L[0..n1-1] = arr[l..m]            // Copy left subarray',
+  '    R[0..n2-1] = arr[m+1..r]          // Copy right subarray',
+  '    i = 0;  j = 0;  k = l',
+  '    while i < n1 and j < n2:',
+  "        if L[i] <= R[j]: arr[k++] = L[i++]",
+  '        else:             arr[k++] = R[j++]',
+  '    while i < n1: arr[k++] = L[i++]  // Copy remaining left',
+  '    while j < n2: arr[k++] = R[j++]  // Copy remaining right',
 ];
 
 function frame(title, rows) { return { title, rows }; }
@@ -97,12 +168,15 @@ function buildSteps(initialValues) {
   const n = arr.length;
   const callStack = [];
 
-  function pushStep(badge, code, activeRange = null, midIdx = -1, mergingIndices = []) {
+  function pushStep(badge, code, opts = {}) {
+    const {
+      activeRange = null, midIdx = -1, mergingIndices = [],
+      mi = -1, mj = -1, mk = -1, n1 = -1, n2 = -1
+    } = opts;
     const l = activeRange ? activeRange[0] : -1;
     const r = activeRange ? activeRange[1] : -1;
     steps.push({
-      badge,
-      code,
+      badge, code,
       vars: callStack.map(item => frame(item.title, item.rows)),
       cells: arr.map((val, idx) => {
         if (mergingIndices.includes(idx)) return { idx, val, state: 'swap' };
@@ -110,14 +184,15 @@ function buildSteps(initialValues) {
         if (l >= 0 && r >= 0 && idx >= l && idx <= r) return { idx, val, state: 'cur' };
         return { idx, val, state: 'normal' };
       }),
-      left: l,
-      right: r,
-      mid: midIdx,
-      n
+      left: l, right: r, mid: midIdx,
+      mi, mj, mk, n1, n2, n
     });
   }
 
-  // Initial step
+  function updateTopFrame(rows) {
+    if (callStack.length > 0) callStack[callStack.length - 1].rows = rows;
+  }
+
   callStack.push({ title: 'main()', rows: [] });
   pushStep(`mergeSort called on array of size ${n}`, 'c_entry');
 
@@ -127,78 +202,131 @@ function buildSteps(initialValues) {
   }
 
   function mergeSortHelper(l, r) {
-    callStack.push({
-      title: `mergeSort(arr, ${l}, ${r})`,
-      rows: [['l', String(l)], ['r', String(r)]]
-    });
+    callStack.push({ title: `mergeSort(${l},${r})`, rows: [['l', String(l)], ['r', String(r)]] });
 
-    pushStep(`mergeSort(arr, ${l}, ${r}) called for subarray range [${l}..${r}]`, 'c_entry', [l, r]);
+    pushStep(`mergeSort(arr, ${l}, ${r}) → entering for subarray [${l}..${r}]`,
+      'c_entry', { activeRange: [l, r] });
 
-    pushStep(`if (l < r) → checking ${l} < ${r} → ${l < r ? 'TRUE' : 'FALSE'}`, 'c_base_check', [l, r]);
+    pushStep(`if (l < r) → ${l} < ${r} → ${l < r ? 'TRUE' : 'FALSE (base case)'}`,
+      'c_base_check', { activeRange: [l, r] });
 
     if (l < r) {
       const m = Math.floor((l + r) / 2);
-      pushStep(`int m = l + (r - l) / 2 → m set to ${m} (mid element = ${arr[m]})`, 'c_mid', [l, r], m);
+      updateTopFrame([['l', String(l)], ['r', String(r)], ['m', String(m)]]);
+      pushStep(`int m = l + (r - l) / 2 = ${l} + (${r} - ${l}) / 2 = ${m}`,
+        'c_mid', { activeRange: [l, r], midIdx: m });
 
-      pushStep(`mergeSort(arr, ${l}, ${m}) → preparing to sort left half [${l}..${m}]`, 'c_rec_left', [l, m], m);
+      pushStep(`mergeSort(arr, ${l}, ${m}) → recurse on left half [${l}..${m}]`,
+        'c_rec_left', { activeRange: [l, m], midIdx: m });
       mergeSortHelper(l, m);
 
-      pushStep(`mergeSort(arr, ${m + 1}, ${r}) → preparing to sort right half [${m + 1}..${r}]`, 'c_rec_right', [m + 1, r], m);
+      pushStep(`mergeSort(arr, ${m + 1}, ${r}) → recurse on right half [${m + 1}..${r}]`,
+        'c_rec_right', { activeRange: [m + 1, r], midIdx: m });
       mergeSortHelper(m + 1, r);
 
-      pushStep(`merge(arr, ${l}, ${m}, ${r}) → merging sorted halves [${l}..${m}] and [${m + 1}..${r}]`, 'c_merge_call', [l, r], m);
+      pushStep(`merge(arr, ${l}, ${m}, ${r}) → merging [${l}..${m}] and [${m + 1}..${r}]`,
+        'c_merge_call', { activeRange: [l, r], midIdx: m });
 
-      // Perform actual merge
+      // ── enter merge function ──
+      callStack.push({ title: `merge(${l},${m},${r})`, rows: [['l', String(l)], ['m', String(m)], ['r', String(r)]] });
+      pushStep(`void merge(l=${l}, m=${m}, r=${r}) → entering merge function`,
+        'c_merge_fn', { activeRange: [l, r], midIdx: m });
+
       const n1 = m - l + 1;
       const n2 = r - m;
-      const L = arr.slice(l, m + 1);
-      const R = arr.slice(m + 1, r + 1);
+      updateTopFrame([['l', String(l)], ['m', String(m)], ['r', String(r)], ['n1', String(n1)], ['n2', String(n2)]]);
+      pushStep(`n1 = m-l+1 = ${m}-${l}+1 = ${n1};  n2 = r-m = ${r}-${m} = ${n2}`,
+        'c_n1_n2', { activeRange: [l, r], midIdx: m, n1, n2 });
 
-      pushStep(`Created temp arrays L [${L.join(', ')}] and R [${R.join(', ')}]`, 'c_temp_copy', [l, r], m);
+      pushStep(`int[] L = new int[${n1}], R = new int[${n2}] → allocate temp arrays`,
+        'c_alloc', { activeRange: [l, r], midIdx: m, n1, n2 });
 
+      // Copy left subarray element by element
+      const L = [];
+      for (let ci = 0; ci < n1; ci++) {
+        L.push(arr[l + ci]);
+        updateTopFrame([['l', String(l)], ['m', String(m)], ['r', String(r)], ['n1', String(n1)], ['n2', String(n2)], ['i', String(ci)]]);
+        pushStep(`L[${ci}] = arr[${l + ci}] = ${arr[l + ci]}  (copy left element ${ci + 1}/${n1})`,
+          'c_copy_l', { activeRange: [l, r], midIdx: m, n1, n2, mi: ci, mergingIndices: [l + ci] });
+      }
+
+      // Copy right subarray element by element
+      const R = [];
+      for (let cj = 0; cj < n2; cj++) {
+        R.push(arr[m + 1 + cj]);
+        updateTopFrame([['l', String(l)], ['m', String(m)], ['r', String(r)], ['n1', String(n1)], ['n2', String(n2)], ['j', String(cj)]]);
+        pushStep(`R[${cj}] = arr[${m + 1 + cj}] = ${arr[m + 1 + cj]}  (copy right element ${cj + 1}/${n2})`,
+          'c_copy_r', { activeRange: [l, r], midIdx: m, n1, n2, mj: cj, mergingIndices: [m + 1 + cj] });
+      }
+
+      // Initialize merge pointers
       let i = 0, j = 0, k = l;
-      while (i < n1 && j < n2) {
-        const comp = L[i] <= R[j];
-        pushStep(`Comparing L[${i}] (${L[i]}) and R[${j}] (${R[j]}) → ${comp ? 'L['+i+'] is smaller/equal' : 'R['+j+'] is smaller'}`, 'c_merge_compare', [l, r], m, [l + i, m + 1 + j]);
+      updateTopFrame([['l', String(l)], ['m', String(m)], ['r', String(r)], ['i', '0'], ['j', '0'], ['k', String(l)]]);
+      pushStep(`int i = 0, j = 0, k = ${l} → initialize merge pointers (i=L index, j=R index, k=output)`,
+        'c_ijk_init', { activeRange: [l, r], midIdx: m, n1, n2, mi: 0, mj: 0, mk: l });
 
+      // Main merge while loop
+      while (true) {
+        const condOk = i < n1 && j < n2;
+        updateTopFrame([['l', String(l)], ['m', String(m)], ['r', String(r)], ['i', String(i)], ['j', String(j)], ['k', String(k)]]);
+        pushStep(
+          `while (i<n1 && j<n2): i=${i}<${n1} && j=${j}<${n2} → ${condOk ? 'TRUE' : 'FALSE, exit loop'}`,
+          'c_merge_while',
+          { activeRange: [l, r], midIdx: m, n1, n2, mi: i, mj: j, mk: k }
+        );
+        if (!condOk) break;
+
+        const comp = L[i] <= R[j];
         if (comp) {
           arr[k] = L[i];
-          pushStep(`arr[${k}] = L[${i}] (${L[i]}) → placed in merged array at index ${k}`, 'c_merge_write', [l, r], m, [k]);
+          updateTopFrame([['l', String(l)], ['m', String(m)], ['r', String(r)], ['i', String(i)], ['j', String(j)], ['k', String(k)]]);
+          pushStep(`L[${i}]=${L[i]} \u2264 R[${j}]=${R[j]} \u2192 arr[${k}]=L[${i}]=${L[i]}, i++, k++`,
+            'c_merge_if_l', { activeRange: [l, r], midIdx: m, n1, n2, mi: i, mj: j, mk: k, mergingIndices: [k] });
           i++;
         } else {
           arr[k] = R[j];
-          pushStep(`arr[${k}] = R[${j}] (${R[j]}) → placed in merged array at index ${k}`, 'c_merge_write', [l, r], m, [k]);
+          updateTopFrame([['l', String(l)], ['m', String(m)], ['r', String(r)], ['i', String(i)], ['j', String(j)], ['k', String(k)]]);
+          pushStep(`L[${i}]=${L[i]} > R[${j}]=${R[j]} \u2192 arr[${k}]=R[${j}]=${R[j]}, j++, k++`,
+            'c_merge_else_r', { activeRange: [l, r], midIdx: m, n1, n2, mi: i, mj: j, mk: k, mergingIndices: [k] });
           j++;
         }
         k++;
       }
 
+      // Copy remaining left elements
       while (i < n1) {
         arr[k] = L[i];
-        pushStep(`Copy remaining L[${i}] (${L[i]}) → arr[${k}] = ${L[i]}`, 'c_merge_write', [l, r], m, [k]);
-        i++;
-        k++;
+        updateTopFrame([['l', String(l)], ['m', String(m)], ['r', String(r)], ['i', String(i)], ['j', String(j)], ['k', String(k)]]);
+        pushStep(`while(i<n1): arr[${k}] = L[${i}] = ${L[i]} \u2192 copy remaining left element`,
+          'c_remain_l', { activeRange: [l, r], midIdx: m, n1, n2, mi: i, mj: j, mk: k, mergingIndices: [k] });
+        i++; k++;
       }
 
+      // Copy remaining right elements
       while (j < n2) {
         arr[k] = R[j];
-        pushStep(`Copy remaining R[${j}] (${R[j]}) → arr[${k}] = ${R[j]}`, 'c_merge_write', [l, r], m, [k]);
-        j++;
-        k++;
+        updateTopFrame([['l', String(l)], ['m', String(m)], ['r', String(r)], ['i', String(i)], ['j', String(j)], ['k', String(k)]]);
+        pushStep(`while(j<n2): arr[${k}] = R[${j}] = ${R[j]} \u2192 copy remaining right element`,
+          'c_remain_r', { activeRange: [l, r], midIdx: m, n1, n2, mi: i, mj: j, mk: k, mergingIndices: [k] });
+        j++; k++;
       }
 
-      pushStep(`Merged subarray range [${l}..${r}] is now sorted: [${arr.slice(l, r + 1).join(', ')}]`, 'c_merge_call', [l, r], m);
+      callStack.pop(); // pop merge frame
+
+      pushStep(`merge(${l},${m},${r}) complete \u2192 [${l}..${r}] sorted: [${arr.slice(l, r + 1).join(', ')}]`,
+        'c_merge_call', { activeRange: [l, r], midIdx: m });
+
     } else {
-      pushStep(`Base case reached: subarray [${l}..${r}] has size 1 (already sorted)`, 'c_base_check', [l, r]);
+      pushStep(`Base case: l = r = ${l}, single element (${arr[l]}) \u2192 already sorted`,
+        'c_base_check', { activeRange: [l, r] });
     }
 
-    callStack.pop();
+    callStack.pop(); // pop mergeSort frame
   }
 
   mergeSortHelper(0, n - 1);
 
-  // Final step
-  pushStep(`Merge Sort Complete! Entire array is sorted: [${arr.join(', ')}]`, 'c_done');
+  pushStep(`Merge Sort Complete! Array sorted: [${arr.join(', ')}]`, 'c_done');
   steps[steps.length - 1].cells = arr.map((v, idx) => ({ idx, val: v, state: 'sorted' }));
 
   return steps;
@@ -364,22 +492,22 @@ onBeforeUnmount(() => {
                     <div class="ll-ptr-chip">left = <b class="ll-c-blue">{{ s.left >= 0 ? s.left : 'N/A' }}</b></div>
                     <div class="ll-ptr-chip">mid = <b class="ll-c-orange">{{ s.mid >= 0 ? s.mid : 'N/A' }}</b></div>
                     <div class="ll-ptr-chip">right = <b class="ll-c-purple">{{ s.right >= 0 ? s.right : 'N/A' }}</b></div>
+                    <div class="ll-ptr-chip">i = <b class="ll-c-green">{{ s.mi >= 0 ? s.mi : 'N/A' }}</b></div>
+                    <div class="ll-ptr-chip">j = <b class="ll-c-red">{{ s.mj >= 0 ? s.mj : 'N/A' }}</b></div>
+                    <div class="ll-ptr-chip">k = <b class="ll-c-teal">{{ s.mk >= 0 ? s.mk : 'N/A' }}</b></div>
                   </div>
 
                   <!-- Visual Diagram - Pastel Flat Cards -->
                   <div class="ll-arr-track">
                     <template v-for="cell in s.cells" :key="cell.idx">
                       <div class="ll-arr-cell-wrap">
-                        <div
-                          class="ll-who"
-                          :class="{
-                            'll-c-blue': cell.state === 'cur',
-                            'll-c-orange': cell.state === 'mid',
-                            'll-c-red': cell.state === 'swap',
-                            'll-c-green': cell.state === 'sorted'
-                          }"
-                        >
-                          {{ cellLabel(cell) }}
+                        <div class="ll-ptr-tag-wrap">
+                          <span v-if="s.left === cell.idx" class="ll-ptr-lbl ll-lbl-blue">left</span>
+                          <span v-if="s.mid === cell.idx" class="ll-ptr-lbl ll-lbl-orange">mid</span>
+                          <span v-if="s.right === cell.idx" class="ll-ptr-lbl ll-lbl-purple">right</span>
+                          <span v-if="s.mi >= 0 && cell.idx === (s.left + s.mi)" class="ll-ptr-lbl ll-lbl-green">i</span>
+                          <span v-if="s.mj >= 0 && cell.idx === (s.mid + 1 + s.mj)" class="ll-ptr-lbl ll-lbl-red">j</span>
+                          <span v-if="s.mk === cell.idx" class="ll-ptr-lbl ll-lbl-teal">k</span>
                         </div>
                         <div
                           class="ll-arr-box"
@@ -562,12 +690,20 @@ onBeforeUnmount(() => {
 .ll-perm-area { display: flex; flex-direction: column; align-items: stretch; min-height: 100%; width: 100%; min-width: 0; box-sizing: border-box; }
 .ll-ptrs { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 16px 4px; min-height: 36px; width: 100%; box-sizing: border-box; min-width: 0; }
 .ll-ptr-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px 10px; font-size: 12px; font-family: monospace; box-shadow: var(--shadow-sm); white-space: nowrap; flex-shrink: 0; }
-.ll-c-blue { color: var(--blue); } .ll-c-orange { color: var(--orange); } .ll-c-green { color: var(--green); } .ll-c-purple { color: var(--purple); } .ll-c-red { color: var(--red); }
+.ll-c-blue { color: var(--blue); } .ll-c-orange { color: var(--orange); } .ll-c-green { color: var(--green); } .ll-c-purple { color: var(--purple); } .ll-c-red { color: var(--red); } .ll-c-teal { color: #0d9488; }
 
 /* Pastel Flat Visual Diagram Box System */
 .ll-arr-track { display: flex; align-items: flex-start; flex-wrap: wrap; padding: 10px 16px 8px; min-height: 100px; gap: 10px; width: 100%; box-sizing: border-box; min-width: 0; }
 .ll-arr-cell-wrap { display: flex; flex-direction: column; align-items: center; min-width: 0; }
-.ll-who { font-size: 11px; font-weight: 700; height: 16px; margin-bottom: 2px; text-align: center; font-family: monospace; }
+.ll-ptr-tag-wrap { height: 28px; display: flex; align-items: flex-end; justify-content: center; gap: 4px; margin-bottom: 2px; }
+.ll-ptr-lbl { font-size: 12px; font-weight: 800; font-family: 'Consolas', 'Fira Code', monospace; display: inline-flex; flex-direction: column; align-items: center; line-height: 1; gap: 1px; white-space: nowrap; animation: ll-pop 0.2s ease; }
+.ll-ptr-lbl::after { content: '↓'; font-size: 11px; font-weight: 900; line-height: 1; margin-top: 1px; }
+.ll-lbl-blue { color: #3b82f6; }
+.ll-lbl-orange { color: #f97316; }
+.ll-lbl-purple { color: #9333ea; }
+.ll-lbl-green { color: #10b981; }
+.ll-lbl-red { color: #ef4444; }
+.ll-lbl-teal { color: #0d9488; }
 .ll-arr-box { width: 54px; height: 54px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--blue); border-radius: var(--radius); background: #eff6ff; color: #1e293b; font-weight: 700; font-size: 16px; box-shadow: var(--shadow-sm); transition: all 0.25s ease; animation: ll-pop .3s ease; }
 .ll-box-cur { border-color: #3b82f6 !important; background: #dbeafe !important; color: #1e40af !important; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important; transform: translateY(-2px); }
 .ll-box-mid { border-color: #f59e0b !important; background: #fef3c7 !important; color: #92400e !important; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25) !important; transform: translateY(-3px); }

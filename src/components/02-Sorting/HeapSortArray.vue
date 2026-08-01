@@ -40,7 +40,17 @@ const CODES = {
     ['c_swap_root', '        int temp = arr[0]; arr[0] = arr[i]; arr[i] = temp;'],
     ['c_heapify_call', '        heapify(arr, i, 0);'],
     ['', '    }'],
-    ['c_done', '}']
+    ['c_done', '}'],
+    ['', ''],
+    ['c_heapify_fn',    'void heapify(int arr[], int heapSize, int i) {'],
+    ['c_largest_init',  '    int largest = i, l = 2 * i + 1, r = 2 * i + 2;'],
+    ['c_check_left',    '    if (l < heapSize && arr[l] > arr[largest]) largest = l;'],
+    ['c_check_right',   '    if (r < heapSize && arr[r] > arr[largest]) largest = r;'],
+    ['c_heapify_swap',  '    if (largest != i) {'],
+    ['c_heapify_swap',  '        int temp = arr[i]; arr[i] = arr[largest]; arr[largest] = temp;'],
+    ['c_heapify_rec',   '        heapify(arr, heapSize, largest);'],
+    ['',                '    }'],
+    ['',                '}']
   ],
   cpp: [
     ['', 'class HeapSort {'],
@@ -53,6 +63,16 @@ const CODES = {
     ['c_heapify_call', '            heapify(arr, i, 0);'],
     ['', '        }'],
     ['c_done', '    }'],
+    ['', ''],
+    ['c_heapify_fn',   '    void heapify(vector<int>& arr, int heapSize, int i) {'],
+    ['c_largest_init', '        int largest = i, l = 2 * i + 1, r = 2 * i + 2;'],
+    ['c_check_left',   '        if (l < heapSize && arr[l] > arr[largest]) largest = l;'],
+    ['c_check_right',  '        if (r < heapSize && arr[r] > arr[largest]) largest = r;'],
+    ['c_heapify_swap', '        if (largest != i) {'],
+    ['c_heapify_swap', '            swap(arr[i], arr[largest]);'],
+    ['c_heapify_rec',  '            heapify(arr, heapSize, largest);'],
+    ['',               '        }'],
+    ['',               '    }'],
     ['', '};']
   ],
   python: [
@@ -64,7 +84,19 @@ const CODES = {
     ['c_extract_loop', '        for i in range(n - 1, 0, -1):'],
     ['c_swap_root', '            arr[0], arr[i] = arr[i], arr[0]'],
     ['c_heapify_call', '            self.heapify(arr, i, 0)'],
-    ['c_done', '']
+    ['c_done', ''],
+    ['', ''],
+    ['c_heapify_fn',   '    def heapify(self, arr, heap_size, i):'],
+    ['c_largest_init', '        largest = i'],
+    ['c_largest_init', '        l = 2 * i + 1'],
+    ['c_largest_init', '        r = 2 * i + 2'],
+    ['c_check_left',   '        if l < heap_size and arr[l] > arr[largest]:'],
+    ['c_check_left',   '            largest = l'],
+    ['c_check_right',  '        if r < heap_size and arr[r] > arr[largest]:'],
+    ['c_check_right',  '            largest = r'],
+    ['c_heapify_swap', '        if largest != i:'],
+    ['c_heapify_swap', '            arr[i], arr[largest] = arr[largest], arr[i]'],
+    ['c_heapify_rec',  '            self.heapify(arr, heap_size, largest)']
   ],
   javascript: [
     ['', 'class HeapSort {'],
@@ -78,6 +110,16 @@ const CODES = {
     ['c_heapify_call', '      this.heapify(arr, i, 0);'],
     ['', '    }'],
     ['c_done', '  }'],
+    ['', ''],
+    ['c_heapify_fn',   '  heapify(arr, heapSize, i) {'],
+    ['c_largest_init', '    let largest = i, l = 2 * i + 1, r = 2 * i + 2;'],
+    ['c_check_left',   '    if (l < heapSize && arr[l] > arr[largest]) largest = l;'],
+    ['c_check_right',  '    if (r < heapSize && arr[r] > arr[largest]) largest = r;'],
+    ['c_heapify_swap', '    if (largest !== i) {'],
+    ['c_heapify_swap', '      [arr[i], arr[largest]] = [arr[largest], arr[i]];'],
+    ['c_heapify_rec',  '      this.heapify(arr, heapSize, largest);'],
+    ['',               '    }'],
+    ['',               '  }'],
     ['', '}']
   ]
 };
@@ -111,7 +153,8 @@ function buildSteps(initialValues) {
   const n = arr.length;
   const callStack = [];
 
-  function pushStep(badge, code, heapSize, activeIndices = [], swapPair = [], largestIdx = -1) {
+  function pushStep(badge, code, heapSize, activeIndices = [], swapPair = [], largestIdx = -1, ptrs = {}) {
+    const { iIdx = -1, lIdx = -1, rIdx = -1, rootIdx = -1 } = ptrs;
     steps.push({
       badge,
       code,
@@ -125,20 +168,21 @@ function buildSteps(initialValues) {
       }),
       heapSize,
       largestIdx,
+      iIdx, lIdx, rIdx, rootIdx,
       n
     });
   }
 
   // Initial step
   callStack.push({ title: 'main()', rows: [] });
-  pushStep(`heapSort called on array of size ${n}`, 'c_entry', n);
+  pushStep(`heapSort called on array of size ${n}`, 'c_entry', n, [], [], -1, {});
 
   if (n === 0) {
-    pushStep('Array is empty (n = 0) → sorting complete', 'c_done', 0);
+    pushStep('Array is empty (n = 0) → sorting complete', 'c_done', 0, [], [], -1, {});
     return steps;
   }
 
-  pushStep(`int n = arr.length → n set to ${n}`, 'c_n', n);
+  pushStep(`int n = arr.length → n set to ${n}`, 'c_n', n, [], [], -1, {});
 
   function heapifyHelper(heapSize, i) {
     callStack.push({
@@ -146,78 +190,142 @@ function buildSteps(initialValues) {
       rows: [['heapSize', String(heapSize)], ['i', String(i)]]
     });
 
-    pushStep(`heapify called for node index ${i} (val = ${arr[i]}) in heap of size ${heapSize}`, 'c_heapify_fn', heapSize, [i]);
-
-    let largest = i;
     const left = 2 * i + 1;
     const right = 2 * i + 2;
+    let largest = i;
 
-    pushStep(`int largest = ${i}, left = ${left}, right = ${right}`, 'c_largest_init', heapSize, [i], [], largest);
+    pushStep(
+      `heapify called for node index ${i} (val = ${arr[i]}) in heap of size ${heapSize}`,
+      'c_heapify_fn', heapSize, [i], [], -1,
+      { iIdx: i }
+    );
+
+    pushStep(
+      `int largest = ${i}, left = ${left}, right = ${right}`,
+      'c_largest_init', heapSize, [i], [], largest,
+      { iIdx: i, lIdx: left < heapSize ? left : -1, rIdx: right < heapSize ? right : -1, largestIdx: largest }
+    );
 
     // Check left
     if (left < heapSize) {
       const compL = arr[left] > arr[largest];
-      pushStep(`if (left < heapSize && arr[left] > arr[largest]) → arr[${left}] (${arr[left]}) > arr[${largest}] (${arr[largest]}) → ${compL ? 'TRUE' : 'FALSE'}`, 'c_check_left', heapSize, [i, left], [], largest);
-      if (compL) {
-        largest = left;
-        pushStep(`largest updated to left child index ${left} (${arr[left]})`, 'c_check_left', heapSize, [i, left], [], largest);
-      }
+      if (compL) largest = left;
+      pushStep(
+        `if (left < heapSize && arr[left] > arr[largest]) → arr[${left}] (${arr[left]}) > arr[${i}] (${arr[i]}) → ${compL ? 'TRUE (largest updated to left ' + left + ')' : 'FALSE'}`,
+        'c_check_left', heapSize, [i, left], [], largest,
+        { iIdx: i, lIdx: left, rIdx: right < heapSize ? right : -1, largestIdx: largest }
+      );
+    } else {
+      pushStep(
+        `if (left < heapSize) → left ${left} >= heapSize ${heapSize} → FALSE`,
+        'c_check_left', heapSize, [i], [], largest,
+        { iIdx: i, lIdx: -1, rIdx: right < heapSize ? right : -1, largestIdx: largest }
+      );
     }
 
     // Check right
     if (right < heapSize) {
       const compR = arr[right] > arr[largest];
-      pushStep(`if (right < heapSize && arr[right] > arr[largest]) → arr[${right}] (${arr[right]}) > arr[${largest}] (${arr[largest]}) → ${compR ? 'TRUE' : 'FALSE'}`, 'c_check_right', heapSize, [i, right], [], largest);
-      if (compR) {
-        largest = right;
-        pushStep(`largest updated to right child index ${right} (${arr[right]})`, 'c_check_right', heapSize, [i, right], [], largest);
-      }
+      if (compR) largest = right;
+      pushStep(
+        `if (right < heapSize && arr[right] > arr[largest]) → arr[${right}] (${arr[right]}) > arr[${largest}] (${arr[arr[largest] !== undefined ? largest : i]}) → ${compR ? 'TRUE (largest updated to right ' + right + ')' : 'FALSE'}`,
+        'c_check_right', heapSize, [i, right], [], largest,
+        { iIdx: i, lIdx: left < heapSize ? left : -1, rIdx: right, largestIdx: largest }
+      );
+    } else {
+      pushStep(
+        `if (right < heapSize) → right ${right} >= heapSize ${heapSize} → FALSE`,
+        'c_check_right', heapSize, [i], [], largest,
+        { iIdx: i, lIdx: left < heapSize ? left : -1, rIdx: -1, largestIdx: largest }
+      );
     }
 
     if (largest !== i) {
-      pushStep(`if (largest != i) → swapping arr[${i}] (${arr[i]}) and arr[${largest}] (${arr[largest]})`, 'c_heapify_swap', heapSize, [i, largest], [i, largest], largest);
+      pushStep(
+        `if (largest != i) → ${largest} != ${i} → TRUE (swapping arr[${i}] and arr[${largest}])`,
+        'c_heapify_swap', heapSize, [i, largest], [], largest,
+        { iIdx: i, lIdx: left < heapSize ? left : -1, rIdx: right < heapSize ? right : -1, largestIdx: largest }
+      );
 
       const temp = arr[i];
       arr[i] = arr[largest];
       arr[largest] = temp;
 
-      pushStep(`Swapped arr[${i}] and arr[${largest}]. Re-heapifying subtree at index ${largest}`, 'c_heapify_rec', heapSize, [i, largest], [i, largest], largest);
+      pushStep(
+        `Swapped arr[${i}] (${arr[i]}) and arr[${largest}] (${arr[largest]}). Re-heapifying subtree at index ${largest}`,
+        'c_heapify_swap', heapSize, [i, largest], [i, largest], largest,
+        { iIdx: i, lIdx: left < heapSize ? left : -1, rIdx: right < heapSize ? right : -1, largestIdx: largest }
+      );
+
+      pushStep(
+        `heapify(arr, ${heapSize}, ${largest}) → recurse on subtree at index ${largest}`,
+        'c_heapify_rec', heapSize, [largest], [], largest,
+        { iIdx: largest }
+      );
+
       heapifyHelper(heapSize, largest);
     } else {
-      pushStep(`Subtree at index ${i} already satisfies Max-Heap property`, 'c_heapify_fn', heapSize, [i], [], largest);
+      pushStep(
+        `if (largest != i) → ${largest} == ${i} → FALSE (subtree satisfies Max-Heap)`,
+        'c_heapify_swap', heapSize, [i], [], largest,
+        { iIdx: i, lIdx: left < heapSize ? left : -1, rIdx: right < heapSize ? right : -1, largestIdx: largest }
+      );
     }
 
     callStack.pop();
   }
 
   // Step 1: Build Max-Heap
-  pushStep(`Building Max-Heap by calling heapify from index ${Math.floor(n / 2) - 1} down to 0`, 'c_build_heap', n);
+  const startI = Math.floor(n / 2) - 1;
+  pushStep(`Building Max-Heap by calling heapify from index ${startI} down to 0`, 'c_build_heap', n, [], [], -1, { iIdx: startI });
 
-  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
-    pushStep(`Build Heap Pass: heapify(arr, ${n}, ${i})`, 'c_build_heapify', n, [i]);
+  for (let i = startI; i >= 0; i--) {
+    pushStep(`for (int i = ${i}; i >= 0; i--) → heapifying index ${i}`, 'c_build_heap', n, [i], [], -1, { iIdx: i });
+    pushStep(`heapify(arr, ${n}, ${i})`, 'c_build_heapify', n, [i], [], -1, { iIdx: i });
     heapifyHelper(n, i);
   }
 
-  pushStep(`Max-Heap built successfully! Root element arr[0] (${arr[0]}) is the maximum value`, 'c_build_heap', n);
+  pushStep(`Max-Heap built successfully! Root element arr[0] (${arr[0]}) is the maximum value`, 'c_build_heap', n, [0], [], -1, { rootIdx: 0 });
 
   // Step 2: Extract elements
   for (let i = n - 1; i > 0; i--) {
-    pushStep(`Extracting max element arr[0] (${arr[0]}) and swapping with arr[${i}] (${arr[i]})`, 'c_swap_root', i + 1, [0, i], [0, i]);
+    pushStep(
+      `for (int i = ${i}; i > 0; i--) → preparing to extract root arr[0] to position ${i}`,
+      'c_extract_loop', i + 1, [0, i], [], -1,
+      { rootIdx: 0, iIdx: i }
+    );
+
+    pushStep(
+      `Extracting max element arr[0] (${arr[0]}) and swapping with arr[${i}] (${arr[i]})`,
+      'c_swap_root', i + 1, [0, i], [0, i], -1,
+      { rootIdx: 0, iIdx: i }
+    );
 
     const temp = arr[0];
     arr[0] = arr[i];
     arr[i] = temp;
 
-    pushStep(`Element ${temp} placed at final sorted index ${i}. Reduced heap size to ${i}`, 'c_extract_loop', i, [], [], -1);
-
-    pushStep(`Restoring Max-Heap: heapify(arr, ${i}, 0)`, 'c_heapify_call', i, [0]);
+    pushStep(`Restoring Max-Heap on reduced heap size ${i}: heapify(arr, ${i}, 0)`, 'c_heapify_call', i, [0], [], -1, { rootIdx: 0, iIdx: i });
     heapifyHelper(i, 0);
   }
 
-  pushStep(`Heap Sort Complete! Entire array is sorted: [${arr.join(', ')}]`, 'c_done', 0);
+  pushStep(`Heap Sort Complete! Entire array is sorted: [${arr.join(', ')}]`, 'c_done', 0, [], [], -1, {});
   steps[steps.length - 1].cells = arr.map((v, idx) => ({ idx, val: v, state: 'sorted' }));
 
   return steps;
+}
+
+function cellLabel(cell) {
+  const tags = [];
+  const sv = s.value;
+  if (sv.rootIdx === cell.idx) tags.push('root');
+  if (sv.iIdx === cell.idx) tags.push('i');
+  if (sv.lIdx === cell.idx) tags.push('l');
+  if (sv.rIdx === cell.idx) tags.push('r');
+  if (sv.largestIdx === cell.idx) tags.push('largest');
+  if (tags.length) return tags.join(', ') + ' \u2192';
+  if (cell.state === 'sorted') return 'sorted';
+  return '';
 }
 
 const inpElems = ref('1 12 9 5 6 10');
@@ -225,7 +333,7 @@ const lang = ref('java');
 const speed = ref(650);
 const si = ref(0);
 const playing = ref(false);
-const showTreeModal = ref(false); // Floating Binary Tree Modal toggle (defaults to hidden)
+const showTreeModal = ref(false);
 const vizHeight = ref(265);
 const tableHeight = ref(60);
 const leftWidth = ref(50);
@@ -239,6 +347,50 @@ const codeLines = computed(() => CODES[lang.value] || []);
 
 const hoveredNodeIdx = ref(null);
 const hoveredParentChildEdge = ref(null);
+
+let playTimer = null;
+
+function applyInput() {
+  const raw = String(inpElems.value).trim();
+  let arr = raw === '' ? [] : raw.split(/[\s,]+/).filter(x => x !== '').map(Number).filter(n => !isNaN(n));
+  if (raw !== '' && !arr.length) {
+    alert('Enter valid numbers separated by spaces or commas.');
+    return;
+  }
+  inpElems.value = arr.join(' ');
+
+  playing.value = false;
+  stepsData.steps = buildSteps(arr);
+  si.value = 0;
+}
+
+function stepBy(d) {
+  si.value = Math.max(0, Math.min(steps.value.length - 1, si.value + d));
+}
+
+function togglePlay() {
+  const next = !playing.value;
+  if (next && si.value >= steps.value.length - 1) si.value = 0;
+  playing.value = next;
+}
+
+function tick() {
+  clearTimeout(playTimer);
+  if (!playing.value) return;
+  if (si.value >= steps.value.length - 1) {
+    playing.value = false;
+    return;
+  }
+  playTimer = setTimeout(() => {
+    si.value = Math.min(steps.value.length - 1, si.value + 1);
+    tick();
+  }, 2100 - speed.value);
+}
+
+watch(playing, v => {
+  if (v) tick();
+  else clearTimeout(playTimer);
+});
 
 // ── Binary Heap Tree Geometry Calculation ──
 const treeNodes = computed(() => {
@@ -296,55 +448,7 @@ function isNodeHoveredChild(nodeIdx) {
   return hoveredParentChildEdge.value && hoveredParentChildEdge.value.childIdx === nodeIdx;
 }
 
-let playTimer = null;
 
-function applyInput() {
-  const raw = String(inpElems.value).trim();
-  let arr = raw === '' ? [] : raw.split(/[\s,]+/).filter(x => x !== '').map(Number).filter(n => !isNaN(n));
-  if (raw !== '' && !arr.length) {
-    alert('Enter valid numbers separated by spaces or commas.');
-    return;
-  }
-  inpElems.value = arr.join(' ');
-
-  playing.value = false;
-  clearTimeout(playTimer);
-  stepsData.steps = buildSteps(arr);
-  si.value = 0;
-}
-
-function stepBy(d) {
-  si.value = Math.max(0, Math.min(steps.value.length - 1, si.value + d));
-}
-
-function togglePlay() {
-  playing.value = !playing.value;
-  if (playing.value) {
-    if (si.value >= steps.value.length - 1) si.value = 0;
-    playNext();
-  } else {
-    clearTimeout(playTimer);
-  }
-}
-
-function playNext() {
-  if (!playing.value) return;
-  if (si.value < steps.value.length - 1) {
-    si.value++;
-    playTimer = setTimeout(playNext, 2100 - speed.value);
-  } else {
-    playing.value = false;
-  }
-}
-
-function cellLabel(cell) {
-  const tags = [];
-  if (cell.idx === 0) tags.push('root');
-  if (s.value.largestIdx === cell.idx) tags.push('largest');
-  if (tags.length) return tags.join(', ') + ' \u2192';
-  if (cell.state === 'sorted') return 'sorted';
-  return '';
-}
 
 function nodeColor(state) {
   if (state === 'sorted') return '#10b981';
@@ -445,7 +549,11 @@ onBeforeUnmount(() => {
                 <div class="ll-perm-area">
                   <div class="ll-ptrs">
                     <div class="ll-ptr-chip">heapSize = <b class="ll-c-blue">{{ s.heapSize !== undefined ? s.heapSize : 'N/A' }}</b></div>
+                    <div class="ll-ptr-chip">i = <b class="ll-c-teal">{{ s.iIdx >= 0 ? s.iIdx : 'N/A' }}</b></div>
                     <div class="ll-ptr-chip">largest = <b class="ll-c-orange">{{ s.largestIdx >= 0 ? s.largestIdx : 'N/A' }}</b></div>
+                    <div class="ll-ptr-chip">l = <b class="ll-c-green">{{ s.lIdx >= 0 ? s.lIdx : 'N/A' }}</b></div>
+                    <div class="ll-ptr-chip">r = <b class="ll-c-red">{{ s.rIdx >= 0 ? s.rIdx : 'N/A' }}</b></div>
+                    <div class="ll-ptr-chip">root = <b class="ll-c-purple">{{ s.rootIdx >= 0 ? s.rootIdx : 'N/A' }}</b></div>
                     <div class="ll-ptr-chip">n = <b class="ll-c-purple">{{ s.n }}</b></div>
                   </div>
 
@@ -458,15 +566,12 @@ onBeforeUnmount(() => {
                         @mouseleave="hoveredNodeIdx = null"
                         style="cursor: pointer;"
                       >
-                        <div
-                          class="ll-who"
-                          :class="{
-                            'll-c-orange': cell.state === 'largest' || cell.state === 'cur',
-                            'll-c-red': cell.state === 'swap',
-                            'll-c-green': cell.state === 'sorted'
-                          }"
-                        >
-                          {{ cellLabel(cell) }}
+                        <div class="ll-ptr-tag-wrap">
+                          <span v-if="s.rootIdx === cell.idx" class="ll-ptr-lbl ll-lbl-purple">root</span>
+                          <span v-if="s.iIdx === cell.idx" class="ll-ptr-lbl ll-lbl-teal">i</span>
+                          <span v-if="s.lIdx === cell.idx" class="ll-ptr-lbl ll-lbl-green">l</span>
+                          <span v-if="s.rIdx === cell.idx" class="ll-ptr-lbl ll-lbl-red">r</span>
+                          <span v-if="s.largestIdx === cell.idx" class="ll-ptr-lbl ll-lbl-amber">largest</span>
                         </div>
                         <div
                           class="ll-arr-box"
@@ -772,12 +877,21 @@ onBeforeUnmount(() => {
 .ll-perm-area { display: flex; flex-direction: column; align-items: stretch; min-height: 100%; width: 100%; min-width: 0; box-sizing: border-box; }
 .ll-ptrs { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 16px 4px; min-height: 36px; width: 100%; box-sizing: border-box; min-width: 0; }
 .ll-ptr-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px 10px; font-size: 12px; font-family: monospace; box-shadow: var(--shadow-sm); white-space: nowrap; flex-shrink: 0; }
-.ll-c-blue { color: var(--blue); } .ll-c-orange { color: var(--orange); } .ll-c-green { color: var(--green); } .ll-c-purple { color: var(--purple); } .ll-c-red { color: var(--red); }
+.ll-c-blue { color: var(--blue); } .ll-c-orange { color: var(--orange); } .ll-c-green { color: var(--green); } .ll-c-purple { color: var(--purple); } .ll-c-red { color: var(--red); } .ll-c-teal { color: #0d9488; }
 
 /* Pastel Flat Visual Diagram Box System */
 .ll-arr-track { display: flex; align-items: flex-start; flex-wrap: wrap; padding: 10px 16px 8px; min-height: 100px; gap: 10px; width: 100%; box-sizing: border-box; min-width: 0; }
 .ll-arr-cell-wrap { display: flex; flex-direction: column; align-items: center; min-width: 0; }
-.ll-who { font-size: 11px; font-weight: 700; height: 16px; margin-bottom: 2px; text-align: center; font-family: monospace; }
+.ll-ptr-tag-wrap { height: 28px; display: flex; align-items: flex-end; justify-content: center; gap: 4px; margin-bottom: 2px; }
+.ll-ptr-lbl { font-size: 12px; font-weight: 800; font-family: 'Consolas', 'Fira Code', monospace; display: inline-flex; flex-direction: column; align-items: center; line-height: 1; gap: 1px; white-space: nowrap; animation: ll-pop 0.2s ease; }
+.ll-ptr-lbl::after { content: '↓'; font-size: 11px; font-weight: 900; line-height: 1; margin-top: 1px; }
+.ll-lbl-blue { color: #3b82f6; }
+.ll-lbl-orange { color: #f97316; }
+.ll-lbl-purple { color: #9333ea; }
+.ll-lbl-green { color: #10b981; }
+.ll-lbl-red { color: #ef4444; }
+.ll-lbl-teal { color: #0d9488; }
+.ll-lbl-amber { color: #d97706; }
 .ll-arr-box { width: 54px; height: 54px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--blue); border-radius: var(--radius); background: #eff6ff; color: #1e293b; font-weight: 700; font-size: 16px; box-shadow: var(--shadow-sm); transition: all 0.25s ease; animation: ll-pop .3s ease; }
 .ll-box-cur { border-color: #3b82f6 !important; background: #dbeafe !important; color: #1e40af !important; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important; transform: translateY(-2px); }
 .ll-box-largest { border-color: #f59e0b !important; background: #fef3c7 !important; color: #92400e !important; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25) !important; transform: translateY(-3px); }

@@ -38,7 +38,20 @@ const CODES = {
     ['c_rec_left', '        quickSort(arr, low, pi - 1);'],
     ['c_rec_right', '        quickSort(arr, pi + 1, high);'],
     ['', '    }'],
-    ['c_done', '}']
+    ['c_done', '}'],
+    ['', ''],
+    ['c_part_fn',    'int partition(int arr[], int low, int high) {'],
+    ['c_pivot_set',  '    int pivot = arr[high];'],
+    ['c_i_init',     '    int i = low - 1;'],
+    ['c_j_loop',     '    for (int j = low; j < high; j++) {'],
+    ['c_check',      '        if (arr[j] < pivot) {'],
+    ['c_i_inc',      '            i++;'],
+    ['c_swap_inner', '            int temp = arr[i]; arr[i] = arr[j]; arr[j] = temp;'],
+    ['',             '        }'],
+    ['',             '    }'],
+    ['c_pivot_swap', '    int temp = arr[i + 1]; arr[i + 1] = arr[high]; arr[high] = temp;'],
+    ['c_return_pi',  '    return i + 1;'],
+    ['',             '}']
   ],
   cpp: [
     ['', 'class QuickSort {'],
@@ -50,6 +63,19 @@ const CODES = {
     ['c_rec_right', '            quickSort(arr, pi + 1, high);'],
     ['', '        }'],
     ['c_done', '    }'],
+    ['', ''],
+    ['c_part_fn',    '    int partition(vector<int>& arr, int low, int high) {'],
+    ['c_pivot_set',  '        int pivot = arr[high];'],
+    ['c_i_init',     '        int i = low - 1;'],
+    ['c_j_loop',     '        for (int j = low; j < high; j++) {'],
+    ['c_check',      '            if (arr[j] < pivot) {'],
+    ['c_i_inc',      '                i++;'],
+    ['c_swap_inner', '                swap(arr[i], arr[j]);'],
+    ['',             '            }'],
+    ['',             '        }'],
+    ['c_pivot_swap', '        swap(arr[i + 1], arr[high]);'],
+    ['c_return_pi',  '        return i + 1;'],
+    ['',             '    }'],
     ['', '};']
   ],
   python: [
@@ -59,7 +85,17 @@ const CODES = {
     ['c_part_call', '            pi = self.partition(arr, low, high)'],
     ['c_rec_left', '            self.quick_sort(arr, low, pi - 1)'],
     ['c_rec_right', '            self.quick_sort(arr, pi + 1, high)'],
-    ['c_done', '']
+    ['c_done', ''],
+    ['', ''],
+    ['c_part_fn',    '    def partition(self, arr, low, high):'],
+    ['c_pivot_set',  '        pivot = arr[high]'],
+    ['c_i_init',     '        i = low - 1'],
+    ['c_j_loop',     '        for j in range(low, high):'],
+    ['c_check',      '            if arr[j] < pivot:'],
+    ['c_i_inc',      '                i += 1'],
+    ['c_swap_inner', '                arr[i], arr[j] = arr[j], arr[i]'],
+    ['c_pivot_swap', '        arr[i + 1], arr[high] = arr[high], arr[i + 1]'],
+    ['c_return_pi',  '        return i + 1']
   ],
   javascript: [
     ['', 'class QuickSort {'],
@@ -70,6 +106,19 @@ const CODES = {
     ['c_rec_right', '      this.quickSort(arr, pi + 1, high);'],
     ['', '    }'],
     ['c_done', '  }'],
+    ['', ''],
+    ['c_part_fn',    '  partition(arr, low, high) {'],
+    ['c_pivot_set',  '    let pivot = arr[high];'],
+    ['c_i_init',     '    let i = low - 1;'],
+    ['c_j_loop',     '    for (let j = low; j < high; j++) {'],
+    ['c_check',      '      if (arr[j] < pivot) {'],
+    ['c_i_inc',      '        i++;'],
+    ['c_swap_inner', '        [arr[i], arr[j]] = [arr[j], arr[i]];'],
+    ['',             '      }'],
+    ['',             '    }'],
+    ['c_pivot_swap', '    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];'],
+    ['c_return_pi',  '    return i + 1;'],
+    ['',             '  }'],
     ['', '}']
   ]
 };
@@ -377,16 +426,12 @@ onBeforeUnmount(() => {
                   <div class="ll-arr-track">
                     <template v-for="cell in s.cells" :key="cell.idx">
                       <div class="ll-arr-cell-wrap">
-                        <div
-                          class="ll-who"
-                          :class="{
-                            'll-c-red': cell.state === 'pivot' || cell.state === 'swap',
-                            'll-c-orange': cell.state === 'j_ptr',
-                            'll-c-green': cell.state === 'i_ptr' || cell.state === 'sorted',
-                            'll-c-blue': cell.state === 'cur'
-                          }"
-                        >
-                          {{ cellLabel(cell) }}
+                        <div class="ll-ptr-tag-wrap">
+                          <span v-if="s.low === cell.idx" class="ll-ptr-lbl ll-lbl-blue">low</span>
+                          <span v-if="s.high === cell.idx && cell.state !== 'pivot'" class="ll-ptr-lbl ll-lbl-purple">high</span>
+                          <span v-if="cell.state === 'pivot'" class="ll-ptr-lbl ll-lbl-red">pivot</span>
+                          <span v-if="s.i === cell.idx" class="ll-ptr-lbl ll-lbl-green">i</span>
+                          <span v-if="s.j === cell.idx" class="ll-ptr-lbl ll-lbl-orange">j</span>
                         </div>
                         <div
                           class="ll-arr-box"
@@ -577,7 +622,14 @@ onBeforeUnmount(() => {
 /* Pastel Flat Visual Diagram Box System */
 .ll-arr-track { display: flex; align-items: flex-start; flex-wrap: wrap; padding: 10px 16px 8px; min-height: 100px; gap: 10px; width: 100%; box-sizing: border-box; min-width: 0; }
 .ll-arr-cell-wrap { display: flex; flex-direction: column; align-items: center; min-width: 0; }
-.ll-who { font-size: 11px; font-weight: 700; height: 16px; margin-bottom: 2px; text-align: center; font-family: monospace; }
+.ll-ptr-tag-wrap { height: 28px; display: flex; align-items: flex-end; justify-content: center; gap: 4px; margin-bottom: 2px; }
+.ll-ptr-lbl { font-size: 12px; font-weight: 800; font-family: 'Consolas', 'Fira Code', monospace; display: inline-flex; flex-direction: column; align-items: center; line-height: 1; gap: 1px; white-space: nowrap; animation: ll-pop 0.2s ease; }
+.ll-ptr-lbl::after { content: '↓'; font-size: 11px; font-weight: 900; line-height: 1; margin-top: 1px; }
+.ll-lbl-blue { color: #3b82f6; }
+.ll-lbl-orange { color: #f97316; }
+.ll-lbl-purple { color: #9333ea; }
+.ll-lbl-green { color: #10b981; }
+.ll-lbl-red { color: #ef4444; }
 .ll-arr-box { width: 54px; height: 54px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--blue); border-radius: var(--radius); background: #eff6ff; color: #1e293b; font-weight: 700; font-size: 16px; box-shadow: var(--shadow-sm); transition: all 0.25s ease; animation: ll-pop .3s ease; }
 .ll-box-cur { border-color: #3b82f6 !important; background: #dbeafe !important; color: #1e40af !important; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important; transform: translateY(-2px); }
 .ll-box-pivot { border-color: #ef4444 !important; background: #fef2f2 !important; color: #991b1b !important; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important; transform: translateY(-4px); }

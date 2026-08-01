@@ -137,7 +137,7 @@ function buildSteps(initialValues) {
       frame(fnLabel, [['arr', '[' + arr.join(', ') + ']']])
     ],
     cells: currentCellStates(-1, -1, new Set()),
-    i: -1, j: -1, n, comparisons: 0, swaps: 0
+    i: -1, j: -1, temp: null, n, comparisons: 0, swaps: 0
   });
 
   if (n === 0) {
@@ -146,7 +146,7 @@ function buildSteps(initialValues) {
       code: 'c_done',
       vars: [frame('main()', []), frame(fnLabel, [['n', '0']])],
       cells: [],
-      i: -1, j: -1, n: 0, comparisons: 0, swaps: 0
+      i: -1, j: -1, temp: null, n: 0, comparisons: 0, swaps: 0
     });
     return steps;
   }
@@ -160,7 +160,7 @@ function buildSteps(initialValues) {
       frame(fnLabel, [['n', String(n)], ['arr', '[' + arr.join(', ') + ']']])
     ],
     cells: currentCellStates(-1, -1, new Set()),
-    i: -1, j: -1, n, comparisons: 0, swaps: 0
+    i: -1, j: -1, temp: null, n, comparisons: 0, swaps: 0
   });
 
   const sortedSet = new Set();
@@ -177,7 +177,7 @@ function buildSteps(initialValues) {
         frame(fnLabel, [['n', String(n)], ['i', String(i)]])
       ],
       cells: currentCellStates(i, -1, sortedSet),
-      i, j: -1, n, comparisons, swaps
+      i, j: -1, temp: null, n, comparisons, swaps
     });
 
     let swapped = false;
@@ -189,7 +189,7 @@ function buildSteps(initialValues) {
         frame(fnLabel, [['n', String(n)], ['i', String(i)], ['swapped', 'false']])
       ],
       cells: currentCellStates(i, -1, sortedSet),
-      i, j: -1, n, comparisons, swaps
+      i, j: -1, temp: null, n, comparisons, swaps
     });
 
     // Inner loop
@@ -205,7 +205,7 @@ function buildSteps(initialValues) {
           frame(fnLabel, [['n', String(n)], ['i', String(i)], ['j', String(j)], ['swapped', String(swapped)]])
         ],
         cells: currentCellStates(i, j, sortedSet, [j, j + 1]),
-        i, j, n, comparisons, swaps
+        i, j, temp: null, n, comparisons, swaps
       });
 
       // Check condition
@@ -217,7 +217,7 @@ function buildSteps(initialValues) {
           frame(fnLabel, [['i', String(i)], ['j', String(j)], ['arr[j]', String(arr[j])], ['arr[j+1]', String(arr[j + 1])]])
         ],
         cells: currentCellStates(i, j, sortedSet, [j, j + 1]),
-        i, j, n, comparisons, swaps
+        i, j, temp: null, n, comparisons, swaps
       });
 
       if (arr[j] > arr[j + 1]) {
@@ -231,7 +231,7 @@ function buildSteps(initialValues) {
             frame(fnLabel, [['i', String(i)], ['j', String(j)], ['temp', String(temp)]])
           ],
           cells: currentCellStates(i, j, sortedSet, [], [j, j + 1]),
-          i, j, n, comparisons, swaps
+          i, j, temp, n, comparisons, swaps
         });
 
         // Write arr[j] = arr[j+1]
@@ -241,10 +241,10 @@ function buildSteps(initialValues) {
           code: 'c_swap_w1',
           vars: [
             frame('main()', []),
-            frame(fnLabel, [['i', String(i)], ['j', String(j)], ['arr[j]', String(arr[j])]])
+            frame(fnLabel, [['i', String(i)], ['j', String(j)], ['temp', String(temp)], ['arr[j]', String(arr[j])]])
           ],
           cells: currentCellStates(i, j, sortedSet, [], [j, j + 1]),
-          i, j, n, comparisons, swaps
+          i, j, temp, n, comparisons, swaps
         });
 
         // Write arr[j+1] = temp
@@ -255,10 +255,10 @@ function buildSteps(initialValues) {
           code: 'c_swap_w2',
           vars: [
             frame('main()', []),
-            frame(fnLabel, [['i', String(i)], ['j', String(j)], ['arr[j+1]', String(temp)]])
+            frame(fnLabel, [['i', String(i)], ['j', String(j)], ['temp', String(temp)], ['arr[j+1]', String(temp)]])
           ],
           cells: currentCellStates(i, j, sortedSet, [], [j, j + 1]),
-          i, j, n, comparisons, swaps
+          i, j, temp, n, comparisons, swaps
         });
 
         // Set swapped = true
@@ -268,10 +268,10 @@ function buildSteps(initialValues) {
           code: 'c_swapped_set',
           vars: [
             frame('main()', []),
-            frame(fnLabel, [['i', String(i)], ['j', String(j)], ['swapped', 'true']])
+            frame(fnLabel, [['i', String(i)], ['j', String(j)], ['temp', String(temp)], ['swapped', 'true']])
           ],
           cells: currentCellStates(i, j, sortedSet, [j, j + 1]),
-          i, j, n, comparisons, swaps
+          i, j, temp, n, comparisons, swaps
         });
       }
     }
@@ -286,7 +286,7 @@ function buildSteps(initialValues) {
         frame(fnLabel, [['i', String(i)], ['sorted_index', String(n - i - 1)], ['swapped', String(swapped)]])
       ],
       cells: currentCellStates(i, -1, sortedSet),
-      i, j: -1, n, comparisons, swaps
+      i, j: -1, temp: null, n, comparisons, swaps
     });
 
     // Check break if swapped is false
@@ -298,7 +298,7 @@ function buildSteps(initialValues) {
         frame(fnLabel, [['i', String(i)], ['swapped', String(swapped)]])
       ],
       cells: currentCellStates(i, -1, sortedSet),
-      i, j: -1, n, comparisons, swaps
+      i, j: -1, temp: null, n, comparisons, swaps
     });
 
     if (!swapped) {
@@ -310,7 +310,7 @@ function buildSteps(initialValues) {
           frame(fnLabel, [['break', 'early_exit']])
         ],
         cells: arr.map((v, idx) => ({ idx, val: v, state: 'sorted' })),
-        i, j: -1, n, comparisons, swaps
+        i, j: -1, temp: null, n, comparisons, swaps
       });
       break;
     }
@@ -327,7 +327,7 @@ function buildSteps(initialValues) {
       frame(fnLabel, [['status', 'complete'], ['comparisons', String(comparisons)], ['swaps', String(swaps)]])
     ],
     cells: arr.map((v, idx) => ({ idx, val: v, state: 'sorted' })),
-    i: n - 1, j: -1, n, comparisons, swaps
+    i: n - 1, j: -1, temp: null, n, comparisons, swaps
   });
 
   return steps;
@@ -492,22 +492,16 @@ onBeforeUnmount(() => {
                     <div class="ll-ptr-chip">Pass i = <b class="ll-c-blue">{{ s.i >= 0 ? s.i : 'N/A' }}</b></div>
                     <div class="ll-ptr-chip">j = <b class="ll-c-orange">{{ s.j >= 0 ? s.j : 'N/A' }}</b></div>
                     <div class="ll-ptr-chip">Comparisons = <b class="ll-c-purple">{{ s.comparisons }}</b></div>
-                    <div class="ll-ptr-chip">Swaps = <b class="ll-c-green">{{ s.swaps }}</b></div>
+                    <div class="ll-ptr-chip">temp = <b class="ll-c-amber">{{ s.temp !== null ? s.temp : 'N/A' }}</b></div>
                   </div>
 
                   <!-- Visual Diagram - Pastel Flat Cards -->
                   <div class="ll-arr-track">
                     <template v-for="cell in s.cells" :key="cell.idx">
                       <div class="ll-arr-cell-wrap">
-                        <div
-                          class="ll-who"
-                          :class="{
-                            'll-c-orange': cell.state === 'cur',
-                            'll-c-red': cell.state === 'swap',
-                            'll-c-green': cell.state === 'sorted'
-                          }"
-                        >
-                          {{ cellLabel(cell) }}
+                        <div class="ll-ptr-tag-wrap">
+                          <span v-if="s.j >= 0 && cell.idx === s.j" class="ll-ptr-lbl ll-lbl-orange">j</span>
+                          <span v-if="s.j >= 0 && cell.idx === s.j + 1" class="ll-ptr-lbl ll-lbl-orange">j+1</span>
                         </div>
                         <div
                           class="ll-arr-box"
@@ -693,7 +687,14 @@ onBeforeUnmount(() => {
 /* Pastel Flat Visual Diagram Box System */
 .ll-arr-track { display: flex; align-items: flex-start; flex-wrap: wrap; padding: 10px 16px 8px; min-height: 100px; gap: 10px; width: 100%; box-sizing: border-box; min-width: 0; }
 .ll-arr-cell-wrap { display: flex; flex-direction: column; align-items: center; min-width: 0; }
-.ll-who { font-size: 11px; font-weight: 700; height: 16px; margin-bottom: 2px; text-align: center; font-family: monospace; }
+.ll-ptr-tag-wrap { height: 28px; display: flex; align-items: flex-end; justify-content: center; gap: 4px; margin-bottom: 2px; }
+.ll-ptr-lbl { font-size: 12px; font-weight: 800; font-family: 'Consolas', 'Fira Code', monospace; display: inline-flex; flex-direction: column; align-items: center; line-height: 1; gap: 1px; white-space: nowrap; animation: ll-pop 0.2s ease; }
+.ll-ptr-lbl::after { content: '↓'; font-size: 11px; font-weight: 900; line-height: 1; margin-top: 1px; }
+.ll-lbl-blue { color: #3b82f6; }
+.ll-lbl-orange { color: #f97316; }
+.ll-lbl-purple { color: #9333ea; }
+.ll-lbl-green { color: #10b981; }
+.ll-lbl-red { color: #ef4444; }
 .ll-arr-box { width: 54px; height: 54px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--blue); border-radius: var(--radius); background: #eff6ff; color: #1e293b; font-weight: 700; font-size: 16px; box-shadow: var(--shadow-sm); transition: all 0.25s ease; animation: ll-pop .3s ease; }
 .ll-box-cur { border-color: #f59e0b !important; background: #fef3c7 !important; color: #92400e !important; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25) !important; transform: translateY(-2px); }
 .ll-box-swap { border-color: #ef4444 !important; background: #fef2f2 !important; color: #991b1b !important; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25) !important; transform: scale(1.05); }

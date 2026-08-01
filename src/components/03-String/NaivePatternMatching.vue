@@ -10,7 +10,9 @@ const CODES = {
   java: [
     ['', 'class NaivePatternMatching {'],
     ['c_entry', '    List<Integer> search(String text, String pattern) {'],
-    ['c_init', '        List<Integer> matches = new ArrayList<>(); int n = text.length(), m = pattern.length();'],
+    ['c_init', '        List<Integer> matches = new ArrayList<>();'],
+    ['c_init', '        int n = text.length();'],
+    ['c_init', '        int m = pattern.length();'],
     ['c_outer_loop', '        for (int i = 0; i <= n - m; i++) {'],
     ['c_inner_init', '            int j;'],
     ['c_inner_loop', '            for (j = 0; j < m; j++) {'],
@@ -28,7 +30,8 @@ const CODES = {
   ],
   c: [
     ['c_entry', 'void naiveSearch(const char* text, const char* pattern) {'],
-    ['c_init', '    int n = strlen(text); int m = strlen(pattern);'],
+    ['c_init', '    int n = strlen(text);'],
+    ['c_init', '    int m = strlen(pattern);'],
     ['c_outer_loop', '    for (int i = 0; i <= n - m; i++) {'],
     ['c_inner_init', '        int j;'],
     ['c_inner_loop', '        for (j = 0; j < m; j++) {'],
@@ -40,13 +43,16 @@ const CODES = {
     ['c_match_found', '            printf("Match at %d\\n", i);'],
     ['', '        }'],
     ['', '    }'],
+    ['c_return', '    return;'],
     ['c_done', '}']
   ],
   cpp: [
     ['', 'class NaivePatternMatching {'],
     ['', 'public:'],
     ['c_entry', '    vector<int> search(string text, string pattern) {'],
-    ['c_init', '        vector<int> matches; int n = text.length(), m = pattern.length();'],
+    ['c_init', '        vector<int> matches;'],
+    ['c_init', '        int n = text.length();'],
+    ['c_init', '        int m = pattern.length();'],
     ['c_outer_loop', '        for (int i = 0; i <= n - m; i++) {'],
     ['c_inner_init', '            int j;'],
     ['c_inner_loop', '            for (j = 0; j < m; j++) {'],
@@ -65,13 +71,16 @@ const CODES = {
   python: [
     ['', 'class NaivePatternMatching:'],
     ['c_entry', '    def search(self, text: str, pattern: str):'],
-    ['c_init', '        n, m = len(text), len(pattern); matches = []'],
+    ['c_init', '        n = len(text)'],
+    ['c_init', '        m = len(pattern)'],
+    ['c_init', '        matches = []'],
     ['c_outer_loop', '        for i in range(n - m + 1):'],
     ['c_inner_init', '            j = 0'],
-    ['c_inner_loop', '            for j in range(m):'],
+    ['c_inner_loop', '            while j < m:'],
     ['c_check', '                if text[i + j] != pattern[j]:'],
     ['c_break', '                    break'],
-    ['c_match_check', '            if j == m - 1 and text[i + j] == pattern[j]:'],
+    ['', '                j += 1'],
+    ['c_match_check', '            if j == m:'],
     ['c_match_found', '                matches.append(i)'],
     ['c_return', '        return matches'],
     ['c_done', '']
@@ -79,7 +88,9 @@ const CODES = {
   javascript: [
     ['', 'class NaivePatternMatching {'],
     ['c_entry', '  search(text, pattern) {'],
-    ['c_init', '    const n = text.length, m = pattern.length; const matches = [];'],
+    ['c_init', '    const n = text.length;'],
+    ['c_init', '    const m = pattern.length;'],
+    ['c_init', '    const matches = [];'],
     ['c_outer_loop', '    for (let i = 0; i <= n - m; i++) {'],
     ['c_inner_init', '      let j;'],
     ['c_inner_loop', '      for (j = 0; j < m; j++) {'],
@@ -103,8 +114,9 @@ const PSEUDOCODE = [
   '    matches = []',
   '    for i = 0 to n - m:',
   '        j = 0',
-  '        while j < m and text[i + j] == pattern[j]:',
-  '            j++',
+  '        for j = 0 to m - 1:',
+  '            if text[i + j] != pattern[j]:',
+  '                break',
   '        if j == m:',
   '            matches.append(i)',
   '    return matches',
@@ -177,7 +189,7 @@ function buildSteps(initialText, initialPattern) {
 
   // 2. Init
   steps.push({
-    badge: `int n = text.length() (${n}), m = pattern.length() (${m})`,
+    badge: `int n = text.length() (${n}), m = pattern.length() (${m}); matches = []`,
     code: 'c_init',
     vars: [
       frame('main()', []),
@@ -197,6 +209,19 @@ function buildSteps(initialText, initialPattern) {
         frame('main()', []),
         frame(fnLabel, [['i', String(i)], ['n-m', String(n - m)], ['matches', JSON.stringify(matches)]])
       ],
+      textCells: getTextCells(i, -1, true),
+      patternCells: getPatternCells(i, -1, true),
+      i, j: -1, matches: [...matches], n, m
+    });
+
+    // 4. Inner init
+    steps.push({
+      badge: `int j = 0 → Initialize inner loop pointer j = 0`,
+      code: 'c_inner_init',
+      vars: [
+        frame('main()', []),
+        frame(fnLabel, [['i', String(i)], ['j', '0'], ['matches', JSON.stringify(matches)]])
+      ],
       textCells: getTextCells(i, 0, true),
       patternCells: getPatternCells(i, 0, true),
       i, j: 0, matches: [...matches], n, m
@@ -204,14 +229,26 @@ function buildSteps(initialText, initialPattern) {
 
     let j = 0;
     for (j = 0; j < m; j++) {
-      const charMatch = text[i + j] === pattern[j];
-
       steps.push({
-        badge: `if (text[${i + j}] != pattern[${j}]) → text['${text[i + j]}'] vs pattern['${pattern[j]}'] → ${charMatch ? 'MATCH!' : 'MISMATCH!'}`,
-        code: 'c_check',
+        badge: `for (j = ${j}; j < ${m}; j++) → Comparing text[${i + j}] ('${text[i + j]}') with pattern[${j}] ('${pattern[j]}')`,
+        code: 'c_inner_loop',
         vars: [
           frame('main()', []),
           frame(fnLabel, [['i', String(i)], ['j', String(j)], ['i+j', String(i + j)], ['text[i+j]', `'${text[i + j]}'`], ['pattern[j]', `'${pattern[j]}'`]])
+        ],
+        textCells: getTextCells(i, j, true),
+        patternCells: getPatternCells(i, j, true),
+        i, j, matches: [...matches], n, m
+      });
+
+      const charMatch = text[i + j] === pattern[j];
+
+      steps.push({
+        badge: `if (text[${i + j}] != pattern[${j}]) → text['${text[i + j]}'] != pattern['${pattern[j]}'] → ${charMatch ? 'FALSE (Characters Match!)' : 'TRUE (Mismatch Detected!)'}`,
+        code: 'c_check',
+        vars: [
+          frame('main()', []),
+          frame(fnLabel, [['i', String(i)], ['j', String(j)], ['text[i+j]', `'${text[i + j]}'`], ['pattern[j]', `'${pattern[j]}'`]])
         ],
         textCells: getTextCells(i, j, charMatch),
         patternCells: getPatternCells(i, j, charMatch),
@@ -220,7 +257,7 @@ function buildSteps(initialText, initialPattern) {
 
       if (!charMatch) {
         steps.push({
-          badge: `text['${text[i + j]}'] != pattern['${pattern[j]}'] → Mismatch at j = ${j} → Break inner loop`,
+          badge: `break → Mismatch text['${text[i + j]}'] != pattern['${pattern[j]}'] at j = ${j} → Breaking inner loop`,
           code: 'c_break',
           vars: [
             frame('main()', []),
@@ -234,14 +271,27 @@ function buildSteps(initialText, initialPattern) {
       }
     }
 
-    if (j === m) {
+    const isFullMatch = j === m;
+    steps.push({
+      badge: `if (j == m) → checking ${j} == ${m} → ${isFullMatch ? 'TRUE (Full Pattern Match!)' : 'FALSE (Mismatch encountered)'}`,
+      code: 'c_match_check',
+      vars: [
+        frame('main()', []),
+        frame(fnLabel, [['i', String(i)], ['j', String(j)], ['m', String(m)], ['isMatch', String(isFullMatch)]])
+      ],
+      textCells: isFullMatch ? getTextCells(i, m - 1, true) : getTextCells(i, j, false),
+      patternCells: isFullMatch ? getPatternCells(i, m - 1, true) : getPatternCells(i, j, false),
+      i, j, matches: [...matches], n, m
+    });
+
+    if (isFullMatch) {
       matches.push(i);
       steps.push({
-        badge: `if (j == m) → Full pattern match found at text index i = ${i}!`,
+        badge: `matches.add(${i}) → Pattern found starting at text index i = ${i}! Matches: [${matches.join(', ')}]`,
         code: 'c_match_found',
         vars: [
           frame('main()', []),
-          frame(fnLabel, [['i', String(i)], ['j', String(j)], ['match_found_at', String(i)], ['matches', JSON.stringify(matches)]])
+          frame(fnLabel, [['i', String(i)], ['j', String(j)], ['matches', JSON.stringify(matches)]])
         ],
         textCells: getTextCells(i, m - 1, true),
         patternCells: getPatternCells(i, m - 1, true),
@@ -250,7 +300,7 @@ function buildSteps(initialText, initialPattern) {
     }
   }
 
-  // 4. Return
+  // 5. Return
   steps.push({
     badge: `return matches → Found ${matches.length} pattern match(es) at indices: [${matches.join(', ')}]`,
     code: 'c_return',
@@ -427,7 +477,11 @@ onBeforeUnmount(() => {
               <div class="ll-viz-wrap" :style="{ height: vizHeight + 'px' }">
                 <div class="ll-perm-area">
                   <div class="ll-ptrs">
+                    <div class="ll-ptr-chip">i = <b class="ll-c-blue">{{ s.i >= 0 ? s.i : 'N/A' }}</b></div>
+                    <div class="ll-ptr-chip">j = <b class="ll-c-purple">{{ s.j >= 0 ? s.j : 'N/A' }}</b></div>
                     <div class="ll-ptr-chip">Matches = <b class="ll-c-green">[{{ (s.matches || []).join(', ') }}]</b></div>
+                    <div class="ll-ptr-chip">n = <b class="ll-c-blue">{{ s.n }}</b></div>
+                    <div class="ll-ptr-chip">m = <b class="ll-c-purple">{{ s.m }}</b></div>
                   </div>
 
                   <!-- Text and Pattern Alignment Tracks -->
