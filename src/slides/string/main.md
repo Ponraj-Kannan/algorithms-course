@@ -38,7 +38,7 @@ import ManachersAlgorithm from '../../components/03-String/ManachersAlgorithm.vu
 
 ---
 
-<!-- <StringRotation topic="String Rotation Algorithm" subTopic="Concatenation & Substring Search" />
+<StringRotation topic="String Rotation Algorithm" subTopic="Concatenation & Substring Search" />
 
 ---
 
@@ -70,7 +70,7 @@ import ManachersAlgorithm from '../../components/03-String/ManachersAlgorithm.vu
 
 ---
 
-<LongestCommonSubsequence topic="Longest Common Subsequence (LCS)" subTopic="2D Dynamic Programming Grid" />
+<!-- <LongestCommonSubsequence topic="Longest Common Subsequence (LCS)" subTopic="2D Dynamic Programming Grid" />
 
 ---
 
