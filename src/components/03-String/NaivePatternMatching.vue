@@ -328,7 +328,7 @@ function buildSteps(initialText, initialPattern) {
   return steps;
 }
 
-const inpText = ref('AABAACAADAABAABA');
+const inpText = ref('AABADAABAAA');
 const inpPattern = ref('AABA');
 const lang = ref('java');
 const speed = ref(650);
@@ -339,7 +339,7 @@ const tableHeight = ref(60);
 const leftWidth = ref(50);
 const rightTab = ref('code');
 
-const stepsData = reactive({ steps: buildSteps('AABAACAADAABAABA', 'AABA') });
+const stepsData = reactive({ steps: buildSteps('AABADAABAAA', 'AABA') });
 const steps = computed(() => stepsData.steps);
 const s = computed(() => steps.value[Math.max(0, Math.min(si.value, steps.value.length - 1))] || {});
 const codeLines = computed(() => CODES[lang.value] || []);
@@ -455,7 +455,7 @@ onBeforeUnmount(() => {
           <!-- Control Panel Toolbar -->
           <div class="ll-toolbar">
             <label>Text</label>
-            <input type="text" v-model="inpText" style="width: 150px;" class="ll-text-input" placeholder="e.g. AABAACAADAABAABA" />
+            <input type="text" v-model="inpText" style="width: 150px;" class="ll-text-input" placeholder="e.g. AABADAABAAA" />
 
             <label>Pattern</label>
             <input type="text" v-model="inpPattern" style="width: 90px;" class="ll-text-input" placeholder="e.g. AABA" />
