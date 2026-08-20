@@ -70,7 +70,7 @@ import ManachersAlgorithm from '../../components/03-String/ManachersAlgorithm.vu
 
 ---
 
-<!-- <LongestCommonSubsequence topic="Longest Common Subsequence (LCS)" subTopic="2D Dynamic Programming Grid" />
+<LongestCommonSubsequence topic="Longest Common Subsequence (LCS)" subTopic="2D Dynamic Programming Grid" />
 
 ---
 
@@ -82,4 +82,4 @@ import ManachersAlgorithm from '../../components/03-String/ManachersAlgorithm.vu
 
 ---
 
-<ManachersAlgorithm topic="Manacher's Algorithm" subTopic="O(N) Longest Palindromic Substring with Center Mirroring" /> -->
+<ManachersAlgorithm topic="Manacher's Algorithm" subTopic="O(N) Longest Palindromic Substring with Center Mirroring" />
