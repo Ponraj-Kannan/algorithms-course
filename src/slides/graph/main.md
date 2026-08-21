@@ -1,28 +1,3 @@
----
-theme: default
-title: Graph Algorithms Visualization
----
-
-<script setup>
-import GraphTerminology from '../../components/04-Graph/GraphTerminology.vue';
-import DirectedWeightedGraphMatrix from '../../components/04-Graph/DirectedWeightedGraphMatrix.vue';
-import DirectedWeightedGraphList from '../../components/04-Graph/DirectedWeightedGraphList.vue';
-import DirectedUnWeightedGraphMatrix from '../../components/04-Graph/DirectedUnWeightedGraphMatrix.vue';
-import DirectedUnWeightedGraphList from '../../components/04-Graph/DirectedUnWeightedGraphList.vue';
-import UnDirectedWeightedGraphMatrix from '../../components/04-Graph/UnDirectedWeightedGraphMatrix.vue';
-import UnDirectedWeightedGraphList from '../../components/04-Graph/UnDirectedWeightedGraphList.vue';
-import UnDirectedUnWeightedGraphMatrix from '../../components/04-Graph/UnDirectedUnWeightedGraphMatrix.vue';
-import UnDirectedUnWeightedGraphList from '../../components/04-Graph/UnDirectedUnWeightedGraphList.vue';
-import BFSGraph from '../../components/04-Graph/BFSGraph.vue';
-import DFSGraph from '../../components/04-Graph/DFSGraph.vue';
-import CycleDetectionDirectedGraph from '../../components/04-Graph/CycleDetectionDirectedGraph.vue';
-import CycleDetectionUndirectedGraph from '../../components/04-Graph/CycleDetectionUndirectedGraph.vue';
-import DijkstraShortestPath from '../../components/04-Graph/DijkstraShortestPath.vue';
-import BellmanFordAlgorithm from '../../components/04-Graph/BellmanFordAlgorithm.vue';
-import PrimsAlgorithm from '../../components/04-Graph/PrimsAlgorithm.vue';
-import KruskalsAlgorithm from '../../components/04-Graph/KruskalsAlgorithm.vue';
-</script>
-
 <GraphTerminology topic="Graph — Fundamental Terminology" subTopic="Core Concepts, Vertices, Edges & Graph Structures" />
 
 ---
