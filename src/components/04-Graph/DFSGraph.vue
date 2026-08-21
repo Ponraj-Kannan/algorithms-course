@@ -12,7 +12,7 @@ const CODES = {
     ['c_entry', '    void dfs(int[][] adj, int V, int startNode) {'],
     ['c_init_visited', '        boolean[] visited = new boolean[V];'],
     ['c_init_stack', '        int[] stack = new int[V];'],
-    ['', '        int top = -1;'],
+    ['c_init_top', '        int top = -1;'],
     ['', ''],
     ['c_push_start', '        stack[++top] = startNode;'],
     ['', ''],
@@ -21,7 +21,7 @@ const CODES = {
     ['', ''],
     ['c_check_vis', '            if (!visited[u]) {'],
     ['c_mark_vis', '                visited[u] = true;'],
-    ['c_process', '                process(u); // Visit u'],
+    ['c_process', '                System.out.print(u + " "); // Visit u'],
     ['', ''],
     ['c_for_adj', '                for (int v = V - 1; v >= 0; v--) {'],
     ['c_check_nbr', '                    if (adj[u][v] == 1 && !visited[v]) {'],
@@ -36,7 +36,8 @@ const CODES = {
   c: [
     ['c_entry', 'void dfs(int adj[MAX][MAX], int V, int startNode) {'],
     ['c_init_visited', '    bool visited[MAX] = {false};'],
-    ['c_init_stack', '    int stack[MAX], top = -1;'],
+    ['c_init_stack', '    int stack[MAX];'],
+    ['c_init_top', '    int top = -1;'],
     ['', ''],
     ['c_push_start', '    stack[++top] = startNode;'],
     ['', ''],
@@ -47,12 +48,12 @@ const CODES = {
     ['c_mark_vis', '            visited[u] = true;'],
     ['c_process', '            printf("%d ", u);'],
     ['', ''],
-    ['c_for_adj', '            for (int v = V - 1; v >= 0; v--) {'],
-    ['c_check_nbr', '                if (adj[u][v] == 1 && !visited[v]) {'],
-    ['c_push_v', '                    stack[++top] = v;'],
-    ['', '                }'],
+    ['c_for_adj', '        for (int v = V - 1; v >= 0; v--) {'],
+    ['c_check_nbr', '            if (adj[u][v] == 1 && !visited[v]) {'],
+    ['c_push_v', '                stack[++top] = v;'],
     ['', '            }'],
     ['', '        }'],
+    ['', '      }'],
     ['', '    }'],
     ['c_done', '}']
   ],
@@ -61,7 +62,8 @@ const CODES = {
     ['', 'public:'],
     ['c_entry', '    void dfs(int adj[10][10], int V, int startNode) {'],
     ['c_init_visited', '        bool visited[10] = {false};'],
-    ['c_init_stack', '        int stack[10], top = -1;'],
+    ['c_init_stack', '        int stack[10];'],
+    ['c_init_top', '        int top = -1;'],
     ['', ''],
     ['c_push_start', '        stack[++top] = startNode;'],
     ['', ''],
@@ -72,13 +74,13 @@ const CODES = {
     ['c_mark_vis', '                visited[u] = true;'],
     ['c_process', '                cout << u << " ";'],
     ['', ''],
-    ['c_for_adj', '                for (int v = V - 1; v >= 0; v--) {'],
-    ['c_check_nbr', '                    if (adj[u][v] == 1 && !visited[v]) {'],
-    ['c_push_v', '                        stack[++top] = v;'],
-    ['', '                    }'],
+    ['c_for_adj', '            for (int v = V - 1; v >= 0; v--) {'],
+    ['c_check_nbr', '                if (adj[u][v] == 1 && !visited[v]) {'],
+    ['c_push_v', '                    stack[++top] = v;'],
     ['', '                }'],
     ['', '            }'],
     ['', '        }'],
+    ['', '    }'],
     ['c_done', '    }'],
     ['', '};']
   ],
@@ -86,18 +88,21 @@ const CODES = {
     ['', 'class DFSGraph:'],
     ['c_entry', '    def dfs(self, adj, start_node):'],
     ['c_init_visited', '        visited = [False] * len(adj)'],
-    ['c_init_stack', '        stack = [start_node]'],
+    ['c_init_stack', '        stack = [None] * len(adj)'],
+    ['c_init_top', '        top = -1'],
     ['', ''],
-    ['c_while', '        while stack:'],
-    ['c_pop', '            u = stack.pop()'],
+    ['c_push_start', '        top += 1; stack[top] = start_node'],
+    ['', ''],
+    ['c_while', '        while top >= 0:'],
+    ['c_pop', '            u = stack[top]; top -= 1'],
     ['', ''],
     ['c_check_vis', '            if not visited[u]:'],
     ['c_mark_vis', '                visited[u] = True'],
     ['c_process', '                print(u, end=" ")'],
     ['', ''],
-    ['c_for_adj', '                for v in reversed(adj[u]):'],
-    ['c_check_nbr', '                    if not visited[v]:'],
-    ['c_push_v', '                        stack.append(v)'],
+    ['c_for_adj', '                for v in reversed(range(len(adj))):'],
+    ['c_check_nbr', '                    if adj[u][v] == 1 and not visited[v]:'],
+    ['c_push_v', '                        top += 1; stack[top] = v'],
     ['c_done', '']
   ],
   javascript: [
@@ -105,7 +110,7 @@ const CODES = {
     ['c_entry', '  dfs(adjMatrix, V, startNode) {'],
     ['c_init_visited', '    const visited = new Array(V).fill(false);'],
     ['c_init_stack', '    const stack = new Array(V);'],
-    ['', '    let top = -1;'],
+    ['c_init_top', '    let top = -1;'],
     ['', ''],
     ['c_push_start', '    stack[++top] = startNode;'],
     ['', ''],
@@ -148,6 +153,7 @@ const PSEUDOCODE_MAP = {
   'c_entry': 0,
   'c_init_visited': 1,
   'c_init_stack': 2,
+  'c_init_top': 3,
   'c_push_start': 4,
   'c_while': 5,
   'c_pop': 6,
@@ -191,14 +197,14 @@ function buildSteps(numV, rawEdgesStr, startNodeInput) {
   const V = isNaN(rawV) || rawV < 0 ? 0 : Math.min(10, rawV);
   const parsedEdges = parseEdges(rawEdgesStr);
   const startNode = Math.max(0, Math.min(V > 0 ? V - 1 : 0, parseInt(startNodeInput) || 0));
-  const fnDfs = `dfs(adjMatrix, ${startNode})`;
+  const fnDfs = `dfs(adjMatrix, ${V}, ${startNode})`;
 
   if (V === 0) {
     steps.push({
       badge: 'Number of vertices is 0. No graph, stack, or DFS traversal created.',
       code: '',
       vars: [frame('main()', []), frame('dfs()', [['vertices', '0']])],
-      V: 0, edges: [], activeU: -1, activeV: -1, queue: [], visited: [], traversal: [], treeEdges: []
+      V: 0, edges: [], activeU: -1, activeV: -1, top: -1, u: -1, v: -1, queue: [], stackArray: [], visited: [], traversal: [], treeEdges: []
     });
     return steps;
   }
@@ -212,7 +218,8 @@ function buildSteps(numV, rawEdgesStr, startNodeInput) {
   });
 
   const visited = new Array(V).fill(false);
-  const stack = [];
+  const stackArray = new Array(V).fill(null);
+  const stackParent = [];
   let top = -1;
   const traversal = [];
   const treeEdges = [];
@@ -222,51 +229,63 @@ function buildSteps(numV, rawEdgesStr, startNodeInput) {
     badge: `dfs(adjMatrix, ${V}, ${startNode}) called → Starting DFS Traversal from source vertex ${startNode}`,
     code: 'c_entry',
     vars: [frame('main()', []), frame(fnDfs, [['V', String(V)], ['startNode', String(startNode)]])],
-    V, edges: parsedEdges, activeU: -1, activeV: -1, queue: [...stack], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+    V, edges: parsedEdges, activeU: -1, activeV: -1, top: -1, u: -1, v: -1, queue: [], stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
   });
 
   // Step 2: Init Visited Array
   steps.push({
-    badge: `boolean[] visited = new boolean[${V}] → Allocated visited array initialized to false`,
+    badge: `boolean[] visited = new boolean[${V}] → Allocated visited boolean array initialized to false`,
     code: 'c_init_visited',
     vars: [frame('main()', []), frame(fnDfs, [['visited', `boolean[${V}]`]])],
-    V, edges: parsedEdges, activeU: -1, activeV: -1, queue: [...stack], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+    V, edges: parsedEdges, activeU: -1, activeV: -1, top: -1, u: -1, v: -1, queue: [], stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
   });
 
-  // Step 3: Init Stack & Pointer
+  // Step 3: Init Stack Array
   steps.push({
-    badge: `int[] stack = new int[${V}], top = -1 → Initialized empty Stack array and pointer`,
+    badge: `int[] stack = new int[${V}] → Allocated empty Stack array of size ${V}`,
     code: 'c_init_stack',
-    vars: [frame('main()', []), frame(fnDfs, [['top', '-1'], ['stack', '[]']])],
-    V, edges: parsedEdges, activeU: -1, activeV: -1, queue: [...stack], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+    vars: [frame('main()', []), frame(fnDfs, [['stack', `int[${V}]`]])],
+    V, edges: parsedEdges, activeU: -1, activeV: -1, top: -1, u: -1, v: -1, queue: [], stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
   });
 
-  // Step 4: Push Start Node to Stack
-  stack.push(startNode);
-  top++;
+  // Step 4: Init Top Pointer
+  top = -1;
   steps.push({
-    badge: `stack[++top] = ${startNode} → Pushed source vertex ${startNode} onto Stack (top = 0)`,
-    code: 'c_push_start',
-    vars: [frame('main()', []), frame(fnDfs, [['top', '0'], ['stack', `[${stack.join(', ')}]`]])],
-    V, edges: parsedEdges, activeU: startNode, activeV: -1, queue: [...stack], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+    badge: `int top = -1 → Initialized top pointer to -1 (empty stack)`,
+    code: 'c_init_top',
+    vars: [frame('main()', []), frame(fnDfs, [['top', '-1']])],
+    V, edges: parsedEdges, activeU: -1, activeV: -1, top: -1, u: -1, v: -1, queue: [], stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
   });
 
-  // Step 5: Loop while top >= 0
+  // Step 5: Push Start Node to Stack
+  top++;
+  stackArray[top] = startNode;
+  stackParent.push(null);
+  steps.push({
+    badge: `stack[++top] = ${startNode} → Pushed source vertex ${startNode} onto Stack at index 0 (top = 0)`,
+    code: 'c_push_start',
+    vars: [frame('main()', []), frame(fnDfs, [['top', '0'], ['stack[0]', String(startNode)]])],
+    V, edges: parsedEdges, activeU: startNode, activeV: -1, top, u: -1, v: -1, queue: stackArray.slice(0, top + 1), stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+  });
+
+  // Step 6: Loop while top >= 0
   while (top >= 0) {
     steps.push({
-      badge: `while (top >= 0) → Condition met (top = ${top}). Stack: [${stack.join(', ')}]`,
+      badge: `while (top >= 0) → Condition met (top = ${top} >= 0). Stack: [${stackArray.slice(0, top + 1).join(', ')}]`,
       code: 'c_while',
-      vars: [frame('main()', []), frame(fnDfs, [['top', String(top)], ['stack', `[${stack.join(', ')}]`]])],
-      V, edges: parsedEdges, activeU: -1, activeV: -1, queue: [...stack], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+      vars: [frame('main()', []), frame(fnDfs, [['top', String(top)], ['stack', `[${stackArray.slice(0, top + 1).join(', ')}]`]])],
+      V, edges: parsedEdges, activeU: -1, activeV: -1, top, u: -1, v: -1, queue: stackArray.slice(0, top + 1), stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
     });
 
-    const u = stack.pop();
+    const u = stackArray[top];
+    const prevTop = top;
+    const p = stackParent.pop();
     top--;
     steps.push({
-      badge: `u = stack[top--] → Popped top vertex u = ${u} from Stack (top = ${top})`,
+      badge: `u = stack[top--] → Popped top vertex u = ${u} from index ${prevTop} (top = ${top})`,
       code: 'c_pop',
-      vars: [frame('main()', []), frame(fnDfs, [['u', String(u)], ['top', String(top)], ['stack', `[${stack.join(', ')}]`]])],
-      V, edges: parsedEdges, activeU: u, activeV: -1, queue: [...stack], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+      vars: [frame('main()', []), frame(fnDfs, [['u', String(u)], ['top', String(top)], ['stack', `[${stackArray.slice(0, top + 1).join(', ')}]`]])],
+      V, edges: parsedEdges, activeU: u, activeV: -1, top, u, v: -1, queue: stackArray.slice(0, top + 1), stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
     });
 
     const isVisitedU = visited[u];
@@ -274,24 +293,27 @@ function buildSteps(numV, rawEdgesStr, startNodeInput) {
       badge: `if (!visited[${u}]) → Check if vertex ${u} is visited (visited[${u}] = ${isVisitedU})`,
       code: 'c_check_vis',
       vars: [frame('main()', []), frame(fnDfs, [['u', String(u)], ['visited[' + u + ']', String(isVisitedU)]])],
-      V, edges: parsedEdges, activeU: u, activeV: -1, queue: [...stack], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+      V, edges: parsedEdges, activeU: u, activeV: -1, top, u, v: -1, queue: stackArray.slice(0, top + 1), stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
     });
 
     if (!isVisitedU) {
       visited[u] = true;
+      if (p !== null && p !== undefined) {
+        treeEdges.push({ u: p, v: u });
+      }
       steps.push({
         badge: `visited[${u}] = true → Marked vertex ${u} as visited`,
         code: 'c_mark_vis',
         vars: [frame('main()', []), frame(fnDfs, [['u', String(u)], ['visited[' + u + ']', 'true']])],
-        V, edges: parsedEdges, activeU: u, activeV: -1, queue: [...stack], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+        V, edges: parsedEdges, activeU: u, activeV: -1, top, u, v: -1, queue: stackArray.slice(0, top + 1), stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
       });
 
       traversal.push(u);
       steps.push({
-        badge: `process(${u}) → Output vertex ${u}. Current DFS Traversal: [${traversal.join(', ')}]`,
+        badge: `System.out.print(${u} + " ") → Output vertex ${u}. Current DFS Traversal: [${traversal.join(', ')}]`,
         code: 'c_process',
         vars: [frame('main()', []), frame(fnDfs, [['u', String(u)], ['traversal', `[${traversal.join(', ')}]`]])],
-        V, edges: parsedEdges, activeU: u, activeV: -1, queue: [...stack], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+        V, edges: parsedEdges, activeU: u, activeV: -1, top, u, v: -1, queue: stackArray.slice(0, top + 1), stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
       });
 
       // Push unvisited neighbors in reverse order (v = V - 1 down to 0) so smaller indices are popped first
@@ -300,7 +322,7 @@ function buildSteps(numV, rawEdgesStr, startNodeInput) {
           badge: `for (int v = ${V - 1}; v >= 0; v--) → Loop candidate neighbor v = ${v} for active vertex u = ${u}`,
           code: 'c_for_adj',
           vars: [frame('main()', []), frame(fnDfs, [['u', String(u)], ['v', String(v)]])],
-          V, edges: parsedEdges, activeU: u, activeV: v, queue: [...stack], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+          V, edges: parsedEdges, activeU: u, activeV: v, top, u, v, queue: stackArray.slice(0, top + 1), stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
         });
 
         const hasEdge = adjMatrix[u][v] === 1;
@@ -310,18 +332,18 @@ function buildSteps(numV, rawEdgesStr, startNodeInput) {
           badge: `if (adjMatrix[${u}][${v}] == 1 && !visited[${v}]) → adjMatrix[${u}][${v}] = ${hasEdge ? 1 : 0}, visited[${v}] = ${isVisitedV}`,
           code: 'c_check_nbr',
           vars: [frame('main()', []), frame(fnDfs, [['u', String(u)], ['v', String(v)], ['edge', String(hasEdge)], ['visited[' + v + ']', String(isVisitedV)]])],
-          V, edges: parsedEdges, activeU: u, activeV: v, queue: [...stack], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+          V, edges: parsedEdges, activeU: u, activeV: v, top, u, v, queue: stackArray.slice(0, top + 1), stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
         });
 
         if (hasEdge && !isVisitedV) {
-          stack.push(v);
           top++;
-          treeEdges.push({ u, v });
+          stackArray[top] = v;
+          stackParent.push(u);
           steps.push({
-            badge: `stack[++top] = ${v} → Pushed unvisited neighbor vertex ${v} onto Stack (top = ${top})`,
+            badge: `stack[++top] = ${v} → Pushed unvisited neighbor vertex ${v} onto Stack at index ${top} (top = ${top})`,
             code: 'c_push_v',
-            vars: [frame('main()', []), frame(fnDfs, [['v', String(v)], ['top', String(top)], ['stack', `[${stack.join(', ')}]`]])],
-            V, edges: parsedEdges, activeU: u, activeV: v, queue: [...stack], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+            vars: [frame('main()', []), frame(fnDfs, [['v', String(v)], ['top', String(top)], ['stack[' + top + ']', String(v)]])],
+            V, edges: parsedEdges, activeU: u, activeV: v, top, u, v, queue: stackArray.slice(0, top + 1), stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
           });
         }
       }
@@ -333,14 +355,14 @@ function buildSteps(numV, rawEdgesStr, startNodeInput) {
     badge: `while (top >= 0) → Loop condition failed (top = -1). Stack is empty.`,
     code: 'c_while',
     vars: [frame('main()', []), frame(fnDfs, [['top', '-1']])],
-    V, edges: parsedEdges, activeU: -1, activeV: -1, queue: [], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+    V, edges: parsedEdges, activeU: -1, activeV: -1, top: -1, u: -1, v: -1, queue: [], stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
   });
 
   steps.push({
     badge: `DFS Traversal Complete! Final Output Sequence: [${traversal.join(', ')}]`,
     code: 'c_done',
     vars: [frame('main()', []), frame(fnDfs, [['DFS Result', `[${traversal.join(', ')}]`]])],
-    V, edges: parsedEdges, activeU: -1, activeV: -1, queue: [], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
+    V, edges: parsedEdges, activeU: -1, activeV: -1, top: -1, u: -1, v: -1, queue: [], stackArray: [...stackArray], visited: [...visited], traversal: [...traversal], treeEdges: [...treeEdges]
   });
 
   return steps;
@@ -353,7 +375,7 @@ const lang = ref('java');
 const speed = ref(650);
 const si = ref(0);
 const playing = ref(false);
-const vizHeight = ref(280);
+const vizHeight = ref(350);
 const tableHeight = ref(60);
 const leftWidth = ref(55);
 const rightTab = ref('code');
@@ -557,7 +579,7 @@ onBeforeUnmount(() => {
 
             <button class="ll-viz-btn" @click="applySetup" title="Run DFS Traversal">&#9654;</button>
 
-            <button class="ll-graph-modal-btn" @click="showGraphModal = !showGraphModal">
+            <button class="ll-graph-modal-btn" style="background-color: slategray" @click="showGraphModal = !showGraphModal">
               {{ showGraphModal ? 'Hide' : 'Show' }}
             </button>
 
@@ -581,43 +603,68 @@ onBeforeUnmount(() => {
                   </div>
 
                   <template v-else>
-                    <!-- Stack Track -->
+                    <!-- Top Pointers Bar -->
+                    <div class="ll-ptrs">
+                      <div class="ll-ptr-chip">top = <b class="ll-c-blue">{{ s.top !== undefined && s.top >= 0 ? s.top : '-1' }}</b></div>
+                      <div class="ll-ptr-chip">u = <b class="ll-c-orange">{{ s.u !== undefined && s.u >= 0 ? s.u : 'N/A' }}</b></div>
+                      <div class="ll-ptr-chip">v = <b class="ll-c-purple">{{ s.v !== undefined && s.v >= 0 ? s.v : 'N/A' }}</b></div>
+                    </div>
+
+                    <!-- DFS Stack Array Track -->
                     <div class="ll-section-wrap">
                       <div class="ll-section-title">
-                        DFS Stack <code>stack.pop() &#10145; [ Bottom ... Top ] &#10145; stack.push()</code>:
+                        DFS Stack Array <code>stack[i] (Bottom ... Top)</code>:
                       </div>
-                      <div class="ll-queue-track">
-                        <span class="ll-q-lbl">Bottom &#10145;</span>
-                        <template v-if="s.queue && s.queue.length">
-                          <div
-                            v-for="(val, idx) in s.queue"
-                            :key="'st-' + idx + '-' + val"
-                            class="ll-queue-cell"
-                            :class="{ 'll-q-head': idx === s.queue.length - 1 }"
-                          >
-                            {{ val }}
+                      <div class="ll-arr-track">
+                        <div
+                          v-for="vIdx in s.V"
+                          :key="'st-box-' + (vIdx - 1)"
+                          class="ll-arr-cell-wrap"
+                        >
+                          <div class="ll-ptr-tag-wrap">
+                            <span v-if="s.top !== undefined && s.top >= 0 && s.top === (vIdx - 1)" class="ll-ptr-lbl ll-lbl-blue">top</span>
                           </div>
-                        </template>
-                        <div v-else class="ll-q-empty">(Empty Stack)</div>
-                        <span class="ll-q-lbl">&#10145; Top</span>
+                          <div
+                            class="ll-arr-box"
+                            :class="{
+                              'll-box-cur': s.top !== undefined && s.top >= 0 && (vIdx - 1) === s.top && s.code === 'c_pop',
+                              'll-box-inq': s.top !== undefined && s.top >= 0 && (vIdx - 1) <= s.top && s.stackArray && s.stackArray[vIdx - 1] !== null,
+                              'll-box-empty': s.top === undefined || s.top < (vIdx - 1) || !s.stackArray || s.stackArray[vIdx - 1] === null
+                            }"
+                          >
+                            {{ (s.top !== undefined && (vIdx - 1) <= s.top && s.stackArray && s.stackArray[vIdx - 1] !== null && s.stackArray[vIdx - 1] !== undefined) ? s.stackArray[vIdx - 1] : '&mdash;' }}
+                          </div>
+                          <div class="ll-arr-idx">[{{ vIdx - 1 }}]</div>
+                        </div>
                       </div>
                     </div>
 
                     <!-- Visited Array -->
                     <div class="ll-section-wrap">
                       <div class="ll-section-title">Visited Array <code>visited[i]</code>:</div>
-                      <div class="ll-vis-track">
+                      <div class="ll-arr-track">
                         <div
                           v-for="vIdx in s.V"
-                          :key="'vis-' + (vIdx - 1)"
-                          class="ll-vis-item"
-                          :class="{
-                            'll-vis-true': s.visited && s.visited[vIdx - 1],
-                            'll-vis-active': (vIdx - 1) === s.activeU || (vIdx - 1) === s.activeV
-                          }"
+                          :key="'vis-box-' + (vIdx - 1)"
+                          class="ll-arr-cell-wrap"
                         >
-                          <span class="ll-vis-idx">[{{ vIdx - 1 }}]</span>
-                          <span class="ll-vis-val">{{ s.visited && s.visited[vIdx - 1] ? 'true' : 'false' }}</span>
+                          <div class="ll-ptr-tag-wrap">
+                            <span v-if="s.u !== undefined && s.u >= 0 && s.u === (vIdx - 1)" class="ll-ptr-lbl ll-lbl-orange">u</span>
+                            <span v-if="s.v !== undefined && s.v >= 0 && s.v === (vIdx - 1)" class="ll-ptr-lbl ll-lbl-purple">v</span>
+                          </div>
+                          <div
+                            class="ll-arr-box"
+                            :class="{
+                              'll-box-cur': s.u === (vIdx - 1),
+                              'll-box-nbr': s.v === (vIdx - 1) && s.u !== (vIdx - 1),
+                              'll-box-found': s.visited && s.visited[vIdx - 1] && s.u !== (vIdx - 1) && s.v !== (vIdx - 1)
+                            }"
+                          >
+                            <span :class="s.visited && s.visited[vIdx - 1] ? 'll-val-true' : 'll-val-false'">
+                              {{ s.visited && s.visited[vIdx - 1] ? 'true' : 'false' }}
+                            </span>
+                          </div>
+                          <div class="ll-arr-idx">[{{ vIdx - 1 }}]</div>
                         </div>
                       </div>
                     </div>
@@ -647,11 +694,12 @@ onBeforeUnmount(() => {
 
               <!-- Color Legend -->
               <div class="ll-legend">
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-unvis"></span>Unvisited</span>
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-active"></span>Current (u)</span>
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-nbr"></span>Neighbor (v)</span>
+                <span class="ll-leg"><span class="ll-legdot ll-legdot-unvis"></span>Unvisited / False</span>
+                <span class="ll-leg"><span class="ll-legdot ll-legdot-active"></span>Active Node (u)</span>
+                <span class="ll-leg"><span class="ll-legdot ll-legdot-nbr"></span>Neighbor Node (v)</span>
                 <span class="ll-leg"><span class="ll-legdot ll-legdot-inq"></span>In Stack</span>
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-visited"></span>Visited</span>
+                <span class="ll-leg"><span class="ll-legdot ll-legdot-visited"></span>Visited / True</span>
+                <span class="ll-leg"><span class="ll-legdot" style="background:var(--surface2); border:1.5px dashed var(--border2);"></span>Popped / Empty</span>
               </div>
 
               <!-- Variable Frames & Stack -->
@@ -768,7 +816,7 @@ onBeforeUnmount(() => {
           <div v-if="(s.V ?? 0) === 0" class="ll-empty-graph-msg">
             No vertices or edges to display (Vertices = 0).
           </div>
-          <svg v-else class="graph-modal-svg" viewBox="0 0 720 460">
+          <svg v-else class="graph-modal-svg" viewBox="0 0 720 470">
             <defs>
               <marker id="dfs-arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b" />
@@ -819,24 +867,44 @@ onBeforeUnmount(() => {
 
             <!-- Graph Vertex Nodes -->
             <g v-for="node in modalNodePositions" :key="'mn-' + node.id">
-              <!-- Pointer Labels above Nodes -->
+              <!-- Pointer Labels above/below Nodes based on position -->
               <g v-if="node.id === s.activeU || node.id === s.activeV || isNodeHoveredSource(node.id) || isNodeHoveredTarget(node.id) || node.id === startNodeInput">
-                <text
-                  :x="node.x"
-                  :y="node.y - 28"
-                  class="ll-svg-ptr"
-                  :class="isNodeHoveredSource(node.id) ? 'll-svg-ptr-hover-src' : (isNodeHoveredTarget(node.id) ? 'll-svg-ptr-hover-tgt' : (node.id === s.activeU ? 'll-svg-ptr-orange' : (node.id === s.activeV ? 'll-svg-ptr-purple' : 'll-svg-ptr-blue')))"
-                >
-                  {{ isNodeHoveredSource(node.id) ? 'src' : (isNodeHoveredTarget(node.id) ? 'tgt' : (node.id === s.activeU ? 'u' : (node.id === s.activeV ? 'v' : (node.id === startNodeInput ? 'start' : '')))) }}
-                </text>
-                <text
-                  :x="node.x"
-                  :y="node.y - 17"
-                  class="ll-svg-ptr"
-                  :class="isNodeHoveredSource(node.id) ? 'll-svg-ptr-hover-src' : (isNodeHoveredTarget(node.id) ? 'll-svg-ptr-hover-tgt' : (node.id === s.activeU ? 'll-svg-ptr-orange' : (node.id === s.activeV ? 'll-svg-ptr-purple' : 'll-svg-ptr-blue')))"
-                >
-                  &darr;
-                </text>
+                <template v-if="node.y > 230">
+                  <text
+                    :x="node.x"
+                    :y="node.y + 22"
+                    class="ll-svg-ptr"
+                    :class="isNodeHoveredSource(node.id) ? 'll-svg-ptr-hover-src' : (isNodeHoveredTarget(node.id) ? 'll-svg-ptr-hover-tgt' : (node.id === s.activeU ? 'll-svg-ptr-orange' : (node.id === s.activeV ? 'll-svg-ptr-purple' : 'll-svg-ptr-blue')))"
+                  >
+                    &utrif;
+                  </text>
+                  <text
+                    :x="node.x"
+                    :y="node.y + 35"
+                    class="ll-svg-ptr"
+                    :class="isNodeHoveredSource(node.id) ? 'll-svg-ptr-hover-src' : (isNodeHoveredTarget(node.id) ? 'll-svg-ptr-hover-tgt' : (node.id === s.activeU ? 'll-svg-ptr-orange' : (node.id === s.activeV ? 'll-svg-ptr-purple' : 'll-svg-ptr-blue')))"
+                  >
+                    {{ isNodeHoveredSource(node.id) ? 'src' : (isNodeHoveredTarget(node.id) ? 'tgt' : (node.id === s.activeU ? 'u' : (node.id === s.activeV ? 'v' : (node.id === startNodeInput ? 'start' : '')))) }}
+                  </text>
+                </template>
+                <template v-else>
+                  <text
+                    :x="node.x"
+                    :y="node.y - 28"
+                    class="ll-svg-ptr"
+                    :class="isNodeHoveredSource(node.id) ? 'll-svg-ptr-hover-src' : (isNodeHoveredTarget(node.id) ? 'll-svg-ptr-hover-tgt' : (node.id === s.activeU ? 'll-svg-ptr-orange' : (node.id === s.activeV ? 'll-svg-ptr-purple' : 'll-svg-ptr-blue')))"
+                  >
+                    {{ isNodeHoveredSource(node.id) ? 'src' : (isNodeHoveredTarget(node.id) ? 'tgt' : (node.id === s.activeU ? 'u' : (node.id === s.activeV ? 'v' : (node.id === startNodeInput ? 'start' : '')))) }}
+                  </text>
+                  <text
+                    :x="node.x"
+                    :y="node.y - 17"
+                    class="ll-svg-ptr"
+                    :class="isNodeHoveredSource(node.id) ? 'll-svg-ptr-hover-src' : (isNodeHoveredTarget(node.id) ? 'll-svg-ptr-hover-tgt' : (node.id === s.activeU ? 'll-svg-ptr-orange' : (node.id === s.activeV ? 'll-svg-ptr-purple' : 'll-svg-ptr-blue')))"
+                  >
+                    &darr;
+                  </text>
+                </template>
               </g>
 
               <circle
@@ -894,7 +962,8 @@ onBeforeUnmount(() => {
 .navbar { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0 10px; background-color: #ffffff; position: fixed; width: 94.7%; }
 .navbar > img { height: 30px; }
 .navbar-title { margin: 0; font-size: 1.5rem; font-weight: 700; background-color: #ef5050; color: #ffffff; width: 80%; padding-left: 10px; margin-left: -10px; border-radius: 5px; }
-.row-main { width: 100%; height: 90%; margin-top: 37px; overflow-x: auto; overflow-y: auto; scrollbar-width: thin; }
+.row-main { width: 100%; height: 90%; margin-top: 37px; overflow-x: auto; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; }
+.row-main::-webkit-scrollbar { display: none; width: 0; height: 0; }
 .ll-toolbar { display: flex; align-items: center; gap: 8px; padding: 7px 16px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; flex-wrap: wrap; box-shadow: var(--shadow-sm); }
 .ll-toolbar label { font-size: 11px; color: var(--muted); white-space: nowrap; font-weight: 600; }
 .ll-text-input { background: var(--surface); border: 1px solid var(--border2); color: var(--text); border-radius: var(--radius-sm); padding: 4px 8px; font-size: 12px; font-family: monospace; transition: border-color .15s; text-align: center; }
@@ -907,52 +976,64 @@ onBeforeUnmount(() => {
 
 .ll-main { display: flex; flex: 1; overflow: hidden; position: relative; }
 .ll-left-col { display: flex; flex-direction: column; overflow: hidden; min-width: 200px; max-width: 72%; }
-.ll-viz-wrap { padding: 12px; overflow-x: auto; overflow-y: auto; background: var(--surface); border-bottom: 1px solid var(--border); }
-.ll-perm-area { display: flex; flex-direction: column; gap: 12px; min-width: max-content; }
+.ll-viz-wrap { flex-shrink: 0; background: var(--surface); border-bottom: 1px solid var(--border); position: relative; overflow-x: auto; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; }
+.ll-viz-wrap::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.ll-perm-area { display: flex; flex-direction: column; align-items: stretch; min-height: 100%; width: 100%; min-width: 0; box-sizing: border-box; gap: 8px; padding-bottom: 6px; }
+.ll-ptrs { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 16px 4px; min-height: 36px; width: 100%; box-sizing: border-box; min-width: 0; }
+.ll-ptr-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px 10px; font-size: 12px; font-family: monospace; box-shadow: var(--shadow-sm); white-space: nowrap; flex-shrink: 0; }
+.ll-c-blue { color: var(--blue); } .ll-c-orange { color: var(--orange); } .ll-c-green { color: var(--green); } .ll-c-purple { color: var(--purple); } .ll-c-red { color: var(--red); }
 
-/* Section Wrappers & Tracks */
-.ll-section-wrap { display: flex; flex-direction: column; gap: 4px; }
-.ll-section-title { font-size: 11px; font-weight: 700; color: var(--text2); font-family: monospace; }
-.ll-grid-2col { display: flex; gap: 16px; width: 100%; }
+/* Section Wrappers & Titles */
+.ll-section-wrap { display: flex; flex-direction: column; gap: 2px; }
+.ll-section-title { font-size: 11px; font-weight: 700; color: var(--text2); font-family: monospace; padding: 0 16px; }
 
-/* Queue Track */
-.ll-queue-track { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); min-height: 48px; }
-.ll-q-lbl { font-size: 11px; font-weight: 700; color: var(--muted); font-family: monospace; }
-.ll-queue-cell { padding: 6px 12px; background: var(--blue-light); border: 2px solid var(--blue); border-radius: var(--radius-sm); font-family: monospace; font-size: 14px; font-weight: 800; color: var(--blue); transition: all 0.2s ease; }
-.ll-q-head { background: var(--orange-light); border-color: var(--orange); color: var(--orange); transform: scale(1.05); }
-.ll-q-empty { font-size: 12px; font-style: italic; color: var(--muted); padding: 0 8px; }
+/* Pastel Flat Visual Diagram Box System (from BFSGraph) */
+.ll-arr-track { display: flex; align-items: flex-start; flex-wrap: wrap; padding: 2px 16px 4px; min-height: 72px; gap: 14px; width: 100%; box-sizing: border-box; min-width: 0; }
+.ll-arr-cell-wrap { display: flex; flex-direction: column; align-items: center; flex: 0 0 42px; width: 42px; min-width: 42px; max-width: 42px; position: relative; }
+.ll-ptr-tag-wrap { height: 22px; display: flex; align-items: flex-end; justify-content: center; gap: 2px; margin-bottom: 2px; white-space: nowrap; width: max-content; max-width: none; }
+.ll-ptr-lbl { font-size: 10px; font-weight: 800; font-family: 'Consolas', 'Fira Code', monospace; display: inline-flex; flex-direction: column; align-items: center; line-height: 1; gap: 1px; white-space: nowrap; animation: ll-pop 0.2s ease; }
+.ll-ptr-lbl::after { content: '↓'; font-size: 9px; font-weight: 900; line-height: 1; margin-top: 1px; }
+.ll-lbl-blue { color: #3b82f6; }
+.ll-lbl-orange { color: #f97316; }
+.ll-lbl-purple { color: #9333ea; }
+.ll-lbl-green { color: #10b981; }
+.ll-lbl-red { color: #ef4444; }
 
-/* Visited Track */
-.ll-vis-track { display: flex; gap: 6px; flex-wrap: wrap; }
-.ll-vis-item { display: flex; flex-direction: column; align-items: center; padding: 4px 8px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); font-family: monospace; min-width: 44px; transition: all 0.2s ease; }
-.ll-vis-idx { font-size: 10px; color: var(--muted); }
-.ll-vis-val { font-size: 12px; font-weight: 700; color: var(--muted); }
-.ll-vis-true { background: var(--green-light); border-color: var(--green); }
-.ll-vis-true .ll-vis-val { color: #15803d; }
-.ll-vis-active { border-color: var(--orange) !important; transform: scale(1.05); }
+.ll-arr-box { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--blue); border-radius: var(--radius-sm); background: #eff6ff; color: #1e293b; font-weight: 700; font-size: 14px; font-family: monospace; box-shadow: var(--shadow-sm); transition: all 0.25s ease; animation: ll-pop .3s ease; }
+.ll-box-cur { border-color: #f59e0b !important; background: #fef3c7 !important; color: #92400e !important; box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25) !important; }
+.ll-box-nbr { border-color: #9333ea !important; background: #f3e8ff !important; color: #6b21a8 !important; box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.25) !important; }
+.ll-box-found { border-color: #10b981 !important; background: #dcfce7 !important; color: #065f46 !important; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25) !important; }
+.ll-box-inq { border-color: #3b82f6 !important; background: #dbeafe !important; color: #1e40af !important; }
+.ll-box-eliminated { background: var(--surface2) !important; border: 2px dashed var(--border2) !important; color: var(--muted) !important; opacity: 0.55; box-shadow: none !important; }
+.ll-box-empty { background: var(--surface2) !important; border: 2px dashed var(--border2) !important; color: var(--muted) !important; box-shadow: none !important; }
+.ll-arr-idx { font-size: 10.5px; color: var(--muted); margin-top: 3px; font-family: 'Consolas', monospace; font-weight: 600; }
+
+.ll-val-true { color: #15803d; font-weight: 800; font-size: 11.5px; }
+.ll-val-false { color: #64748b; font-weight: 600; font-size: 10.5px; letter-spacing: -0.2px; }
 
 /* Traversal Track */
-.ll-res-track { display: flex; align-items: center; gap: 4px; padding: 8px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); min-height: 48px; flex-wrap: wrap; }
+.ll-res-track { display: flex; align-items: center; gap: 4px; padding: 6px 12px; margin: 0 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); min-height: 42px; flex-wrap: wrap; }
 .ll-res-chip { display: flex; align-items: center; gap: 4px; }
 .ll-res-arrow { color: var(--muted); font-size: 12px; }
 .ll-res-node { padding: 4px 10px; background: var(--green-light); border: 1.5px solid var(--green); border-radius: 12px; font-family: monospace; font-size: 13px; font-weight: 800; color: #15803d; }
 .ll-res-empty { font-size: 12px; font-style: italic; color: var(--muted); }
 
-.ll-empty-matrix-msg { padding: 24px 16px; text-align: center; color: var(--muted); font-size: 12px; font-weight: 600; border: 1px dashed var(--border2); border-radius: var(--radius-sm); background: var(--surface2); }
+.ll-empty-matrix-msg { padding: 24px 16px; margin: 16px; text-align: center; color: var(--muted); font-size: 12px; font-weight: 600; border: 1px dashed var(--border2); border-radius: var(--radius-sm); background: var(--surface2); }
 .ll-empty-graph-msg { display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; color: #64748b; font-size: 14px; font-weight: 600; text-align: center; }
 
 /* Legend */
-.ll-legend { display: flex; gap: 12px; padding: 6px 16px; background: var(--surface); border-bottom: 1px solid var(--border); flex-wrap: wrap; flex-shrink: 0; }
-.ll-leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); }
-.ll-legdot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.ll-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 6px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; background: var(--surface2); }
+.ll-leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); font-weight: 500; }
+.ll-legdot { width: 11px; height: 11px; border-radius: 3px; flex-shrink: 0; display: inline-block; }
 .ll-legdot-unvis { background: #eff6ff; border: 1.5px solid #3b82f6; }
-.ll-legdot-active { background: #fff7ed; border: 1.5px solid #f97316; }
+.ll-legdot-active { background: #fef3c7; border: 1.5px solid #f59e0b; }
 .ll-legdot-nbr { background: #f3e8ff; border: 1.5px solid #9333ea; }
 .ll-legdot-inq { background: #dbeafe; border: 1.5px solid #3b82f6; }
-.ll-legdot-visited { background: #f0fdf4; border: 1.5px solid #22c55e; }
+.ll-legdot-visited { background: #dcfce7; border: 1.5px solid #10b981; }
 
 /* Variable Frames */
-.ll-table-area { padding: 6px 16px; overflow-y: auto; background: var(--surface); font-family: monospace; font-size: 12px; border-bottom: 1px solid var(--border); }
+.ll-table-area { padding: 6px 16px; overflow-y: auto; overflow-x: auto; background: var(--surface); font-family: monospace; font-size: 12px; border-bottom: 1px solid var(--border); scrollbar-width: none; -ms-overflow-style: none; }
+.ll-table-area::-webkit-scrollbar { display: none; width: 0; height: 0; }
 .ll-table-title { font-size: 10px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .5px; }
 .ll-stack-line { display: flex; flex-direction: column; gap: 2px; }
 .ll-frame { color: var(--text2); font-size: 11.5px; }
@@ -981,11 +1062,17 @@ onBeforeUnmount(() => {
 .ll-tab-btn.active { background: var(--coral); border-color: var(--coral); color: #fff; }
 .ll-lang-select { background: var(--surface2); border: 1px solid var(--border2); color: var(--text); padding: 5px 28px 5px 10px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 500; cursor: pointer; min-width: 110px; margin-left: auto; transition: border-color .15s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2394a3b8'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
 .ll-lang-select:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px rgba(240,77,77,.1); }
-.ll-code-scroll { flex: 1; overflow: auto; padding: 14px 16px; background: #f8fafc; min-width: 0; }
+.ll-code-scroll { flex: 1; overflow: auto; padding: 14px 16px; background: #f8fafc; min-width: 0; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+.ll-code-scroll::-webkit-scrollbar:horizontal { display: none !important; height: 0 !important; }
+.ll-code-scroll::-webkit-scrollbar:vertical { width: 6px; }
+.ll-code-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 .ll-pre { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 12px; line-height: 1.65; white-space: pre-wrap; word-break: break-all; color: var(--text); margin: 0; }
 .ll-codeline { display: block; padding: 0 16px; margin: 0 -16px; }
 .ll-codeline.ll-hl { background: #dcfce7; color: #15803d; border-radius: 3px; border-left: 3px solid var(--green); font-weight: 600; }
-.ll-info-scroll { flex: 1; overflow: auto; padding: 16px 20px; background: var(--surface); color: var(--text2); font-size: 13px; line-height: 1.6; }
+.ll-info-scroll { flex: 1; overflow: auto; padding: 16px 20px; background: var(--surface); color: var(--text2); font-size: 13px; line-height: 1.6; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+.ll-info-scroll::-webkit-scrollbar:horizontal { display: none !important; height: 0 !important; }
+.ll-info-scroll::-webkit-scrollbar:vertical { width: 6px; }
+.ll-info-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 .ll-info-scroll h3 { margin: 12px 0 6px 0; font-size: 13px; color: var(--text); }
 .ll-complexity-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 12.5px; }
 .ll-complexity-table th, .ll-complexity-table td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }

@@ -2,23 +2,28 @@
 import { ref, reactive, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 
 defineProps({
-  topic: { type: String, default: 'Directed Weighted Graph' },
-  subTopic: { type: String, default: '2D Adjacency Matrix Representation' }
+  topic: { type: String, default: 'Directed Unweighted Graph' },
+  subTopic: { type: String, default: 'Adjacency List (Collections) Representation' }
 });
 
 const CODES = {
   java: [
+    ['', 'import java.util.ArrayList;'],
+    ['', 'import java.util.List;'],
     ['', 'import java.util.Scanner;'],
     ['', ''],
     ['', 'class Graph {'],
-    ['', '    private int[][] adjMatrix;'],
+    ['', '    private List<List<Integer>> adjList;'],
     ['', ''],
     ['c_ctor_entry', '    Graph(int vertices) {'],
-    ['c_alloc_matrix', '        adjMatrix = new int[vertices][vertices];'],
+    ['c_alloc_list', '        adjList = new ArrayList<>();'],
+    ['c_init_loop', '        for (int i = 0; i < vertices; i++) {'],
+    ['c_add_empty', '            adjList.add(new ArrayList<>());'],
+    ['', '        }'],
     ['c_ctor_done', '    }'],
     ['', ''],
-    ['c_add_edge_entry', '    void addEdge(int source, int destination, int weight) {'],
-    ['c_set_uv', '        adjMatrix[source][destination] = weight;'],
+    ['c_add_edge_entry', '    void addEdge(int source, int destination) {'],
+    ['c_set_uv', '        adjList.get(source).add(destination);'],
     ['c_add_edge_done', '    }'],
     ['', '}'],
     ['', ''],
@@ -32,8 +37,7 @@ const CODES = {
     ['c_loop_i', '        for (int i = 0; i < edges; i++) {'],
     ['c_sc_src', '            int source = sc.nextInt();'],
     ['c_sc_dst', '            int destination = sc.nextInt();'],
-    ['c_sc_weight', '            int weight = sc.nextInt();'],
-    ['c_call_add_edge', '            graph.addEdge(source, destination, weight);'],
+    ['c_call_add_edge', '            graph.addEdge(source, destination);'],
     ['', '        }'],
     ['c_sc_close', '        sc.close();'],
     ['c_main_done', '    }'],
@@ -43,34 +47,49 @@ const CODES = {
     ['', '#include <stdio.h>'],
     ['', '#include <stdlib.h>'],
     ['', ''],
+    ['', 'struct Node {'],
+    ['', '    int dest;'],
+    ['', '    struct Node* next;'],
+    ['', '};'],
+    ['', ''],
     ['', 'struct Graph {'],
     ['', '    int vertices;'],
-    ['', '    int** adjMatrix;'],
+    ['', '    struct Node** adjList;'],
     ['', '};'],
     ['', ''],
     ['c_ctor_entry', 'struct Graph* createGraph(int vertices) {'],
     ['c_alloc_struct', '    struct Graph* g = (struct Graph*)malloc(sizeof(struct Graph));'],
     ['c_v_assign', '    g->vertices = vertices;'],
-    ['c_alloc_matrix', '    g->adjMatrix = (int**)malloc(vertices * sizeof(int*));'],
-    ['c_init_loop', '    for (int i = 0; i < vertices; i++) g->adjMatrix[i] = (int*)calloc(vertices, sizeof(int));'],
+    ['c_alloc_list', '    g->adjList = (struct Node**)malloc('],
+    ['c_alloc_list', '        vertices * sizeof(struct Node*)'],
+    ['c_alloc_list', '    );'],
+    ['c_init_loop', '    for (int i = 0; i < vertices; i++) {'],
+    ['c_add_empty', '        g->adjList[i] = NULL;'],
+    ['', '    }'],
     ['c_ctor_done', '    return g;'],
     ['', '}'],
     ['', ''],
-    ['c_add_edge_entry', 'void addEdge(struct Graph* g, int source, int destination, int weight) {'],
-    ['c_set_uv', '    g->adjMatrix[source][destination] = weight;'],
+    ['c_add_edge_entry', 'void addEdge(struct Graph* g, int source, int destination) {'],
+    ['c_set_uv', '    struct Node* newNode = (struct Node*)malloc('],
+    ['c_set_uv', '        sizeof(struct Node)'],
+    ['c_set_uv', '    );'],
+    ['c_set_uv', '    newNode->dest = destination;'],
+    ['c_set_uv', '    newNode->next = g->adjList[source];'],
+    ['c_set_uv', '    g->adjList[source] = newNode;'],
     ['c_add_edge_done', '}'],
     ['', ''],
     ['c_main_entry', 'int main() {'],
-    ['c_sc_vertices', '    int vertices; scanf("%d", &vertices);'],
+    ['c_sc_vertices', '    int vertices;'],
+    ['c_sc_vertices', '    scanf("%d", &vertices);'],
     ['c_new_graph', '    struct Graph* graph = createGraph(vertices);'],
-    ['c_sc_edges', '    int edges; scanf("%d", &edges);'],
+    ['c_sc_edges', '    int edges;'],
+    ['c_sc_edges', '    scanf("%d", &edges);'],
     ['', ''],
     ['c_loop_i', '    for (int i = 0; i < edges; i++) {'],
-    ['c_sc_src', '        int source, destination, weight;'],
+    ['c_sc_src_dst', '        int source, destination;'],
     ['c_sc_src', '        scanf("%d", &source);'],
     ['c_sc_dst', '        scanf("%d", &destination);'],
-    ['c_sc_weight', '        scanf("%d", &weight);'],
-    ['c_call_add_edge', '        addEdge(graph, source, destination, weight);'],
+    ['c_call_add_edge', '        addEdge(graph, source, destination);'],
     ['', '    }'],
     ['c_main_done', '    return 0;'],
     ['', '}']
@@ -82,28 +101,32 @@ const CODES = {
     ['', ''],
     ['', 'class Graph {'],
     ['', 'private:'],
-    ['', '    vector<vector<int>> adjMatrix;'],
+    ['', '    vector<vector<int>> adjList;'],
     ['', 'public:'],
     ['c_ctor_entry', '    Graph(int vertices) {'],
-    ['c_alloc_matrix', '        adjMatrix.assign(vertices, vector<int>(vertices, 0));'],
+    ['c_alloc_list', '        adjList.resize(vertices);'],
+    ['c_init_loop', '        for (int i = 0; i < vertices; i++) {'],
+    ['c_add_empty', '            adjList[i] = vector<int>();'],
+    ['', '        }'],
     ['c_ctor_done', '    }'],
     ['', ''],
-    ['c_add_edge_entry', '    void addEdge(int source, int destination, int weight) {'],
-    ['c_set_uv', '        adjMatrix[source][destination] = weight;'],
+    ['c_add_edge_entry', '    void addEdge(int source, int destination) {'],
+    ['c_set_uv', '        adjList[source].push_back(destination);'],
     ['c_add_edge_done', '    }'],
     ['', '};'],
     ['', ''],
     ['c_main_entry', 'int main() {'],
-    ['c_sc_vertices', '    int vertices; cin >> vertices;'],
+    ['c_sc_vertices', '    int vertices;'],
+    ['c_sc_vertices', '    cin >> vertices;'],
     ['c_new_graph', '    Graph graph(vertices);'],
-    ['c_sc_edges', '    int edges; cin >> edges;'],
+    ['c_sc_edges', '    int edges;'],
+    ['c_sc_edges', '    cin >> edges;'],
     ['', ''],
     ['c_loop_i', '    for (int i = 0; i < edges; i++) {'],
-    ['c_sc_src', '        int source, destination, weight;'],
+    ['c_sc_src_dst', '        int source, destination;'],
     ['c_sc_src', '        cin >> source;'],
     ['c_sc_dst', '        cin >> destination;'],
-    ['c_sc_weight', '        cin >> weight;'],
-    ['c_call_add_edge', '        graph.addEdge(source, destination, weight);'],
+    ['c_call_add_edge', '        graph.addEdge(source, destination);'],
     ['', '    }'],
     ['c_main_done', '    return 0;'],
     ['', '}']
@@ -111,11 +134,13 @@ const CODES = {
   python: [
     ['', 'class Graph:'],
     ['c_ctor_entry', '    def __init__(self, vertices):'],
-    ['c_alloc_matrix', '        self.adjMatrix = [[0] * vertices for _ in range(vertices)]'],
+    ['c_alloc_list', '        self.adjList = []'],
+    ['c_init_loop', '        for i in range(vertices):'],
+    ['c_add_empty', '            self.adjList.append([])'],
     ['c_ctor_done', '        pass'],
     ['', ''],
-    ['c_add_edge_entry', '    def addEdge(self, source, destination, weight):'],
-    ['c_set_uv', '        self.adjMatrix[source][destination] = weight'],
+    ['c_add_edge_entry', '    def addEdge(self, source, destination):'],
+    ['c_set_uv', '        self.adjList[source].append(destination)'],
     ['c_add_edge_done', '        pass'],
     ['', ''],
     ['c_main_entry', 'def main():'],
@@ -126,8 +151,7 @@ const CODES = {
     ['c_loop_i', '    for i in range(edges):'],
     ['c_sc_src', '        source = int(input())'],
     ['c_sc_dst', '        destination = int(input())'],
-    ['c_sc_weight', '        weight = int(input())'],
-    ['c_call_add_edge', '        graph.addEdge(source, destination, weight)'],
+    ['c_call_add_edge', '        graph.addEdge(source, destination)'],
     ['c_main_done', '    pass'],
     ['', 'if __name__ == "__main__":'],
     ['', '    main()']
@@ -135,11 +159,14 @@ const CODES = {
   javascript: [
     ['', 'class Graph {'],
     ['c_ctor_entry', '    constructor(vertices) {'],
-    ['c_alloc_matrix', '        this.adjMatrix = Array.from({ length: vertices }, () => Array(vertices).fill(0));'],
+    ['c_alloc_list', '        this.adjList = [];'],
+    ['c_init_loop', '        for (let i = 0; i < vertices; i++) {'],
+    ['c_add_empty', '            this.adjList.push([]);'],
+    ['', '        }'],
     ['c_ctor_done', '    }'],
     ['', ''],
-    ['c_add_edge_entry', '    addEdge(source, destination, weight) {'],
-    ['c_set_uv', '        this.adjMatrix[source][destination] = weight;'],
+    ['c_add_edge_entry', '    addEdge(source, destination) {'],
+    ['c_set_uv', '        this.adjList[source].push(destination);'],
     ['c_add_edge_done', '    }'],
     ['', '}'],
     ['', ''],
@@ -151,8 +178,7 @@ const CODES = {
     ['c_loop_i', '    for (let i = 0; i < edges; i++) {'],
     ['c_sc_src', '        const source = parseInt(prompt("Enter source:"));'],
     ['c_sc_dst', '        const destination = parseInt(prompt("Enter destination:"));'],
-    ['c_sc_weight', '        const weight = parseInt(prompt("Enter weight:"));'],
-    ['c_call_add_edge', '        graph.addEdge(source, destination, weight);'],
+    ['c_call_add_edge', '        graph.addEdge(source, destination);'],
     ['', '    }'],
     ['c_main_done', '}']
   ]
@@ -161,20 +187,41 @@ const CODES = {
 const PSEUDOCODE = [
   'class Graph:',
   '    constructor(vertices):',
-  '        adjMatrix = 2D array size [vertices][vertices] initialized to 0',
-  '    method addEdge(source, destination, weight):',
-  '        adjMatrix[source][destination] = weight  // directed weighted edge',
+  '        adjList = List of empty Lists of size vertices',
+  '    method addEdge(source, destination):',
+  '        adjList.get(source).add(destination)  // directed (source -> destination)',
   '',
   'main():',
   '    read vertices',
   '    instantiate graph = new Graph(vertices)',
   '    read edges',
   '    for i in 0..edges-1:',
-  '        read source, destination, weight',
-  '        graph.addEdge(source, destination, weight)'
+  '        read source, destination',
+  '        graph.addEdge(source, destination)'
 ];
 
+const PSEUDOCODE_MAP = {
+  'c_ctor_entry': 1,
+  'c_alloc_list': 2,
+  'c_add_edge_entry': 3,
+  'c_set_uv': 4,
+  'c_main_entry': 6,
+  'c_sc_vertices': 7,
+  'c_new_graph': 8,
+  'c_sc_edges': 9,
+  'c_loop_i': 10,
+  'c_sc_src': 11,
+  'c_sc_dst': 11,
+  'c_call_add_edge': 12,
+  'c_main_done': -1
+};
+
 function frame(title, rows) { return { title, rows }; }
+function cloneAdj(adj) {
+  const c = {};
+  for (const k in adj) c[k] = [...adj[k]];
+  return c;
+}
 
 function buildSteps(numV, edgeList) {
   const steps = [];
@@ -184,10 +231,10 @@ function buildSteps(numV, edgeList) {
 
   if (V === 0) {
     steps.push({
-      badge: 'vertices = 0. No Graph or 2D matrix instantiated.',
+      badge: 'vertices = 0. No Graph or Adjacency List instantiated.',
       code: 'c_sc_vertices',
       vars: [frame('main()', [['vertices', '0']])],
-      V: 0, matrix: [], activeU: -1, activeV: -1, activeW: -1, activeK: -1, curI: -1, curJ: -1, edges: []
+      V: 0, adjList: {}, activeU: -1, activeV: -1, activeK: -1, curI: -1, curJ: -1, edges: []
     });
     return steps;
   }
@@ -197,7 +244,7 @@ function buildSteps(numV, edgeList) {
     badge: 'main() started: Scanner sc = new Scanner(System.in);',
     code: 'c_main_entry',
     vars: [frame('main()', [])],
-    V: 0, matrix: [], activeU: -1, activeV: -1, activeW: -1, activeK: -1, curI: -1, curJ: -1, edges: []
+    V: 0, adjList: {}, activeU: -1, activeV: -1, activeK: -1, curI: -1, curJ: -1, edges: []
   });
 
   // 2. Read vertices
@@ -205,7 +252,7 @@ function buildSteps(numV, edgeList) {
     badge: `int vertices = sc.nextInt(); → Read vertices = ${V}`,
     code: 'c_sc_vertices',
     vars: [frame('main()', [['vertices', String(V)]])],
-    V: 0, matrix: [], activeU: -1, activeV: -1, activeW: -1, activeK: -1, curI: -1, curJ: -1, edges: []
+    V: 0, adjList: {}, activeU: -1, activeV: -1, activeK: -1, curI: -1, curJ: -1, edges: []
   });
 
   // 3. Graph graph = new Graph(vertices);
@@ -213,7 +260,7 @@ function buildSteps(numV, edgeList) {
     badge: `Graph graph = new Graph(${V}); → Instantiating Graph object`,
     code: 'c_new_graph',
     vars: [frame('main()', [['vertices', String(V)]])],
-    V: 0, matrix: [], activeU: -1, activeV: -1, activeW: -1, activeK: -1, curI: -1, curJ: -1, edges: []
+    V: 0, adjList: {}, activeU: -1, activeV: -1, activeK: -1, curI: -1, curJ: -1, edges: []
   });
 
   // Constructor entry
@@ -221,24 +268,43 @@ function buildSteps(numV, edgeList) {
     badge: `Graph(int vertices) constructor called with vertices = ${V}`,
     code: 'c_ctor_entry',
     vars: [frame('main()', [['vertices', String(V)]]), frame('Graph()', [['vertices', String(V)]])],
-    V: 0, matrix: [], activeU: -1, activeV: -1, activeW: -1, activeK: -1, curI: -1, curJ: -1, edges: []
-  });
-
-  // Allocate matrix
-  const m = Array.from({ length: V }, () => new Array(V).fill(0));
-
-  steps.push({
-    badge: `adjMatrix = new int[${V}][${V}]; → Allocated 2D matrix of size ${V}x${V} initialized to 0`,
-    code: 'c_alloc_matrix',
-    vars: [frame('main()', [['vertices', String(V)]]), frame('Graph()', [['vertices', String(V)], ['adjMatrix', `${V}x${V}`]])],
-    V, matrix: m.map(row => [...row]), activeU: -1, activeV: -1, activeW: -1, activeK: -1, curI: -1, curJ: -1, edges: []
+    V: 0, adjList: {}, activeU: -1, activeV: -1, activeK: -1, curI: -1, curJ: -1, edges: []
   });
 
   steps.push({
-    badge: `Graph constructor finished. Graph instance created with ${V}x${V} matrix.`,
+    badge: `adjList = new ArrayList<>(); → Allocated List for ${V} vertex buckets`,
+    code: 'c_alloc_list',
+    vars: [frame('main()', [['vertices', String(V)]]), frame('Graph()', [['vertices', String(V)], ['adjList', `List(${V})`]])],
+    V: 0, adjList: {}, activeU: -1, activeV: -1, activeK: -1, curI: -1, curJ: -1, edges: []
+  });
+
+  // Init loop buckets step by step
+  const tempAdj = {};
+  for (let i = 0; i < V; i++) {
+    steps.push({
+      badge: `for (int i = ${i}; i < vertices (${V}); i++) → Loop iteration i = ${i}`,
+      code: 'c_init_loop',
+      vars: [frame('main()', [['vertices', String(V)]]), frame('Graph()', [['vertices', String(V)], ['i', String(i)]])],
+      V, adjList: cloneAdj(tempAdj), activeU: -1, activeV: -1, activeK: -1, curI: i, curJ: -1, edges: []
+    });
+
+    tempAdj[i] = [];
+
+    steps.push({
+      badge: `adjList.add(new ArrayList<>()); → Added empty list for vertex ${i}`,
+      code: 'c_add_empty',
+      vars: [frame('main()', [['vertices', String(V)]]), frame('Graph()', [['vertices', String(V)], ['i', String(i)], [`adjList[${i}]`, '[]']])],
+      V, adjList: cloneAdj(tempAdj), activeU: -1, activeV: -1, activeK: -1, curI: i, curJ: -1, edges: []
+    });
+  }
+
+  const initialAdj = cloneAdj(tempAdj);
+
+  steps.push({
+    badge: `Graph constructor finished. Graph instance created with ${V} empty Adjacency List buckets.`,
     code: 'c_ctor_done',
     vars: [frame('main()', [['vertices', String(V)], ['graph', 'Graph@inst']])],
-    V, matrix: m.map(row => [...row]), activeU: -1, activeV: -1, activeW: -1, activeK: -1, curI: -1, curJ: -1, edges: []
+    V, adjList: cloneAdj(initialAdj), activeU: -1, activeV: -1, activeK: -1, curI: -1, curJ: -1, edges: []
   });
 
   // 4. Read edges
@@ -246,21 +312,21 @@ function buildSteps(numV, edgeList) {
     badge: `int edges = sc.nextInt(); → Read edge count edges = ${E}`,
     code: 'c_sc_edges',
     vars: [frame('main()', [['vertices', String(V)], ['edges', String(E)]])],
-    V, matrix: m.map(row => [...row]), activeU: -1, activeV: -1, activeW: -1, activeK: -1, curI: -1, curJ: -1, edges: []
+    V, adjList: cloneAdj(initialAdj), activeU: -1, activeV: -1, activeK: -1, curI: -1, curJ: -1, edges: []
   });
 
-  const currentMatrix = m.map(row => [...row]);
+  const currentAdj = cloneAdj(initialAdj);
   const processedEdges = [];
 
   for (let i = 0; i < edgeList.length; i++) {
     const edge = edgeList[i];
-    const u = edge[0], v = edge[1], weight = edge[2] ?? 1;
+    const u = edge[0], v = edge[1];
 
     steps.push({
       badge: `for (int i = ${i}; i < edges (${E}); i++) → Loop iteration i = ${i}`,
       code: 'c_loop_i',
       vars: [frame('main()', [['vertices', String(V)], ['edges', String(E)], ['i', String(i)]])],
-      V, matrix: currentMatrix.map(row => [...row]), activeU: -1, activeV: -1, activeW: -1, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
+      V, adjList: cloneAdj(currentAdj), activeU: -1, activeV: -1, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
     });
 
     // Read source
@@ -268,7 +334,7 @@ function buildSteps(numV, edgeList) {
       badge: `int source = sc.nextInt(); → Read source vertex source = ${u}`,
       code: 'c_sc_src',
       vars: [frame('main()', [['vertices', String(V)], ['edges', String(E)], ['i', String(i)], ['source', String(u)]])],
-      V, matrix: currentMatrix.map(row => [...row]), activeU: u, activeV: -1, activeW: -1, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
+      V, adjList: cloneAdj(currentAdj), activeU: u, activeV: -1, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
     });
 
     // Read destination
@@ -276,54 +342,48 @@ function buildSteps(numV, edgeList) {
       badge: `int destination = sc.nextInt(); → Read destination vertex destination = ${v}`,
       code: 'c_sc_dst',
       vars: [frame('main()', [['vertices', String(V)], ['edges', String(E)], ['i', String(i)], ['source', String(u)], ['destination', String(v)]])],
-      V, matrix: currentMatrix.map(row => [...row]), activeU: u, activeV: v, activeW: -1, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
-    });
-
-    // Read weight
-    steps.push({
-      badge: `int weight = sc.nextInt(); → Read edge weight weight = ${weight}`,
-      code: 'c_sc_weight',
-      vars: [frame('main()', [['vertices', String(V)], ['edges', String(E)], ['i', String(i)], ['source', String(u)], ['destination', String(v)], ['weight', String(weight)]])],
-      V, matrix: currentMatrix.map(row => [...row]), activeU: u, activeV: v, activeW: weight, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
+      V, adjList: cloneAdj(currentAdj), activeU: u, activeV: v, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
     });
 
     // Call addEdge
     steps.push({
-      badge: `graph.addEdge(${u}, ${v}, ${weight}); → Calling addEdge(source, destination, weight)`,
+      badge: `graph.addEdge(${u}, ${v}); → Calling addEdge(source, destination)`,
       code: 'c_call_add_edge',
-      vars: [frame('main()', [['i', String(i)], ['source', String(u)], ['destination', String(v)], ['weight', String(weight)]])],
-      V, matrix: currentMatrix.map(row => [...row]), activeU: u, activeV: v, activeW: weight, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
+      vars: [frame('main()', [['i', String(i)], ['source', String(u)], ['destination', String(v)]])],
+      V, adjList: cloneAdj(currentAdj), activeU: u, activeV: v, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
     });
 
     // Entry addEdge
     steps.push({
-      badge: `addEdge(int source = ${u}, int destination = ${v}, int weight = ${weight})`,
+      badge: `addEdge(int source = ${u}, int destination = ${v})`,
       code: 'c_add_edge_entry',
-      vars: [frame('main()', [['i', String(i)]]), frame('addEdge()', [['source', String(u)], ['destination', String(v)], ['weight', String(weight)]])],
-      V, matrix: currentMatrix.map(row => [...row]), activeU: u, activeV: v, activeW: weight, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
+      vars: [frame('main()', [['i', String(i)]]), frame('addEdge()', [['source', String(u)], ['destination', String(v)]])],
+      V, adjList: cloneAdj(currentAdj), activeU: u, activeV: v, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
     });
 
     const isValid = u >= 0 && u < V && v >= 0 && v < V;
 
     if (isValid) {
-      currentMatrix[u][v] = weight;
-      const existingIdx = processedEdges.findIndex(e => e.u === u && e.v === v);
-      if (existingIdx >= 0) processedEdges[existingIdx].weight = weight;
-      else processedEdges.push({ u, v, weight });
+      if (!currentAdj[u].includes(v)) {
+        currentAdj[u].push(v);
+      }
+      if (!processedEdges.some(e => e.u === u && e.v === v)) {
+        processedEdges.push({ u, v });
+      }
 
       steps.push({
-        badge: `adjMatrix[${u}][${v}] = ${weight}; → Set matrix cell [${u}][${v}] = ${weight} (directed edge ${u} → ${v} with weight ${weight})`,
+        badge: `adjList.get(${u}).add(${v}); → Added neighbor ${v} to source vertex ${u}'s list (directed u → v)`,
         code: 'c_set_uv',
-        vars: [frame('main()', [['i', String(i)]]), frame('addEdge()', [['source', String(u)], ['destination', String(v)], [`adjMatrix[${u}][${v}]`, String(weight)]])],
-        V, matrix: currentMatrix.map(row => [...row]), activeU: u, activeV: v, activeW: weight, activeK: i, curI: u, curJ: v, edges: [...processedEdges]
+        vars: [frame('main()', [['i', String(i)]]), frame('addEdge()', [['source', String(u)], ['destination', String(v)], [`adjList[${u}]`, JSON.stringify(currentAdj[u])]])],
+        V, adjList: cloneAdj(currentAdj), activeU: u, activeV: v, activeK: i, curI: u, curJ: v, edges: [...processedEdges]
       });
     }
 
     steps.push({
-      badge: `addEdge(${u}, ${v}, ${weight}) completed.`,
+      badge: `addEdge(${u}, ${v}) completed.`,
       code: 'c_add_edge_done',
-      vars: [frame('main()', [['i', String(i)], ['source', String(u)], ['destination', String(v)], ['weight', String(weight)]])],
-      V, matrix: currentMatrix.map(row => [...row]), activeU: -1, activeV: -1, activeW: -1, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
+      vars: [frame('main()', [['i', String(i)], ['source', String(u)], ['destination', String(v)]])],
+      V, adjList: cloneAdj(currentAdj), activeU: -1, activeV: -1, activeK: i, curI: -1, curJ: -1, edges: [...processedEdges]
     });
   }
 
@@ -331,21 +391,21 @@ function buildSteps(numV, edgeList) {
     badge: 'sc.close(); → Scanner resource closed.',
     code: 'c_sc_close',
     vars: [frame('main()', [['vertices', String(V)], ['edges', String(E)]])],
-    V, matrix: currentMatrix.map(row => [...row]), activeU: -1, activeV: -1, activeW: -1, activeK: -1, curI: -1, curJ: -1, edges: [...processedEdges]
+    V, adjList: cloneAdj(currentAdj), activeU: -1, activeV: -1, activeK: -1, curI: -1, curJ: -1, edges: [...processedEdges]
   });
 
   steps.push({
-    badge: `main() finished: All ${E} directed weighted edges created and stored in Graph.`,
+    badge: `main() finished: All ${E} directed edges added to Graph Adjacency List.`,
     code: 'c_main_done',
     vars: [frame('main()', [['vertices', String(V)], ['edges', String(E)], ['totalEdges', String(processedEdges.length)]])],
-    V, matrix: currentMatrix.map(row => [...row]), activeU: -1, activeV: -1, activeW: -1, activeK: -1, curI: -1, curJ: -1, edges: [...processedEdges]
+    V, adjList: cloneAdj(currentAdj), activeU: -1, activeV: -1, activeK: -1, curI: -1, curJ: -1, edges: [...processedEdges]
   });
 
   return steps;
 }
 
 const numVInput = ref(4);
-const edgesInputStr = ref('[[0,1,5],[0,2,4],[1,2,3]]');
+const edgesInputStr = ref('[[0,1],[0,2],[1,2],[2,3]]');
 
 function parseEdges(str) {
   if (!str || !str.trim()) return [];
@@ -353,16 +413,17 @@ function parseEdges(str) {
     const parsed = JSON.parse(str);
     if (Array.isArray(parsed)) {
       return parsed
-        .filter(e => Array.isArray(e) && e.length >= 3)
-        .map(e => [parseInt(e[0]), parseInt(e[1]), parseInt(e[2])]);
+        .filter(e => Array.isArray(e) && e.length >= 2)
+        .map(e => [parseInt(e[0]), parseInt(e[1])])
+        .filter(e => !isNaN(e[0]) && !isNaN(e[1]));
     }
   } catch (err) {
-    const matches = (str || '').match(/\[\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\]/g);
+    const matches = (str || '').match(/\[\s*\d+\s*,\s*\d+\s*\]/g);
     if (matches) {
       return matches.map(m => {
         try {
           const arr = JSON.parse(m);
-          return [parseInt(arr[0]), parseInt(arr[1]), parseInt(arr[2])];
+          return [parseInt(arr[0]), parseInt(arr[1])];
         } catch (e) { return null; }
       }).filter(Boolean);
     }
@@ -370,12 +431,14 @@ function parseEdges(str) {
   return [];
 }
 
-const defaultEdgeList = [[0, 1, 5], [0, 2, 4], [1, 2, 3]];
+const defaultEdgeList = [[0, 1], [0, 2], [1, 2], [2, 3]];
 
 const hoveredEdge = ref(null);
 
 function isEdgeHovered(u, v) {
-  return hoveredEdge.value && hoveredEdge.value.u === u && hoveredEdge.value.v === v;
+  if (!hoveredEdge.value) return false;
+  const { u: hu, v: hv } = hoveredEdge.value;
+  return hu === u && hv === v;
 }
 function isNodeHoveredSource(nodeId) {
   return hoveredEdge.value && hoveredEdge.value.u === nodeId;
@@ -399,6 +462,17 @@ const steps = computed(() => stepsData.steps);
 const s = computed(() => steps.value[Math.max(0, Math.min(si.value, steps.value.length - 1))] || {});
 const codeLines = computed(() => CODES[lang.value] || []);
 
+const createdVertices = computed(() => {
+  if (!s.value || !s.value.adjList) return [];
+  return Object.keys(s.value.adjList).map(Number).sort((a, b) => a - b);
+});
+
+watch(lang, () => {
+  const currentV = s.value.V ?? 4;
+  const parsed = parseEdges(edgesInputStr.value);
+  stepsData.steps = buildSteps(currentV, parsed.length ? parsed : defaultEdgeList);
+});
+
 const modalNodePositions = computed(() => {
   const V = s.value.V ?? 0;
   if (V <= 0) return [];
@@ -416,13 +490,15 @@ const modalNodePositions = computed(() => {
   return positions;
 });
 
-function getEdgeGeometry(edge, positions, allEdges, curvature = 32) {
-  const uNode = positions[edge.u];
-  const vNode = positions[edge.v];
-  if (!uNode || !vNode) return { pathD: '', labelX: 0, labelY: 0, isBi: false, isLoop: false };
+function getEdgeGeometry(edge, positions) {
+  const uId = edge.u;
+  const vId = edge.v;
 
-  // Handle Self-Loop (u === v)
-  if (edge.u === edge.v) {
+  const uNode = positions[uId];
+  const vNode = positions[vId];
+  if (!uNode || !vNode) return { pathD: '', isLoop: false };
+
+  if (uId === vId) {
     const x0 = uNode.x, y0 = uNode.y;
     const gCx = 360, gCy = 230;
     let dx = x0 - gCx, dy = y0 - gCy;
@@ -431,150 +507,38 @@ function getEdgeGeometry(edge, positions, allEdges, curvature = 32) {
     const dirX = dx / dist, dirY = dy / dist;
     const px = -dirY, py = dirX;
 
-    const nodeR = 20;
-    const loopOffset = 38;
-
+    const nodeR = 20, loopOffset = 38;
     const startX = x0 + dirX * nodeR - px * 10;
     const startY = y0 + dirY * nodeR - py * 10;
     const endX = x0 + dirX * nodeR + px * 10;
     const endY = y0 + dirY * nodeR + py * 10;
-
     const c1X = startX + dirX * loopOffset - px * 14;
     const c1Y = startY + dirY * loopOffset - py * 14;
     const c2X = endX + dirX * loopOffset + px * 14;
     const c2Y = endY + dirY * loopOffset + py * 14;
 
     const pathD = `M ${startX} ${startY} C ${c1X} ${c1Y}, ${c2X} ${c2Y}, ${endX} ${endY}`;
-    const labelX = x0 + dirX * (nodeR + loopOffset + 12);
-    const labelY = y0 + dirY * (nodeR + loopOffset + 12);
-
-    return { pathD, labelX, labelY, isBi: false, isLoop: true };
+    return { pathD, isLoop: true };
   }
 
-  // Normal edge (u !== v)
   const x1 = uNode.x, y1 = uNode.y;
   const x2 = vNode.x, y2 = vNode.y;
   const dx = x2 - x1, dy = y2 - y1;
   const dist = Math.hypot(dx, dy) || 1;
-
   const ux = dx / dist, uy = dy / dist;
-  const nx = -uy, ny = ux;
-
-  const isBi = allEdges.some(e => e.u === edge.v && e.v === edge.u);
-
-  const h = isBi ? curvature : 0;
-  const mx = (x1 + x2) / 2;
-  const my = (y1 + y2) / 2;
-  const cx = mx + h * nx;
-  const cy = my + h * ny;
 
   const nodeR = 20;
-  const startX = x1 + ux * nodeR + (isBi ? nx * 6 : 0);
-  const startY = y1 + uy * nodeR + (isBi ? ny * 6 : 0);
-  const endX = x2 - ux * nodeR + (isBi ? nx * 6 : 0);
-  const endY = y2 - uy * nodeR + (isBi ? ny * 6 : 0);
+  const startX = x1 + ux * nodeR;
+  const startY = y1 + uy * nodeR;
+  const endX = x2 - ux * nodeR;
+  const endY = y2 - uy * nodeR;
 
-  const pathD = isBi
-    ? `M ${startX} ${startY} Q ${cx} ${cy} ${endX} ${endY}`
-    : `M ${startX} ${startY} L ${endX} ${endY}`;
-
-  const labelX = isBi ? 0.25 * startX + 0.5 * cx + 0.25 * endX : mx;
-  const labelY = isBi ? 0.25 * startY + 0.5 * cy + 0.25 * endY : my;
-
-  return { pathD, labelX, labelY, isBi, isLoop: false };
+  const pathD = `M ${startX} ${startY} L ${endX} ${endY}`;
+  return { pathD, isLoop: false };
 }
 
-const edgeGeometries = computed(() => {
-  const edges = s.value.edges || [];
-  const positions = modalNodePositions.value;
-  const map = new Map();
-  if (!positions || positions.length === 0 || !edges || edges.length === 0) return map;
-
-  const gCx = 360, gCy = 230;
-  const list = edges.map((edge, idx) => {
-    let uId = edge.u;
-    let vId = edge.v;
-    if (s.value && s.value.activeU >= 0 && s.value.activeV >= 0) {
-      if (edge.u === s.value.activeU && edge.v === s.value.activeV) {
-        uId = s.value.activeU;
-        vId = s.value.activeV;
-      }
-    }
-    const uNode = positions[uId];
-    const vNode = positions[vId];
-    const key = `${edge.u}-${edge.v}`;
-    if (!uNode || !vNode) return { key, pathD: '', labelX: 0, labelY: 0, isLoop: false };
-
-    const geo = getEdgeGeometry(edge, positions, edges, 32);
-    let labelX = geo.labelX;
-    let labelY = geo.labelY;
-
-    if (!geo.isLoop && !geo.isBi) {
-      const x1 = uNode.x, y1 = uNode.y;
-      const x2 = vNode.x, y2 = vNode.y;
-      const dx = x2 - x1, dy = y2 - y1;
-      const dist = Math.hypot(dx, dy) || 1;
-      const ux = dx / dist, uy = dy / dist;
-      const nx = -uy, ny = ux;
-      const startX = x1 + ux * 20;
-      const startY = y1 + uy * 20;
-      const endX = x2 - ux * 20;
-      const endY = y2 - uy * 20;
-      const mx = (startX + endX) / 2;
-      const my = (startY + endY) / 2;
-      const distToCenter = Math.hypot(mx - gCx, my - gCy);
-
-      let t = 0.5;
-      if (distToCenter < 25) {
-        t = (idx % 2 === 0) ? 0.33 : 0.67;
-        labelX = startX + t * (endX - startX);
-        labelY = startY + t * (endY - startY);
-      }
-      return {
-        key, pathD: geo.pathD, labelX, labelY, isBi: false, isLoop: false,
-        startX, startY, endX, endY, nx, ny, t
-      };
-    }
-
-    return { key, pathD: geo.pathD, labelX, labelY, isBi: geo.isBi, isLoop: geo.isLoop };
-  });
-
-  for (let iter = 0; iter < 8; iter++) {
-    let shifted = false;
-    for (let i = 0; i < list.length; i++) {
-      for (let j = i + 1; j < list.length; j++) {
-        const a = list[i], b = list[j];
-        if (a.isLoop && b.isLoop) continue;
-        const dist = Math.hypot(a.labelX - b.labelX, a.labelY - b.labelY);
-        if (dist < 28) {
-          shifted = true;
-          if (!b.isLoop && !b.isBi && b.startX !== undefined) {
-            b.t = (b.t > 0.5) ? 0.28 : 0.72;
-            b.labelX = b.startX + b.t * (b.endX - b.startX) + b.nx * 14;
-            b.labelY = b.startY + b.t * (b.endY - b.startY) + b.ny * 14;
-          }
-          if (!a.isLoop && !a.isBi && a.startX !== undefined && dist < 20) {
-            a.labelX += a.nx * 14;
-            a.labelY += a.ny * 14;
-          }
-        }
-      }
-    }
-    if (!shifted) break;
-  }
-
-  for (const item of list) {
-    map.set(item.key, item);
-  }
-  return map;
-});
-
 function getEdgeGeo(edge) {
-  const key = `${edge.u}-${edge.v}`;
-  if (edgeGeometries.value.has(key)) {
-    return edgeGeometries.value.get(key);
-  }
-  return getEdgeGeometry(edge, modalNodePositions.value, s.value.edges || [], 32);
+  return getEdgeGeometry(edge, modalNodePositions.value);
 }
 
 let playTimer = null;
@@ -586,36 +550,6 @@ function applySetup() {
   playing.value = false;
   stepsData.steps = buildSteps(vCount, parsedEdges);
   si.value = 0;
-}
-
-function handleAddEdge() {
-  const u = parseInt(inputU.value);
-  const v = parseInt(inputV.value);
-  const w = parseInt(inputW.value);
-  const V = s.value.V ?? 0;
-
-  if (V <= 0) {
-    alert('Cannot add edge to a graph with 0 vertices.');
-    return;
-  }
-
-  if (isNaN(u) || u < 0 || u >= V || isNaN(v) || v < 0 || v >= V) {
-    alert(`Source (u) and Destination (v) must be between 0 and ${V - 1}.`);
-    return;
-  }
-  if (isNaN(w) || w <= 0) {
-    alert('Weight must be a positive integer.');
-    return;
-  }
-
-  playing.value = false;
-  const currentEdges = s.value.edges ? [...s.value.edges] : [];
-  const existingIdx = currentEdges.findIndex(e => e.u === u && e.v === v);
-  if (existingIdx >= 0) currentEdges[existingIdx].weight = w;
-  else currentEdges.push({ u, v, weight: w });
-
-  stepsData.steps = buildSteps(V, currentEdges);
-  si.value = stepsData.steps.length - 4; // Jump to adding this edge
 }
 
 function stepBy(d) {
@@ -647,8 +581,7 @@ watch(playing, v => {
 });
 
 function onKeydown(e) {
-  const tag = e.target.tagName;
-  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+  if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
   if (e.key === 'ArrowRight') stepBy(1);
   if (e.key === 'ArrowLeft') stepBy(-1);
   if (e.key === ' ') { e.preventDefault(); togglePlay(); }
@@ -656,7 +589,7 @@ function onKeydown(e) {
 
 const mainRef = ref(null);
 const leftColRef = ref(null);
-const hResizerRef = ref(null); 
+const hResizerRef = ref(null);
 const vizResizerRef = ref(null);
 const tableResizerRef = ref(null);
 
@@ -699,23 +632,6 @@ onBeforeUnmount(() => {
   clearTimeout(playTimer);
   cleanupFns.forEach(fn => fn && fn());
 });
-
-// Vertex Node Positions in Circular Layout
-const nodePositions = computed(() => {
-  const V = s.value.V ?? 0;
-  if (V <= 0) return [];
-  const positions = [];
-  const cx = 150, cy = 130, r = 85;
-  for (let i = 0; i < V; i++) {
-    const angle = (2 * Math.PI * i) / V - Math.PI / 2;
-    positions.push({
-      id: i,
-      x: cx + r * Math.cos(angle),
-      y: cy + r * Math.sin(angle)
-    });
-  }
-  return positions;
-});
 </script>
 
 <template>
@@ -736,7 +652,7 @@ const nodePositions = computed(() => {
             <span class="ll-divider">|</span>
 
             <label>Edges</label>
-            <input type="text" v-model="edgesInputStr" style="width: 220px;" class="ll-text-input" placeholder="e.g. [[0,1,5],[0,2,4],[1,2,3]]" @keyup.enter="applySetup" />
+            <input type="text" v-model="edgesInputStr" style="width: 240px;" class="ll-text-input" placeholder="e.g. [[0,1],[0,2],[1,2]]" @keyup.enter="applySetup" />
             <button class="ll-viz-btn" @click="applySetup" title="Visualize Edge List Loop">&#9654;</button>
 
             <button class="ll-graph-modal-btn" style="background-color: slategray" @click="showGraphModal = !showGraphModal">
@@ -757,58 +673,62 @@ const nodePositions = computed(() => {
             <div class="ll-left-col" ref="leftColRef" :style="{ width: leftWidth + '%' }">
               <div class="ll-viz-wrap" :style="{ height: vizHeight + 'px' }">
                 <div class="ll-perm-area">
-                  <!-- 2D Adjacency Matrix Grid Display Only -->
-                  <div class="ll-matrix-area">
-                    <div class="ll-matrix-card">
-                      <div class="ll-card-title">2D Adjacency Matrix <code>adj[u][v]</code>:</div>
-                      <div v-if="(s.V ?? 0) === 0" class="ll-empty-matrix-msg">
-                        No matrix to display (Vertices = 0). Enter a vertex count &gt; 0 to initialize graph.
+                  <!-- Adjacency List Collections Display -->
+                  <div class="ll-adj-list-area">
+                    <div class="ll-adj-card">
+                      <div class="ll-card-header">
+                        <div class="ll-card-title-main">adj</div>
+                        <div class="ll-card-subtitle">{{ createdVertices.length }} inner lists</div>
                       </div>
-                      <div v-else class="ll-matrix-grid-wrap">
-                        <table class="ll-matrix-table" :style="{ '--row-count': (s.V ?? 0) + 1 }" :class="[ (s.V ?? 0) > 7 ? 'll-matrix-v-lg' : ((s.V ?? 0) > 4 ? 'll-matrix-v-md' : '') ]">
-                          <thead>
-                            <tr>
-                              <th class="ll-corner-th">u \ v</th>
-                              <th
-                                v-for="vIdx in s.V"
-                                :key="'ch-' + (vIdx - 1)"
-                                :class="{ 'll-th-active-v': (vIdx - 1) === s.activeV || (vIdx - 1) === s.curJ }"
-                              >
-                                <div class="ll-ptr-tag-wrap">
-                                  <span v-if="(vIdx - 1) === s.activeV" class="ll-ptr-lbl ll-lbl-purple">v</span>
-                                  <span v-if="(vIdx - 1) === s.curJ && (vIdx - 1) !== s.activeV" class="ll-ptr-lbl ll-lbl-green">j</span>
-                                </div>
-                                {{ vIdx - 1 }}
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr v-for="uIdx in s.V" :key="'row-' + (uIdx - 1)">
-                              <th :class="{ 'll-th-active-u': (uIdx - 1) === s.activeU || (uIdx - 1) === s.curI }">
-                                <div class="ll-ptr-tag-wrap" style="justify-content: flex-start; padding-left: 2px;">
-                                  <span v-if="(uIdx - 1) === s.activeU" class="ll-ptr-lbl ll-lbl-blue">u</span>
-                                  <span v-if="(uIdx - 1) === s.curI && (uIdx - 1) !== s.activeU" class="ll-ptr-lbl ll-lbl-green">i</span>
-                                </div>
-                                {{ uIdx - 1 }}
-                              </th>
-                              <td
-                                v-for="vIdx in s.V"
-                                :key="'cell-' + (uIdx - 1) + '-' + (vIdx - 1)"
-                                class="ll-matrix-cell"
+                      <div v-if="(s.V ?? 0) === 0 || createdVertices.length === 0" class="ll-empty-matrix-msg">
+                        No Collections instantiated yet. Step through constructor to add inner lists.
+                      </div>
+                      <div v-else class="ll-adj-wrap">
+                        <div
+                          v-for="uVal in createdVertices"
+                          :key="'row-' + uVal"
+                          class="ll-adj-row"
+                        >
+                          <!-- Vertex Box (Purple) -->
+                          <div
+                            class="ll-adj-v-head"
+                            :class="{
+                              'll-adj-v-head-active-u': uVal === s.activeU || uVal === s.curI,
+                              'll-adj-v-head-active-v': uVal === s.activeV || uVal === s.curJ
+                            }"
+                          >
+                            <div class="ll-ptr-tag-wrap" style="position: absolute; bottom: 100%; margin-bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 10; pointer-events: none;">
+                              <span v-if="uVal === s.activeU" class="ll-ptr-lbl ll-lbl-blue">u</span>
+                              <span v-if="uVal === s.activeV" class="ll-ptr-lbl ll-lbl-purple">v</span>
+                            </div>
+                            {{ uVal }}
+                          </div>
+
+                          <!-- Connection Arrow -->
+                          <svg class="ll-adj-arrow" width="22" height="12" viewBox="0 0 22 12">
+                            <path d="M 1 6 L 17 6 M 13 2 L 18 6 L 13 10" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                          </svg>
+
+                          <!-- Neighbor Element Boxes (Soft Teal) -->
+                          <div class="ll-adj-items">
+                            <template v-if="s.adjList && s.adjList[uVal] && s.adjList[uVal].length">
+                              <span
+                                v-for="(neighbor, nIdx) in s.adjList[uVal]"
+                                :key="'nbr-' + uVal + '-' + nIdx"
+                                class="ll-adj-chip"
                                 :class="{
-                                  'll-cell-active': (uIdx - 1) === s.activeU && (vIdx - 1) === s.activeV,
-                                  'll-cell-cur': (uIdx - 1) === s.curI && (vIdx - 1) === s.curJ,
-                                  'll-cell-hovered': isEdgeHovered(uIdx - 1, vIdx - 1),
-                                  'll-cell-has-edge': s.matrix && s.matrix[uIdx - 1] && s.matrix[uIdx - 1][vIdx - 1] > 0
+                                  'll-adj-chip-hovered': isEdgeHovered(uVal, neighbor),
+                                  'll-adj-chip-added': uVal === s.curI && neighbor === s.curJ
                                 }"
-                                @mouseenter="hoveredEdge = { u: uIdx - 1, v: vIdx - 1 }"
+                                @mouseenter="hoveredEdge = { u: uVal, v: neighbor }"
                                 @mouseleave="hoveredEdge = null"
                               >
-                                {{ s.matrix && s.matrix[uIdx - 1] ? s.matrix[uIdx - 1][vIdx - 1] : 0 }}
-                              </td>
-                            </tr>
-                          </tbody> 
-                        </table>
+                                {{ neighbor }}
+                              </span>
+                            </template>
+                            <span v-else class="ll-adj-empty">empty</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -819,11 +739,11 @@ const nodePositions = computed(() => {
 
               <!-- Color Legend -->
               <div class="ll-legend">
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-existing"></span>No Edge (0)</span>
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-has-edge"></span>Edge Exists (Weight w)</span>
+                <span class="ll-leg"><span class="ll-legdot ll-legdot-existing"></span>Empty Bucket</span>
+                <span class="ll-leg"><span class="ll-legdot ll-legdot-has-edge"></span>Neighbor Node</span>
                 <span class="ll-leg"><span class="ll-legdot ll-legdot-u"></span>Source Vertex (u)</span>
                 <span class="ll-leg"><span class="ll-legdot ll-legdot-v"></span>Destination Vertex (v)</span>
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-active"></span>Active Cell adj[u][v]</span>
+                <span class="ll-leg"><span class="ll-legdot ll-legdot-active"></span>Added Neighbor</span>
               </div>
 
               <!-- Variable Frames & Call Stack -->
@@ -840,7 +760,7 @@ const nodePositions = computed(() => {
                     >
                       {{ f.title }}(<span v-for="(r, idx) in f.rows" :key="idx">
                         <span v-if="idx > 0">, </span>
-                        <span class="ll-fname">{{ r[0] }}</span>=<span :class="r[2] ? 'll-c-blue' : (depth === s.vars.length - 1 ? 'll-c-orange' : 'll-c-green')" style="font-weight:700">{{ r[1] }}</span>
+                        <span class="ll-fname">{{ r[0] }}</span>=<span :class="depth === s.vars.length - 1 ? 'll-c-orange' : 'll-c-green'" style="font-weight:700">{{ r[1] }}</span>
                       </span>)<span v-if="depth === s.vars.length - 1" class="ll-now"> &#9668; current</span>
                     </div>
                   </template>
@@ -892,6 +812,7 @@ const nodePositions = computed(() => {
                     v-for="(line, idx) in PSEUDOCODE"
                     :key="idx"
                     class="ll-codeline"
+                    :class="{ 'll-hl': PSEUDOCODE_MAP[s.code] === idx }"
                   >{{ line }}</span></pre>
                 </div>
 
@@ -901,14 +822,14 @@ const nodePositions = computed(() => {
                   <table class="ll-complexity-table">
                     <thead><tr><th>Operation</th><th>Time</th><th>Why</th></tr></thead>
                     <tbody>
-                      <tr><td>Matrix Allocation</td><td>O(V&sup2;)</td><td>Initializes V x V matrix cells to 0.</td></tr>
-                      <tr><td>Add Edge <code>addEdge(u, v, w)</code></td><td>O(1)</td><td>Direct indexing access <code>adj[u][v] = w</code>.</td></tr>
-                      <tr><td>Query Edge <code>getEdge(u, v)</code></td><td>O(1)</td><td>Direct array lookup <code>return adj[u][v]</code>.</td></tr>
-                      <tr><td>Space Complexity</td><td>O(V&sup2;)</td><td>Stores a dense V x V array in memory.</td></tr>
+                      <tr><td>List Allocation</td><td>O(V)</td><td>Initializes V empty list buckets.</td></tr>
+                      <tr><td>Add Edge <code>addEdge(u, v)</code></td><td>O(1)</td><td>Appends <code>v</code> to <code>adj[u]</code> (directed source bucket).</td></tr>
+                      <tr><td>Query Edge <code>getEdge(u, v)</code></td><td>O(deg+(u))</td><td>Scans list <code>adj[u]</code> for outgoing neighbor <code>v</code>.</td></tr>
+                      <tr><td>Space Complexity</td><td>O(V + E)</td><td>Stores V vertex heads and E directed neighbor nodes.</td></tr>
                     </tbody>
                   </table>
                   <p class="ll-note">
-                    Key feature: <b>2D Adjacency Matrix</b> allows instant <code>O(1)</code> lookup for any directed edge <code>u &rarr; v</code>, but uses <code>O(V&sup2;)</code> space regardless of edge density.
+                    Key feature: <b>Adjacency List Collections</b> for directed unweighted graphs store directed edges asymmetricly (only <code>adj[u].add(v)</code>). Uses efficient <code>O(V + E)</code> memory.
                   </p>
                 </div>
               </div>
@@ -924,13 +845,13 @@ const nodePositions = computed(() => {
       </div>
     </div>
 
-    <!-- Floating Directed Weighted Graph Modal Dialog Container -->
+    <!-- Floating Directed Unweighted Graph Modal Dialog Container -->
     <div v-if="showGraphModal" class="graph-modal-backdrop" @click.self="showGraphModal = false">
       <div class="graph-modal-card">
         <div class="graph-modal-header">
           <div class="graph-modal-title">
-            <span>Directed Weighted Graph View</span>
-            <span class="graph-subtitle">(Synchronized with 2D Adjacency Matrix)</span>
+            <span>Directed Unweighted Graph View</span>
+            <span class="graph-subtitle">(Synchronized with Adjacency List Collections)</span>
           </div>
           <button class="graph-close-btn" @click="showGraphModal = false" title="Close modal">&times;</button>
         </div>
@@ -952,7 +873,7 @@ const nodePositions = computed(() => {
               </marker>
             </defs>
 
-            <!-- Directed Edges with Interactive Hover Targets -->
+            <!-- Directed Edges -->
             <g
               v-for="edge in s.edges"
               :key="'me-' + edge.u + '-' + edge.v"
@@ -960,7 +881,7 @@ const nodePositions = computed(() => {
               @mouseleave="hoveredEdge = null"
               style="cursor: pointer;"
             >
-              <!-- Invisible Thick Hit Target Path for Smooth Hovering -->
+              <!-- Thick Hit Target Path -->
               <path
                 :d="getEdgeGeo(edge).pathD"
                 fill="none"
@@ -982,28 +903,6 @@ const nodePositions = computed(() => {
                   ? 'url(#modal-arrowhead-hover)'
                   : ((edge.u === s.activeU && edge.v === s.activeV) ? 'url(#modal-arrowhead-active)' : 'url(#modal-arrowhead)')"
               />
-
-              <!-- Weight Label Badge -->
-              <g v-if="getEdgeGeo(edge)">
-                <circle
-                  :cx="getEdgeGeo(edge).labelX"
-                  :cy="getEdgeGeo(edge).labelY"
-                  r="13"
-                  class="ll-weight-bg"
-                  :class="{
-                    'll-weight-bg-active': edge.u === s.activeU && edge.v === s.activeV,
-                    'll-weight-bg-hovered': isEdgeHovered(edge.u, edge.v)
-                  }"
-                />
-                <text
-                  :x="getEdgeGeo(edge).labelX"
-                  :y="getEdgeGeo(edge).labelY + 4"
-                  class="ll-weight-text"
-                  :class="{ 'll-weight-text-hovered': isEdgeHovered(edge.u, edge.v) }"
-                >
-                  {{ edge.weight }}
-                </text>
-              </g>
             </g>
 
             <!-- Graph Vertex Nodes -->
@@ -1109,8 +1008,6 @@ const nodePositions = computed(() => {
 .ll-divider { color: var(--border2); font-weight: 300; margin: 0 4px; }
 .ll-viz-btn { background: var(--coral); color: #fff; border: none; padding: 5px 14px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; font-weight: 600; box-shadow: var(--shadow-sm); transition: filter .15s; }
 .ll-viz-btn:hover { filter: brightness(1.08); }
-.ll-add-btn { background: var(--blue); color: #fff; border: none; padding: 5px 12px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; font-weight: 600; box-shadow: var(--shadow-sm); transition: filter .15s; }
-.ll-add-btn:hover { filter: brightness(1.08); }
 .ll-graph-modal-btn { background: var(--purple); color: #fff; border: none; padding: 5px 12px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; font-weight: 600; box-shadow: var(--shadow-sm); transition: filter .15s; }
 .ll-graph-modal-btn:hover { filter: brightness(1.08); }
 
@@ -1192,118 +1089,141 @@ const nodePositions = computed(() => {
 .ll-right-col { display: flex; flex-direction: column; flex: 1; overflow: hidden; min-width: 0; height: 78%; }
 .ll-viz-wrap { flex-shrink: 0; background: var(--surface); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; display: flex; flex-direction: column; }
 .ll-perm-area { display: flex; flex-direction: column; align-items: stretch; height: 100%; width: 100%; min-width: 0; box-sizing: border-box; }
-.ll-ptrs { display: flex; gap: 8px; flex-wrap: wrap; padding: 8px 16px 4px; min-height: 34px; width: 100%; box-sizing: border-box; min-width: 0; }
-.ll-ptr-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px 10px; font-size: 12px; font-family: monospace; box-shadow: var(--shadow-sm); white-space: nowrap; flex-shrink: 0; }
-.ll-c-blue { color: var(--blue); } .ll-c-orange { color: var(--orange); } .ll-c-green { color: var(--green); } .ll-c-purple { color: var(--purple); } .ll-c-red { color: var(--red); }
 
-/* Matrix Layout */
-.ll-matrix-area { display: flex; flex-direction: column; padding: 10px 16px; width: 100%; height: 100%; min-width: 0; box-sizing: border-box; overflow: hidden; }
-.ll-matrix-card { display: flex; flex-direction: column; width: 100%; height: 100%; min-height: 0; background: transparent; border: none; padding: 0; min-width: 0; }
-.ll-card-title { font-size: 12px; font-weight: 700; color: var(--text2); font-family: monospace; margin-bottom: 8px; flex-shrink: 0; }
-.ll-empty-matrix-msg { padding: 24px 16px; text-align: center; color: var(--muted); font-size: 12px; font-weight: 600; border: 1px dashed var(--border2); border-radius: var(--radius-sm); background: var(--surface2); }
+/* Adjacency List Collections Panel Layout (Compact Light Theme) */
+.ll-adj-list-area { display: flex; flex-direction: column; padding: 6px 10px; width: 100%; height: 100%; min-width: 0; box-sizing: border-box; overflow: hidden; }
+.ll-adj-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: #ffffff;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-sizing: border-box;
+  min-width: 0;
+  box-shadow: var(--shadow-sm);
+}
+.ll-card-header { margin-bottom: 8px; flex-shrink: 0; }
+.ll-card-title-main { font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 700; color: #0f172a; line-height: 1.2; }
+.ll-card-subtitle { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 500; color: #64748b; margin-top: 1px; }
+.ll-empty-matrix-msg { padding: 18px 12px; text-align: center; color: #64748b; font-size: 12px; font-weight: 600; border: 1px dashed #cbd5e1; border-radius: 8px; background: #f8fafc; }
 .ll-empty-graph-msg { display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; color: #64748b; font-size: 14px; font-weight: 600; text-align: center; }
-.ll-graph-svg { width: 100%; height: 220px; background: #fafafa; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+
+.ll-adj-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  scrollbar-gutter: stable;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 10px;
+  padding-right: 2px;
+  padding-left: 10px;
+}
+@keyframes ll-row-pop {
+  from { opacity: 0; transform: translateY(-8px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.ll-adj-row { display: flex; align-items: center; gap: 8px; flex-shrink: 0; height: 45px; animation: ll-row-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* Left Vertex Box (Soft Indigo/Purple) */
+.ll-adj-v-head {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  background: #eef2ff;
+  border: 1.5px solid #818cf8;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: #3730a3;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+.ll-adj-v-head-active-u {
+  background: #dbeafe !important;
+  border-color: #3b82f6 !important;
+  color: #1e40af !important;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5) !important;
+}
+.ll-adj-v-head-active-v {
+  background: #f3e8ff !important;
+  border-color: #9333ea !important;
+  color: #6b21a8 !important;
+  box-shadow: 0 0 8px rgba(147, 51, 234, 0.5) !important;
+}
+
+.ll-adj-arrow { flex-shrink: 0; }
+
+.ll-adj-items { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; flex: 1; }
+
+/* Neighbor Box (Soft Emerald/Teal) */
+.ll-adj-chip {
+  width: 32px;
+  height: 32px;
+  background: #ecfdf5;
+  border: 1.5px solid #34d399;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #065f46;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.ll-adj-chip-hovered {
+  background: #dcfce7 !important;
+  border-color: #10b981 !important;
+  color: #047857 !important;
+  transform: scale(1.08);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5) !important;
+}
+.ll-adj-chip-added {
+  background: #bbf7d0 !important;
+  border-color: #22c55e !important;
+  color: #14532d !important;
+  animation: ll-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.ll-adj-empty { font-size: 12px; color: #94a3b8; font-style: italic; font-family: system-ui, -apple-system, sans-serif; }
 
 /* SVG Graph Elements */
 .ll-edge-line { stroke: #94a3b8; stroke-width: 2.5; transition: all 0.25s ease; }
 .ll-edge-active { stroke: #f97316; stroke-width: 4; stroke-dasharray: 6 3; animation: ll-dash 1s linear infinite; }
 @keyframes ll-dash { to { stroke-dashoffset: -18; } }
+.ll-edge-line.ll-edge-hovered { stroke: #3b82f6 !important; stroke-width: 4px !important; filter: drop-shadow(0 0 6px rgba(59,130,246,0.6)); }
 
-/* Hover Highlights for Graph Edges & Nodes */
-/* Edge & Weight Badge (Blue) */
-.ll-edge-line.ll-edge-hovered {
-  stroke: #3b82f6 !important;
-  stroke-width: 4px !important;
-  filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.6));
-  transition: all 0.15s ease;
-}
-.ll-weight-bg { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.5; }
-.ll-weight-bg-active { fill: #fff7ed; stroke: #f97316; stroke-width: 2.5; }
-.ll-weight-bg-hovered {
-  fill: #eff6ff !important;
-  stroke: #3b82f6 !important;
-  stroke-width: 2.5px !important;
-  transition: all 0.15s ease;
-}
-.ll-weight-text { font-size: 11px; font-weight: 800; font-family: monospace; text-anchor: middle; fill: #1e293b; }
-.ll-weight-text-hovered {
-  fill: #1d4ed8 !important;
-  font-weight: 900 !important;
-}
-
-/* Source Node (Orange) */
+/* Graph Vertex Nodes */
 .ll-node-circle { fill: #eff6ff; stroke: #3b82f6; stroke-width: 2.5; transition: all 0.25s ease; }
 .ll-node-u { fill: #dbeafe !important; stroke: #3b82f6 !important; stroke-width: 3.5 !important; }
 .ll-node-v { fill: #f3e8ff !important; stroke: #9333ea !important; stroke-width: 3.5 !important; }
-.ll-node-hover-src {
-  fill: #fff7ed !important;
-  stroke: #f97316 !important;
-  stroke-width: 3.5px !important;
-  filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.55));
-  transition: all 0.15s ease;
-}
+.ll-node-hover-src { fill: #fff7ed !important; stroke: #f97316 !important; stroke-width: 3.5px !important; filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.55)); }
 .ll-node-text { font-size: 13px; font-weight: 800; font-family: monospace; text-anchor: middle; fill: #1e293b; }
-.ll-node-text-hover-src {
-  fill: #c2410c !important;
-  font-weight: 900 !important;
-}
-.ll-svg-ptr-hover-src {
-  fill: #ea580c !important;
-  font-weight: 900 !important;
-}
+.ll-node-text-hover-src { fill: #c2410c !important; font-weight: 900 !important; }
+.ll-svg-ptr-hover-src { fill: #ea580c !important; font-weight: 900 !important; }
 
-/* Destination Node (Light Green) */
-.ll-node-hover-tgt {
-  fill: #f0fdf4 !important;
-  stroke: #22c55e !important;
-  stroke-width: 3.5px !important;
-  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.55));
-  transition: all 0.15s ease;
-}
-.ll-node-text-hover-tgt {
-  fill: #15803d !important;
-  font-weight: 900 !important;
-}
-.ll-svg-ptr-hover-tgt {
-  fill: #16a34a !important;
-  font-weight: 900 !important;
-}
+.ll-node-hover-tgt { fill: #f0fdf4 !important; stroke: #22c55e !important; stroke-width: 3.5px !important; filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.55)); }
+.ll-node-text-hover-tgt { fill: #15803d !important; font-weight: 900 !important; }
+.ll-svg-ptr-hover-tgt { fill: #16a34a !important; font-weight: 900 !important; }
 
 .ll-svg-ptr { font-size: 13px; font-weight: 800; font-family: monospace; text-anchor: middle; }
 .ll-svg-ptr-blue { fill: #3b82f6; }
 .ll-svg-ptr-purple { fill: #9333ea; }
-
-/* 2D Matrix Table */
-.ll-matrix-grid-wrap { flex: 1; min-height: 0; height: 100%; width: 100%; overflow: hidden; display: flex; flex-direction: column; }
-.ll-matrix-table { border-collapse: collapse; margin: 0; font-family: monospace; table-layout: fixed; width: 100%; height: 100%; }
-.ll-matrix-table tr { height: calc(100% / var(--row-count, 5)); }
-.ll-corner-th { background: var(--surface2) !important; color: var(--muted); font-size: 11px; padding: 2px 1px; border: 1px solid var(--border); text-align: center; vertical-align: middle; }
-.ll-matrix-table thead th { background: var(--surface2) !important; color: var(--text); font-size: 11px; font-weight: 700; padding: 2px 1px; border: 1px solid var(--border); text-align: center; vertical-align: middle; }
-.ll-matrix-table tbody th { background: var(--surface2); color: var(--text); font-size: 11px; font-weight: 700; padding: 2px 1px; border: 1px solid var(--border); text-align: center; vertical-align: middle; }
-.ll-th-active-u { background: #dbeafe !important; color: #1e40af !important; }
-.ll-th-active-v { background: #f3e8ff !important; color: #5b21b6 !important; }
-
-.ll-matrix-cell { text-align: center; vertical-align: middle; border: 1px solid var(--border); font-size: 13px; font-weight: 700; background: #ffffff; color: var(--muted); box-sizing: border-box; padding: 1px; }
-
-/* Dynamic Scaling by Vertex Count */
-.ll-matrix-v-md thead th, .ll-matrix-v-md tbody th { font-size: 10px; }
-.ll-matrix-v-md .ll-matrix-cell { font-size: 11.5px; }
-.ll-matrix-v-md .ll-ptr-tag-wrap { height: 13px; min-height: 13px; }
-.ll-matrix-v-md .ll-ptr-lbl { font-size: 9px; }
-
-.ll-matrix-v-lg thead th, .ll-matrix-v-lg tbody th { font-size: 9px; }
-.ll-matrix-v-lg .ll-matrix-cell { font-size: 10px; }
-.ll-matrix-v-lg .ll-ptr-tag-wrap { height: 11px; min-height: 11px; }
-.ll-matrix-v-lg .ll-ptr-lbl { font-size: 8px; }
-
-.ll-cell-has-edge { background: #eff6ff; color: #1e293b; font-weight: 800; border-color: #93c5fd; }
-.ll-cell-active { background: #fff7ed !important; outline: 2px solid #f97316 !important; outline-offset: -2px; color: #c2410c !important; font-weight: 900 !important; }
-.ll-cell-cur { background: #dcfce7 !important; outline: 2px solid #22c55e !important; outline-offset: -2px; color: #15803d !important; }
-.ll-cell-hovered {
-  background: #dbeafe !important;
-  color: #1d4ed8 !important;
-  font-weight: 800 !important;
-}
 
 /* Pointer Tag Styling */
 .ll-ptr-tag-wrap { height: 15px; min-height: 15px; display: flex; align-items: flex-end; justify-content: center; gap: 2px; margin-bottom: 1px; flex-shrink: 0; }
@@ -1320,7 +1240,7 @@ const nodePositions = computed(() => {
 .ll-leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); font-weight: 500; }
 .ll-legdot { width: 11px; height: 11px; border-radius: 3px; flex-shrink: 0; display: inline-block; }
 .ll-legdot-existing { background: #ffffff; border: 1.5px solid var(--border); }
-.ll-legdot-has-edge { background: #eff6ff; border: 1.5px solid #93c5fd; }
+.ll-legdot-has-edge { background: #f0fdf4; border: 1.5px solid #86efac; }
 .ll-legdot-u { background: #dbeafe; border: 1.5px solid #3b82f6; }
 .ll-legdot-v { background: #f3e8ff; border: 1.5px solid #9333ea; }
 .ll-legdot-active { background: #fff7ed; border: 1.5px solid #f97316; }
