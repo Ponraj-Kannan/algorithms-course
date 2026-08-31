@@ -50,7 +50,7 @@
 
 ---
 
-<!-- <DijkstraShortestPath topic="Dijkstra's Shortest Path" subTopic="Weighted Graph Algorithm" />
+<DijkstraShortestPath topic="Dijkstra's Shortest Path" subTopic="Weighted Graph Algorithm" />
 
 ---
 
@@ -62,4 +62,4 @@
 
 ---
 
-<KruskalsAlgorithm topic="Kruskal's Algorithm" subTopic="Minimum Spanning Tree (MST)" /> -->
+<KruskalsAlgorithm topic="Kruskal's Algorithm" subTopic="Minimum Spanning Tree (MST)" />
