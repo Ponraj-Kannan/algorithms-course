@@ -2209,7 +2209,7 @@ onUnmounted(() => {
   --radius: 8px; --radius-sm: 6px;
   background: var(--bg); color: var(--text);
   font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12.5px;
-  display: flex; flex-direction: column; overflow: hidden; width: 100%; height:58vh;
+  display: flex; flex-direction: column; overflow: hidden; width: 100%; height:100vh;
 }
 
 @keyframes ll-pop { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
