@@ -15,3 +15,9 @@
 ---
 
 <Knapsack01 topic="Dynamic Programming" subTopic="0/1 Knapsack Problem" />
+
+---
+
+<LongestIncreasingSubsequence topic="Dynamic Programming" subTopic="Longest Increasing Subsequence" />
+
+---
