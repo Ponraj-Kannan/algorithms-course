@@ -1,23 +1,3 @@
-<GraphTerminology topic="Graph — Fundamental Terminology" subTopic="Core Concepts, Vertices, Edges & Graph Structures" />
-
----
-
-<UnDirectedUnWeightedGraphMatrix topic="Undirected Unweighted Graph" subTopic="2D Adjacency Matrix Representation" />
-
----
-
-<UnDirectedWeightedGraphMatrix topic="Undirected Weighted Graph" subTopic="2D Adjacency Matrix Representation" />
-
----
-
-<DirectedUnWeightedGraphMatrix topic="Directed Unweighted Graph" subTopic="2D Adjacency Matrix Representation" />
-
----
-
-<DirectedWeightedGraphMatrix topic="Directed Weighted Graph" subTopic="2D Adjacency Matrix Representation" />
-
----
-
 <BFSGraph topic="Breadth-First Search (BFS)" subTopic="Graph Traversal Algorithm" />
 
 ---
