@@ -519,9 +519,7 @@ function generateStaticTree(approach, n) {
 /* ==================================================================== */
 function buildSteps(approach, targetN) {
   const steps = [];
-  const maxLimit = approach === 'tabulation' ? 20 : 5;
-  const rawN = Math.max(1, parseInt(targetN, 10) || 1);
-  const n = Math.min(rawN, maxLimit);
+  const n = Math.max(1, parseInt(targetN, 10) || 1);
 
   /* ------------------------------------------------------------------ */
   /* APPROACH 1: BRUTE FORCE RECURSION                                   */
@@ -564,7 +562,27 @@ function buildSteps(approach, targetN) {
       }));
     }
 
-    // Step 0: Input ingestion
+    // Step 0a: Initialize scanner / reader
+    steps.push({
+      code: 'm_scanner',
+      badge: `Initializing input reader (Java: new Scanner(System.in), C: int n;, C++: int n;, JS: readline.createInterface)`,
+      badgeType: 'info',
+      state: {
+        n,
+        curN: n,
+        totalCalls: 0,
+        redundantCalls: 0,
+        currentReturn: null,
+        activeNodeId: null,
+        frames: [{ name: 'main()', args: `n=?` }],
+        treeNodes: getVisibleNodes(),
+        treeEdges: getVisibleEdges(),
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height
+      }
+    });
+
+    // Step 0b: Read n from stdin
     steps.push({
       code: 'm_read_n',
       badge: `Read user input: n = ${n} staircase steps`,
@@ -839,7 +857,30 @@ function buildSteps(approach, targetN) {
       }));
     }
 
-    // Step 0: Input ingestion
+    const zeroMemo = new Array(n + 1).fill(0);
+
+    // Step 0a: Initialize scanner / reader
+    steps.push({
+      code: 'm_scanner',
+      badge: `Initializing input reader (Java: new Scanner(System.in), C: int n;, C++: int n;, JS: readline.createInterface)`,
+      badgeType: 'info',
+      state: {
+        n,
+        curN: n,
+        totalCalls: 0,
+        cacheHits: 0,
+        currentReturn: null,
+        activeNodeId: null,
+        memo: [...zeroMemo],
+        frames: [{ name: 'main()', args: `n=?` }],
+        treeNodes: getVisibleNodes(),
+        treeEdges: getVisibleEdges(),
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height
+      }
+    });
+
+    // Step 0b: Read n from stdin
     steps.push({
       code: 'm_read_n',
       badge: `Read user input: n = ${n} staircase steps`,
@@ -851,7 +892,7 @@ function buildSteps(approach, targetN) {
         cacheHits: 0,
         currentReturn: null,
         activeNodeId: null,
-        memo: [...memoArray],
+        memo: [...zeroMemo],
         frames: [{ name: 'main()', args: `n=${n}` }],
         treeNodes: getVisibleNodes(),
         treeEdges: getVisibleEdges(),
@@ -863,7 +904,7 @@ function buildSteps(approach, targetN) {
     // Step 1: Allocate memo
     steps.push({
       code: 'm_alloc_memo',
-      badge: `Allocate lookup table memo[0...${n}] of size ${n + 1}`,
+      badge: `int[] memo = new int[${n + 1}]; Allocated array of size ${n + 1} (default Java int array values are 0)`,
       badgeType: 'info',
       state: {
         n,
@@ -872,7 +913,7 @@ function buildSteps(approach, targetN) {
         cacheHits: 0,
         currentReturn: null,
         activeNodeId: null,
-        memo: [...memoArray],
+        memo: [...zeroMemo],
         frames: [{ name: 'main()', args: `n=${n}` }],
         treeNodes: getVisibleNodes(),
         treeEdges: getVisibleEdges(),
@@ -884,7 +925,7 @@ function buildSteps(approach, targetN) {
     // Step 2: Initialize memo with -1
     steps.push({
       code: 'm_fill_memo',
-      badge: `Initialize all cache entries in memo table to -1 (indicating uncalculated state)`,
+      badge: `Arrays.fill(memo, -1); Filling all cache entries in memo table with sentinel value -1 (uncalculated state)`,
       badgeType: 'info',
       state: {
         n,
@@ -955,7 +996,6 @@ function buildSteps(approach, targetN) {
         const ret = k;
         nodeStateMap[myNodeId].state = 'solved';
         nodeStateMap[myNodeId].retVal = ret;
-        memoArray[k] = ret;
 
         steps.push({
           code: 'c_ret_base',
@@ -1058,14 +1098,14 @@ function buildSteps(approach, targetN) {
       // 2-step jump branch
       steps.push({
         code: 'c_rec_two',
-        badge: `solve(${k}) calls 2-step subproblem solve(n - 2 = ${k - 2})`,
+        badge: `solve(${k}): 1-step returned ${oneStepVal} (stored in variable 'oneStep'). Recursing 2-step subproblem solve(n - 2 = ${k - 2}, memo).`,
         badgeType: 'info',
         state: {
           n,
           curN: k,
           totalCalls: callCounter,
           cacheHits,
-          currentReturn: null,
+          currentReturn: oneStepVal,
           activeNodeId: myNodeId,
           memo: [...memoArray],
           frames: [...stackFrames],
@@ -1083,7 +1123,7 @@ function buildSteps(approach, targetN) {
 
       steps.push({
         code: 'c_store_memo',
-        badge: `Store result: memo[${k}] = (1-step: ${oneStepVal}) + (2-step: ${twoStepVal}) = ${sumVal}`,
+        badge: `Both subproblems computed (oneStep = ${oneStepVal}, twoStep = ${twoStepVal}). Updating array memo[${k}] = oneStep + twoStep = ${sumVal}.`,
         badgeType: 'info',
         state: {
           n,
@@ -1127,6 +1167,27 @@ function buildSteps(approach, targetN) {
       stackFrames.pop();
       return sumVal;
     }
+
+    // Step 3: Call solve(n, memo)
+    steps.push({
+      code: 'm_call_climb',
+      badge: `main() invokes solve(n = ${n}, memo)`,
+      badgeType: 'info',
+      state: {
+        n,
+        curN: n,
+        totalCalls: 0,
+        cacheHits: 0,
+        currentReturn: null,
+        activeNodeId: null,
+        memo: [...memoArray],
+        frames: [{ name: 'main()', args: `n=${n}` }],
+        treeNodes: getVisibleNodes(),
+        treeEdges: getVisibleEdges(),
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height
+      }
+    });
 
     const finalAnswer = recurseMemo(n);
 
@@ -1180,12 +1241,28 @@ function buildSteps(approach, targetN) {
     function getDPCells(activeI = -1) {
       return dpArr.map((val, idx) => ({
         idx,
-        val: val !== null ? val : '?',
+        val: val !== null ? val : 0,
         status: val !== null ? (idx === activeI ? 'active' : (idx <= 2 ? 'base' : 'computed')) : 'uncalculated'
       }));
     }
 
-    // Step 0: Input read
+    // Step 0a: Initialize scanner / reader
+    steps.push({
+      code: 'm_scanner',
+      badge: `Initializing input reader (Java: new Scanner(System.in), C: int n;, C++: int n;, JS: readline.createInterface)`,
+      badgeType: 'info',
+      state: {
+        n,
+        i: 0,
+        iterations: 0,
+        totalOps: 0,
+        currentReturn: null,
+        dpCells: getDPCells(),
+        frames: [{ name: 'main()', args: `n=?` }]
+      }
+    });
+
+    // Step 0b: Read n from stdin
     steps.push({
       code: 'm_read_n',
       badge: `Read user input: n = ${n} staircase steps`,
@@ -1341,7 +1418,22 @@ function buildSteps(approach, targetN) {
       });
     }
 
+    // For-loop exit: i > n condition
     const totalIterations = Math.max(0, n - 2);
+    steps.push({
+      code: 'c_for_loop',
+      badge: `For loop exit check: i = ${n + 1} &rarr; (${n + 1} <= ${n}) is FALSE. Loop complete after ${totalIterations} iteration(s).`,
+      badgeType: 'info',
+      state: {
+        n,
+        i: n + 1,
+        iterations: totalIterations,
+        totalOps: ops,
+        currentReturn: null,
+        dpCells: getDPCells(n),
+        frames: [{ name: 'main()', args: `n=${n}` }, { name: 'climbStairs()', args: `n=${n}` }]
+      }
+    });
 
     // Step 7: Return dp[n]
     steps.push({
@@ -1409,21 +1501,6 @@ const tableHeight = ref(38);
 const leftWidth = ref(54);
 const rightTab = ref('code');
 
-// Warning Popup Modal State
-const showWarningModal = ref(false);
-const warningModalTitle = ref('Input Limit Notice');
-const warningModalMsg = ref('');
-const warningModalLimit = ref(5);
-const requestedValue = ref(0);
-
-function closeWarningModal() {
-  showWarningModal.value = false;
-}
-
-const maxAllowedN = computed(() => {
-  if (currentApproach.value === 'tabulation') return 20;
-  return 5; // 'recursion' and 'memoization'
-});
 
 const stepsData = reactive({ steps: buildSteps('recursion', 5) });
 const steps = computed(() => stepsData.steps);
@@ -1443,29 +1520,9 @@ let playTimer = null;
 
 function applyApproach(newApproach) {
   currentApproach.value = newApproach;
-  const maxN = newApproach === 'tabulation' ? 20 : 5;
   let val = parseInt(inpN.value, 10);
   if (isNaN(val) || val < 1) val = 1;
-
-  if (val > maxN) {
-    const origVal = val;
-    val = maxN;
-    inpN.value = val;
-    requestedValue.value = origVal;
-    warningModalLimit.value = maxN;
-    if (newApproach === 'tabulation') {
-      warningModalTitle.value = 'Tabulation Limit (Max: 20)';
-      warningModalMsg.value = `Input n = ${origVal} exceeds the maximum allowed limit for DP Tabulation. The input has been adjusted to n = 20 for optimal display.`;
-    } else {
-      const approachName = newApproach === 'recursion' ? 'Brute Force Recursion' : 'DP Memoization';
-      warningModalTitle.value = `${approachName} Limit (Max: 5)`;
-      warningModalMsg.value = `Input n = ${origVal} exceeds the maximum allowed limit for ${approachName}. The input has been adjusted to n = 5 to preserve recursion tree readability.`;
-    }
-    showWarningModal.value = true;
-  } else {
-    inpN.value = val;
-  }
-
+  inpN.value = val;
   playing.value = false;
   stepsData.steps = buildSteps(newApproach, val);
   si.value = 0;
@@ -1474,27 +1531,7 @@ function applyApproach(newApproach) {
 function applyInput() {
   let val = parseInt(inpN.value, 10);
   if (isNaN(val) || val < 1) val = 1;
-  const maxN = maxAllowedN.value;
-
-  if (val > maxN) {
-    const origVal = val;
-    val = maxN;
-    inpN.value = val;
-    requestedValue.value = origVal;
-    warningModalLimit.value = maxN;
-    if (currentApproach.value === 'tabulation') {
-      warningModalTitle.value = 'Tabulation Limit (Max: 20)';
-      warningModalMsg.value = `Input n = ${origVal} exceeds the maximum limit for DP Tabulation (max: 20). Processing has been capped at n = 20.`;
-    } else {
-      const approachName = currentApproach.value === 'recursion' ? 'Brute Force Recursion' : 'DP Memoization';
-      warningModalTitle.value = `${approachName} Limit (Max: 5)`;
-      warningModalMsg.value = `Input n = ${origVal} exceeds the maximum limit for ${approachName} (max: 5). Processing has been capped at n = 5 to prevent exponential recursion call overhead.`;
-    }
-    showWarningModal.value = true;
-  } else {
-    inpN.value = val;
-  }
-
+  inpN.value = val;
   playing.value = false;
   stepsData.steps = buildSteps(currentApproach.value, val);
   si.value = 0;
@@ -1669,10 +1706,8 @@ onUnmounted(() => {
                 v-model.number="inpN"
                 class="ll-num-input"
                 :min="1"
-                :max="maxAllowedN"
                 @keyup.enter="applyInput"
               />
-              <span class="ll-input-hint">(max {{ maxAllowedN }})</span>
             </div>
 
             <button class="ll-viz-btn" @click="applyInput">&#9654; Visualize</button>
@@ -1863,7 +1898,7 @@ onUnmounted(() => {
                                   'll-memo-empty': mVal === -1
                                 }"
                               >
-                                {{ mVal !== -1 ? mVal : '?' }}
+                                {{ mVal }}
                               </div>
                               <span class="ll-memo-idx">Step {{ mIdx }}</span>
                             </div>
@@ -2053,44 +2088,7 @@ onUnmounted(() => {
             <span class="ll-speed-wrap">Speed <input type="range" min="100" max="2000" step="100" v-model.number="speed" /></span>
           </div>
 
-          <!-- Warning Modal for Input Limit Exceeded -->
-          <transition name="ll-modal-fade">
-            <div v-if="showWarningModal" class="ll-modal-backdrop" @click.self="closeWarningModal">
-              <div class="ll-modal-card" @click.stop>
-                <!-- Modal Header -->
-                <div class="ll-modal-header">
-                  <div class="ll-modal-title-wrap">
-                    <div class="ll-modal-icon-badge">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="ll-modal-svg-icon">
-                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                        <line x1="12" y1="9" x2="12" y2="13"/>
-                        <line x1="12" y1="17" x2="12.01" y2="17"/>
-                      </svg>
-                    </div>
-                    <span class="ll-modal-title">{{ warningModalTitle }}</span>
-                  </div>
-                  <button class="ll-modal-close-btn" @click="closeWarningModal" title="Close warning">&times;</button>
-                </div>
 
-                <!-- Modal Body -->
-                <div class="ll-modal-body">
-                  <div class="ll-modal-badge-row">
-                    <span class="ll-modal-tag-entered">Entered: n = {{ requestedValue }}</span>
-                    <span class="ll-modal-arrow">&rarr;</span>
-                    <span class="ll-modal-tag-applied">Adjusted to Max: n = {{ warningModalLimit }}</span>
-                  </div>
-                  <p class="ll-modal-message">{{ warningModalMsg }}</p>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="ll-modal-footer">
-                  <button class="ll-modal-confirm-btn" @click="closeWarningModal">
-                    Got it, Proceed &#10003;
-                  </button>
-                </div>
-              </div>
-            </div>
-          </transition>
         </div>
       </div>
     </div>
@@ -2122,7 +2120,7 @@ onUnmounted(() => {
   --radius: 8px; --radius-sm: 6px;
   background: var(--bg); color: var(--text);
   font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12.5px;
-  display: flex; flex-direction: column; overflow: hidden; width: 100%; height:100vh;  /* modified */
+  display: flex; flex-direction: column; height: 58vh; overflow: hidden; width: 100%;
 }
 
 @keyframes ll-pop { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }

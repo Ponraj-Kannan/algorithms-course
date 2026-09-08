@@ -18,13 +18,7 @@ const APPROACHES = [
   { id: 'tabulation', label: 'Tabulation', desc: 'O(n) Linear Time & O(n) Space — Bottom-Up 1D DP Array' }
 ];
 
-const PRESETS = [
-  { label: '[2, 7, 9, 3, 1]', desc: '5 Houses ($12 Max Loot)', val: [2, 7, 9, 3, 1] },
-  { label: '[1, 2, 3, 1]', desc: '4 Houses ($4 Max Loot)', val: [1, 2, 3, 1] },
-  { label: '[2, 1, 1, 2]', desc: '4 Houses ($4 Max Loot)', val: [2, 1, 1, 2] },
-  { label: '[5, 1, 2, 6]', desc: '4 Houses ($11 Max Loot)', val: [5, 1, 2, 6] },
-  { label: '[2, 3, 2]', desc: '3 Houses ($4 Max Loot)', val: [2, 3, 2] }
-];
+
 
 const CODES = {
   recursion: {
@@ -33,8 +27,12 @@ const CODES = {
       ['',             ''],
       ['',             'public class Main {'],
       ['c_entry',      '    static int rob(int[] nums, int i) {'],
-      ['c_base_neg',   '        if (i < 0) return 0;'],
-      ['c_base_zero',  '        if (i == 0) return nums[0];'],
+      ['c_base_neg',   '        if (i < 0) {'],
+      ['c_ret_neg',    '            return 0;'],
+      ['',             '        }'],
+      ['c_base_zero',  '        if (i == 0) {'],
+      ['c_ret_zero',   '            return nums[0];'],
+      ['',             '        }'],
       ['c_rec_skip',   '        int skip = rob(nums, i - 1);'],
       ['c_rec_rob',    '        int robCurrent = nums[i] + rob(nums, i - 2);'],
       ['c_ret_max',    '        return Math.max(skip, robCurrent);'],
@@ -44,7 +42,9 @@ const CODES = {
       ['m_scanner',    '        Scanner sc = new Scanner(System.in);'],
       ['m_read_n',     '        int n = sc.nextInt();'],
       ['m_read_arr',   '        int[] nums = new int[n];'],
-      ['',             '        for (int j = 0; j < n; j++) nums[j] = sc.nextInt();'],
+      ['m_for_read',   '        for (int j = 0; j < n; j++) {'],
+      ['m_read_elem',  '            nums[j] = sc.nextInt();'],
+      ['',             '        }'],
       ['m_call_rob',   '        int maxLoot = rob(nums, n - 1);'],
       ['m_print',      '        System.out.println(maxLoot);'],
       ['m_done',       '    }'],
@@ -55,8 +55,12 @@ const CODES = {
       ['',             '#define MAX(a, b) ((a) > (b) ? (a) : (b))'],
       ['',             ''],
       ['c_entry',      'int rob(int* nums, int i) {'],
-      ['c_base_neg',   '    if (i < 0) return 0;'],
-      ['c_base_zero',  '    if (i == 0) return nums[0];'],
+      ['c_base_neg',   '    if (i < 0) {'],
+      ['c_ret_neg',    '        return 0;'],
+      ['',             '    }'],
+      ['c_base_zero',  '    if (i == 0) {'],
+      ['c_ret_zero',   '        return nums[0];'],
+      ['',             '    }'],
       ['c_rec_skip',   '    int skip = rob(nums, i - 1);'],
       ['c_rec_rob',    '    int robCurrent = nums[i] + rob(nums, i - 2);'],
       ['c_ret_max',    '    return MAX(skip, robCurrent);'],
@@ -65,7 +69,9 @@ const CODES = {
       ['',             'int main() {'],
       ['m_read_n',     '    int n; scanf("%d", &n);'],
       ['m_read_arr',   '    int nums[n];'],
-      ['',             '    for (int j = 0; j < n; j++) scanf("%d", &nums[j]);'],
+      ['m_for_read',   '    for (int j = 0; j < n; j++) {'],
+      ['m_read_elem',  '        scanf("%d", &nums[j]);'],
+      ['',             '    }'],
       ['m_call_rob',   '    int maxLoot = rob(nums, n - 1);'],
       ['m_print',      '    printf("%d\\n", maxLoot);'],
       ['m_done',       '    return 0;'],
@@ -78,8 +84,12 @@ const CODES = {
       ['',             'using namespace std;'],
       ['',             ''],
       ['c_entry',      'int rob(vector<int>& nums, int i) {'],
-      ['c_base_neg',   '    if (i < 0) return 0;'],
-      ['c_base_zero',  '    if (i == 0) return nums[0];'],
+      ['c_base_neg',   '    if (i < 0) {'],
+      ['c_ret_neg',    '        return 0;'],
+      ['',             '    }'],
+      ['c_base_zero',  '    if (i == 0) {'],
+      ['c_ret_zero',   '        return nums[0];'],
+      ['',             '    }'],
       ['c_rec_skip',   '    int skip = rob(nums, i - 1);'],
       ['c_rec_rob',    '    int robCurrent = nums[i] + rob(nums, i - 2);'],
       ['c_ret_max',    '    return max(skip, robCurrent);'],
@@ -88,7 +98,9 @@ const CODES = {
       ['',             'int main() {'],
       ['m_read_n',     '    int n; cin >> n;'],
       ['m_read_arr',   '    vector<int> nums(n);'],
-      ['',             '    for (int j = 0; j < n; j++) cin >> nums[j];'],
+      ['m_for_read',   '    for (int j = 0; j < n; j++) {'],
+      ['m_read_elem',  '        cin >> nums[j];'],
+      ['',             '    }'],
       ['m_call_rob',   '    int maxLoot = rob(nums, n - 1);'],
       ['m_print',      '    cout << maxLoot << endl;'],
       ['m_done',       '    return 0;'],
@@ -99,9 +111,9 @@ const CODES = {
       ['',             ''],
       ['c_entry',      'def rob(nums, i):'],
       ['c_base_neg',   '    if i < 0:'],
-      ['',             '        return 0'],
+      ['c_ret_neg',    '        return 0'],
       ['c_base_zero',  '    if i == 0:'],
-      ['',             '        return nums[0]'],
+      ['c_ret_zero',   '        return nums[0]'],
       ['c_rec_skip',   '    skip = rob(nums, i - 1)'],
       ['c_rec_rob',    '    rob_current = nums[i] + rob(nums, i - 2)'],
       ['c_ret_max',    '    return max(skip, rob_current)'],
@@ -117,8 +129,12 @@ const CODES = {
       ['',             'const fs = require("fs");'],
       ['',             ''],
       ['c_entry',      'function rob(nums, i) {'],
-      ['c_base_neg',   '    if (i < 0) return 0;'],
-      ['c_base_zero',  '    if (i === 0) return nums[0];'],
+      ['c_base_neg',   '    if (i < 0) {'],
+      ['c_ret_neg',    '        return 0;'],
+      ['',             '    }'],
+      ['c_base_zero',  '    if (i === 0) {'],
+      ['c_ret_zero',   '        return nums[0];'],
+      ['',             '    }'],
       ['c_rec_skip',   '    const skip = rob(nums, i - 1);'],
       ['c_rec_rob',    '    const robCurrent = nums[i] + rob(nums, i - 2);'],
       ['c_ret_max',    '    return Math.max(skip, robCurrent);'],
@@ -138,9 +154,15 @@ const CODES = {
       ['',             ''],
       ['',             'public class Main {'],
       ['c_entry',      '    static int solve(int[] nums, int i, int[] memo) {'],
-      ['c_base_neg',   '        if (i < 0) return 0;'],
-      ['c_base_zero',  '        if (i == 0) return nums[0];'],
-      ['c_memo_check', '        if (memo[i] != -1) return memo[i];'],
+      ['c_base_neg',   '        if (i < 0) {'],
+      ['c_ret_neg',    '            return 0;'],
+      ['',             '        }'],
+      ['c_base_zero',  '        if (i == 0) {'],
+      ['c_ret_zero',   '            return nums[0];'],
+      ['',             '        }'],
+      ['c_memo_check', '        if (memo[i] != -1) {'],
+      ['c_ret_memo',   '            return memo[i];'],
+      ['',             '        }'],
       ['c_rec_skip',   '        int skip = solve(nums, i - 1, memo);'],
       ['c_rec_rob',    '        int robCurrent = nums[i] + solve(nums, i - 2, memo);'],
       ['c_store_memo', '        memo[i] = Math.max(skip, robCurrent);'],
@@ -151,7 +173,9 @@ const CODES = {
       ['m_scanner',    '        Scanner sc = new Scanner(System.in);'],
       ['m_read_n',     '        int n = sc.nextInt();'],
       ['m_read_arr',   '        int[] nums = new int[n];'],
-      ['',             '        for (int j = 0; j < n; j++) nums[j] = sc.nextInt();'],
+      ['m_for_read',   '        for (int j = 0; j < n; j++) {'],
+      ['m_read_elem',  '            nums[j] = sc.nextInt();'],
+      ['',             '        }'],
       ['m_alloc_memo', '        int[] memo = new int[n];'],
       ['m_fill_memo',  '        Arrays.fill(memo, -1);'],
       ['m_call_rob',   '        int maxLoot = solve(nums, n - 1, memo);'],
@@ -165,9 +189,15 @@ const CODES = {
       ['',             '#define MAX(a, b) ((a) > (b) ? (a) : (b))'],
       ['',             ''],
       ['c_entry',      'int solve(int* nums, int i, int* memo) {'],
-      ['c_base_neg',   '    if (i < 0) return 0;'],
-      ['c_base_zero',  '    if (i == 0) return nums[0];'],
-      ['c_memo_check', '    if (memo[i] != -1) return memo[i];'],
+      ['c_base_neg',   '    if (i < 0) {'],
+      ['c_ret_neg',    '        return 0;'],
+      ['',             '    }'],
+      ['c_base_zero',  '    if (i == 0) {'],
+      ['c_ret_zero',   '        return nums[0];'],
+      ['',             '    }'],
+      ['c_memo_check', '    if (memo[i] != -1) {'],
+      ['c_ret_memo',   '        return memo[i];'],
+      ['',             '    }'],
       ['c_rec_skip',   '    int skip = solve(nums, i - 1, memo);'],
       ['c_rec_rob',    '    int robCurrent = nums[i] + solve(nums, i - 2, memo);'],
       ['c_store_memo', '    memo[i] = MAX(skip, robCurrent);'],
@@ -177,7 +207,9 @@ const CODES = {
       ['',             'int main() {'],
       ['m_read_n',     '    int n; scanf("%d", &n);'],
       ['m_read_arr',   '    int nums[n];'],
-      ['',             '    for (int j = 0; j < n; j++) scanf("%d", &nums[j]);'],
+      ['m_for_read',   '    for (int j = 0; j < n; j++) {'],
+      ['m_read_elem',  '        scanf("%d", &nums[j]);'],
+      ['',             '    }'],
       ['m_alloc_memo', '    int memo[n];'],
       ['m_fill_memo',  '    memset(memo, -1, sizeof(memo));'],
       ['m_call_rob',   '    int maxLoot = solve(nums, n - 1, memo);'],
@@ -192,9 +224,15 @@ const CODES = {
       ['',             'using namespace std;'],
       ['',             ''],
       ['c_entry',      'int solve(vector<int>& nums, int i, vector<int>& memo) {'],
-      ['c_base_neg',   '    if (i < 0) return 0;'],
-      ['c_base_zero',  '    if (i == 0) return nums[0];'],
-      ['c_memo_check', '    if (memo[i] != -1) return memo[i];'],
+      ['c_base_neg',   '    if (i < 0) {'],
+      ['c_ret_neg',    '        return 0;'],
+      ['',             '    }'],
+      ['c_base_zero',  '    if (i == 0) {'],
+      ['c_ret_zero',   '        return nums[0];'],
+      ['',             '    }'],
+      ['c_memo_check', '    if (memo[i] != -1) {'],
+      ['c_ret_memo',   '        return memo[i];'],
+      ['',             '    }'],
       ['c_rec_skip',   '    int skip = solve(nums, i - 1, memo);'],
       ['c_rec_rob',    '    int robCurrent = nums[i] + solve(nums, i - 2, memo);'],
       ['c_store_memo', '    memo[i] = max(skip, robCurrent);'],
@@ -204,7 +242,9 @@ const CODES = {
       ['',             'int main() {'],
       ['m_read_n',     '    int n; cin >> n;'],
       ['m_read_arr',   '    vector<int> nums(n);'],
-      ['',             '    for (int j = 0; j < n; j++) cin >> nums[j];'],
+      ['m_for_read',   '    for (int j = 0; j < n; j++) {'],
+      ['m_read_elem',  '        cin >> nums[j];'],
+      ['',             '    }'],
       ['m_alloc_memo', '    vector<int> memo(n, -1);'],
       ['m_call_rob',   '    int maxLoot = solve(nums, n - 1, memo);'],
       ['m_print',      '    cout << maxLoot << endl;'],
@@ -216,11 +256,11 @@ const CODES = {
       ['',             ''],
       ['c_entry',      'def solve(nums, i, memo):'],
       ['c_base_neg',   '    if i < 0:'],
-      ['',             '        return 0'],
+      ['c_ret_neg',    '        return 0'],
       ['c_base_zero',  '    if i == 0:'],
-      ['',             '        return nums[0]'],
+      ['c_ret_zero',   '        return nums[0]'],
       ['c_memo_check', '    if memo[i] != -1:'],
-      ['',             '        return memo[i]'],
+      ['c_ret_memo',   '        return memo[i]'],
       ['c_rec_skip',   '    skip = solve(nums, i - 1, memo)'],
       ['c_rec_rob',    '    rob_current = nums[i] + solve(nums, i - 2, memo)'],
       ['c_store_memo', '    memo[i] = max(skip, rob_current)'],
@@ -238,9 +278,15 @@ const CODES = {
       ['',             'const fs = require("fs");'],
       ['',             ''],
       ['c_entry',      'function solve(nums, i, memo) {'],
-      ['c_base_neg',   '    if (i < 0) return 0;'],
-      ['c_base_zero',  '    if (i === 0) return nums[0];'],
-      ['c_memo_check', '    if (memo[i] !== -1) return memo[i];'],
+      ['c_base_neg',   '    if (i < 0) {'],
+      ['c_ret_neg',    '        return 0;'],
+      ['',             '    }'],
+      ['c_base_zero',  '    if (i === 0) {'],
+      ['c_ret_zero',   '        return nums[0];'],
+      ['',             '    }'],
+      ['c_memo_check', '    if (memo[i] !== -1) {'],
+      ['c_ret_memo',   '        return memo[i];'],
+      ['',             '    }'],
       ['c_rec_skip',   '    const skip = solve(nums, i - 1, memo);'],
       ['c_rec_rob',    '    const robCurrent = nums[i] + solve(nums, i - 2, memo);'],
       ['c_store_memo', '    memo[i] = Math.max(skip, robCurrent);'],
@@ -262,8 +308,12 @@ const CODES = {
       ['',             'public class Main {'],
       ['c_entry',      '    static int rob(int[] nums) {'],
       ['c_base_empty', '        int n = nums.length;'],
-      ['',             '        if (n == 0) return 0;'],
-      ['c_base_one',   '        if (n == 1) return nums[0];'],
+      ['c_check_empty','        if (n == 0) {'],
+      ['c_ret_empty',  '            return 0;'],
+      ['',             '        }'],
+      ['c_base_one',   '        if (n == 1) {'],
+      ['c_ret_one',    '            return nums[0];'],
+      ['',             '        }'],
       ['c_alloc_dp',   '        int[] dp = new int[n];'],
       ['c_init_base0', '        dp[0] = nums[0];'],
       ['c_init_base1', '        dp[1] = Math.max(nums[0], nums[1]);'],
@@ -277,7 +327,9 @@ const CODES = {
       ['m_scanner',    '        Scanner sc = new Scanner(System.in);'],
       ['m_read_n',     '        int n = sc.nextInt();'],
       ['m_read_arr',   '        int[] nums = new int[n];'],
-      ['',             '        for (int j = 0; j < n; j++) nums[j] = sc.nextInt();'],
+      ['m_for_read',   '        for (int j = 0; j < n; j++) {'],
+      ['m_read_elem',  '            nums[j] = sc.nextInt();'],
+      ['',             '        }'],
       ['m_call_rob',   '        int maxLoot = rob(nums);'],
       ['m_print',      '        System.out.println(maxLoot);'],
       ['m_done',       '    }'],
@@ -288,8 +340,12 @@ const CODES = {
       ['',             '#define MAX(a, b) ((a) > (b) ? (a) : (b))'],
       ['',             ''],
       ['c_entry',      'int rob(int* nums, int n) {'],
-      ['c_base_empty', '    if (n == 0) return 0;'],
-      ['c_base_one',   '    if (n == 1) return nums[0];'],
+      ['c_base_empty', '    if (n == 0) {'],
+      ['c_ret_empty',  '        return 0;'],
+      ['',             '    }'],
+      ['c_base_one',   '    if (n == 1) {'],
+      ['c_ret_one',    '        return nums[0];'],
+      ['',             '    }'],
       ['c_alloc_dp',   '    int dp[n];'],
       ['c_init_base0', '    dp[0] = nums[0];'],
       ['c_init_base1', '    dp[1] = MAX(nums[0], nums[1]);'],
@@ -299,10 +355,12 @@ const CODES = {
       ['c_ret_dpn',    '    return dp[n - 1];'],
       ['',             '}'],
       ['',             ''],
-      ['int main() {'],
+      ['',             'int main() {'],
       ['m_read_n',     '    int n; scanf("%d", &n);'],
       ['m_read_arr',   '    int nums[n];'],
-      ['',             '    for (int j = 0; j < n; j++) scanf("%d", &nums[j]);'],
+      ['m_for_read',   '    for (int j = 0; j < n; j++) {'],
+      ['m_read_elem',  '        scanf("%d", &nums[j]);'],
+      ['',             '    }'],
       ['m_call_rob',   '    int maxLoot = rob(nums, n);'],
       ['m_print',      '    printf("%d\\n", maxLoot);'],
       ['m_done',       '    return 0;'],
@@ -316,8 +374,12 @@ const CODES = {
       ['',             ''],
       ['c_entry',      'int rob(vector<int>& nums) {'],
       ['c_base_empty', '    int n = nums.size();'],
-      ['',             '    if (n == 0) return 0;'],
-      ['c_base_one',   '    if (n == 1) return nums[0];'],
+      ['c_check_empty','    if (n == 0) {'],
+      ['c_ret_empty',  '        return 0;'],
+      ['',             '    }'],
+      ['c_base_one',   '    if (n == 1) {'],
+      ['c_ret_one',    '        return nums[0];'],
+      ['',             '    }'],
       ['c_alloc_dp',   '    vector<int> dp(n);'],
       ['c_init_base0', '    dp[0] = nums[0];'],
       ['c_init_base1', '    dp[1] = max(nums[0], nums[1]);'],
@@ -327,10 +389,12 @@ const CODES = {
       ['c_ret_dpn',    '    return dp[n - 1];'],
       ['',             '}'],
       ['',             ''],
-      ['int main() {'],
+      ['',             'int main() {'],
       ['m_read_n',     '    int n; cin >> n;'],
       ['m_read_arr',   '    vector<int> nums(n);'],
-      ['',             '    for (int j = 0; j < n; j++) cin >> nums[j];'],
+      ['m_for_read',   '    for (int j = 0; j < n; j++) {'],
+      ['m_read_elem',  '        cin >> nums[j];'],
+      ['',             '    }'],
       ['m_call_rob',   '    int maxLoot = rob(nums);'],
       ['m_print',      '    cout << maxLoot << endl;'],
       ['m_done',       '    return 0;'],
@@ -350,7 +414,7 @@ const CODES = {
       ['c_dp_trans',   '        dp[i] = max(dp[i - 1], nums[i] + dp[i - 2])'],
       ['c_ret_dpn',    '    return dp[n - 1]'],
       ['',             ''],
-      ['if __name__ == "__main__":'],
+      ['', 'if __name__ == "__main__":'],
       ['m_read_n',     '    data = list(map(int, sys.stdin.read().split()))'],
       ['m_read_arr',   '    n, nums = data[0], data[1:data[0]+1]'],
       ['m_call_rob',   '    max_loot = rob(nums)'],
@@ -449,8 +513,8 @@ function generateStaticTree(approach, nums) {
         // Left child: Skip house i -> evaluate subproblem i - 1
         const leftId = build(i - 1, id, true);
         // Right child: Rob house i -> evaluate subproblem i - 2
-        const rightId = (i - 2 >= 0) ? build(i - 2, id, false) : null;
-        node.children = rightId !== null ? [leftId, rightId] : [leftId];
+        const rightId = build(i - 2, id, false);
+        node.children = [leftId, rightId];
       }
       return id;
     }
@@ -468,13 +532,13 @@ function generateStaticTree(approach, nums) {
       }
 
       if (i <= 0) {
-        if (i === 0) memo[0] = nums[0];
+        // Base cases (i == 0 or i < 0) are leaves — no children spawned
       } else if (isCacheHit) {
         // Pruned subtree — no children spawned!
       } else {
         const leftId = buildMemo(i - 1, id, true);
-        const rightId = (i - 2 >= 0) ? buildMemo(i - 2, id, false) : null;
-        node.children = rightId !== null ? [leftId, rightId] : [leftId];
+        const rightId = buildMemo(i - 2, id, false);
+        node.children = [leftId, rightId];
         memo[i] = 1;
       }
       return id;
@@ -540,9 +604,7 @@ function generateStaticTree(approach, nums) {
 /* ==================================================================== */
 function buildSteps(approach, numsArr) {
   const steps = [];
-  const maxLimit = approach === 'tabulation' ? 16 : 6;
-  const rawNums = (numsArr && numsArr.length > 0) ? numsArr : [2, 7, 9, 3, 1];
-  const nums = rawNums.slice(0, maxLimit);
+  const nums = (numsArr && numsArr.length > 0) ? numsArr : [2, 7, 9, 3, 1];
   const n = nums.length;
 
   /* ------------------------------------------------------------------ */
@@ -586,10 +648,30 @@ function buildSteps(approach, numsArr) {
       }));
     }
 
-    // Step 0: Input read
+    // Step 0a: Initialize scanner / reader
+    steps.push({
+      code: 'm_scanner',
+      badge: `Initializing input reader (Java: new Scanner(System.in), C/C++: int n;, JS: fs.readFileSync)`,
+      badgeType: 'info',
+      state: {
+        nums,
+        n,
+        totalCalls: 0,
+        redundantCalls: 0,
+        currentReturn: null,
+        activeNodeId: null,
+        frames: [{ name: 'main()', args: `n=?` }],
+        treeNodes: getVisibleNodes(),
+        treeEdges: getVisibleEdges(),
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height
+      }
+    });
+
+    // Step 0b: Read n from stdin
     steps.push({
       code: 'm_read_n',
-      badge: `Input: ${n} houses with cash values [${nums.join(', ')}]`,
+      badge: `Read n = ${n} (total number of houses)`,
       badgeType: 'info',
       state: {
         nums,
@@ -605,6 +687,88 @@ function buildSteps(approach, numsArr) {
         treeHeight: staticTree.height
       }
     });
+
+    // Step 0c: Declare nums array
+    steps.push({
+      code: 'm_read_arr',
+      badge: `Declare array: nums = new int[${n}] (${n} slots allocated, default 0)`,
+      badgeType: 'info',
+      state: {
+        nums: new Array(n).fill(0),
+        n,
+        totalCalls: 0,
+        redundantCalls: 0,
+        currentReturn: null,
+        activeNodeId: null,
+        frames: [{ name: 'main()', args: `n=${n}` }],
+        treeNodes: getVisibleNodes(),
+        treeEdges: getVisibleEdges(),
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height
+      }
+    });
+
+    // Steps 0d+: Read each element via for loop
+    {
+      const pNums = new Array(n).fill(0);
+      for (let j = 0; j < n; j++) {
+        steps.push({
+          code: 'm_for_read',
+          badge: `Input loop: j = ${j} < ${n} → TRUE. About to read nums[${j}]`,
+          badgeType: 'info',
+          state: {
+            nums: [...pNums],
+            n,
+            totalCalls: 0,
+            redundantCalls: 0,
+            currentReturn: null,
+            activeNodeId: null,
+            frames: [{ name: 'main()', args: `n=${n}, j=${j}` }],
+            treeNodes: getVisibleNodes(),
+            treeEdges: getVisibleEdges(),
+            treeWidth: staticTree.width,
+            treeHeight: staticTree.height
+          }
+        });
+        pNums[j] = nums[j];
+        steps.push({
+          code: 'm_read_elem',
+          badge: `nums[${j}] = ${nums[j]} ← House ${j} cash value stored`,
+          badgeType: 'info',
+          state: {
+            nums: [...pNums],
+            n,
+            totalCalls: 0,
+            redundantCalls: 0,
+            currentReturn: null,
+            activeNodeId: null,
+            frames: [{ name: 'main()', args: `n=${n}, j=${j}` }],
+            treeNodes: getVisibleNodes(),
+            treeEdges: getVisibleEdges(),
+            treeWidth: staticTree.width,
+            treeHeight: staticTree.height
+          }
+        });
+      }
+      steps.push({
+        code: 'm_for_read',
+        badge: `Input loop exit: j = ${n} < ${n} → FALSE. All ${n} values read: [${nums.join(', ')}]`,
+        badgeType: 'success',
+        state: {
+          nums: [...pNums],
+          n,
+          totalCalls: 0,
+          redundantCalls: 0,
+          currentReturn: null,
+          activeNodeId: null,
+          frames: [{ name: 'main()', args: `n=${n}` }],
+          treeNodes: getVisibleNodes(),
+          treeEdges: getVisibleEdges(),
+          treeWidth: staticTree.width,
+          treeHeight: staticTree.height
+        }
+      });
+    }
 
     // Step 1: Call rob(nums, n - 1)
     steps.push({
@@ -627,7 +791,6 @@ function buildSteps(approach, numsArr) {
     });
 
     function recurse(i) {
-      if (i < 0) return 0;
       const myNodeId = nextNodeId++;
       callCounter++;
       const isDuplicate = (computedValuesMap[i] !== undefined);
@@ -636,14 +799,19 @@ function buildSteps(approach, numsArr) {
       nodeStateMap[myNodeId].state = 'active';
       nodeStateMap[myNodeId].isRedundant = isDuplicate;
 
-      stackFrames.push({ name: `rob(i = ${i})`, args: `house[${i}]=$${nums[i]}` });
+      stackFrames.push({
+        name: `rob(i = ${i})`,
+        args: i >= 0 ? `house[${i}]=$${nums[i]}` : 'i < 0'
+      });
 
       // Step: Function entry
       steps.push({
         code: 'c_entry',
         badge: isDuplicate
           ? `[REDUNDANT SUBPROBLEM] rob(i = ${i}) evaluated again! Subproblem i = ${i} was already computed earlier.`
-          : `Entering rob(i = ${i}) [Call #${callCounter}] for House ${i} ($${nums[i]})`,
+          : (i >= 0
+              ? `Entering rob(i = ${i}) [Call #${callCounter}] for House ${i} ($${nums[i]})`
+              : `Entering rob(i = ${i}) [Call #${callCounter}] (Base case: i < 0)`),
         badgeType: isDuplicate ? 'warn' : 'info',
         state: {
           nums,
@@ -652,7 +820,7 @@ function buildSteps(approach, numsArr) {
           redundantCalls: redundantCounter,
           currentReturn: null,
           activeNodeId: myNodeId,
-          activeHouseIdx: i,
+          activeHouseIdx: i >= 0 ? i : null,
           frames: [...stackFrames],
           treeNodes: getVisibleNodes(),
           treeEdges: getVisibleEdges(),
@@ -661,7 +829,57 @@ function buildSteps(approach, numsArr) {
         }
       });
 
-      // Step: Base check i == 0
+      // Step: Check i < 0 (base neg)
+      steps.push({
+        code: 'c_base_neg',
+        badge: `Check base: i < 0 &rarr; ${i} < 0 is ${i < 0 ? 'TRUE (no houses left to rob &rarr; return $0)' : 'FALSE (i &ge; 0, proceed to i==0 check)'}`,
+        badgeType: 'info',
+        state: {
+          nums,
+          n,
+          totalCalls: callCounter,
+          redundantCalls: redundantCounter,
+          currentReturn: null,
+          activeNodeId: myNodeId,
+          activeHouseIdx: i >= 0 ? i : null,
+          frames: [...stackFrames],
+          treeNodes: getVisibleNodes(),
+          treeEdges: getVisibleEdges(),
+          treeWidth: staticTree.width,
+          treeHeight: staticTree.height
+        }
+      });
+
+      if (i < 0) {
+        nodeStateMap[myNodeId].state = 'solved';
+        nodeStateMap[myNodeId].retVal = 0;
+        computedValuesMap[i] = 0;
+
+        steps.push({
+          code: 'c_ret_neg',
+          badge: `Base case: rob(i = ${i}) returns $0 (no money looted)`,
+          badgeType: 'success',
+          state: {
+            nums,
+            n,
+            totalCalls: callCounter,
+            redundantCalls: redundantCounter,
+            currentReturn: 0,
+            activeNodeId: myNodeId,
+            activeHouseIdx: null,
+            frames: [...stackFrames],
+            treeNodes: getVisibleNodes(),
+            treeEdges: getVisibleEdges(),
+            treeWidth: staticTree.width,
+            treeHeight: staticTree.height
+          }
+        });
+
+        stackFrames.pop();
+        return 0;
+      }
+
+      // Step: Check i == 0
       steps.push({
         code: 'c_base_zero',
         badge: `Check base condition: i == 0 &rarr; ${i === 0 ? `TRUE. Only 1 house available: return nums[0] = $${nums[0]}` : 'FALSE (Must choose between Skip or Rob)'}`,
@@ -689,7 +907,7 @@ function buildSteps(approach, numsArr) {
         computedValuesMap[i] = ret;
 
         steps.push({
-          code: 'c_base_zero',
+          code: 'c_ret_zero',
           badge: `Base case: rob(i = 0) returns nums[0] = $${ret}`,
           badgeType: 'success',
           state: {
@@ -756,7 +974,7 @@ function buildSteps(approach, numsArr) {
         }
       });
 
-      const robPrevVal = (i - 2 >= 0) ? recurse(i - 2) : 0;
+      const robPrevVal = recurse(i - 2);
       const robTotal = nums[i] + robPrevVal;
 
       // Decision: max(skipVal, robTotal)
@@ -871,10 +1089,12 @@ function buildSteps(approach, numsArr) {
       }));
     }
 
-    // Step 0: Input read
+    const zeroMemo = new Array(n).fill(0);
+
+    // Step 0a: Initialize scanner / reader
     steps.push({
-      code: 'm_read_n',
-      badge: `Input: ${n} houses [${nums.join(', ')}]. Starting Top-Down DP with Memoization.`,
+      code: 'm_scanner',
+      badge: `Initializing input reader (Java: new Scanner(System.in), C: int n;, JS: fs.readFileSync)`,
       badgeType: 'info',
       state: {
         nums,
@@ -883,7 +1103,28 @@ function buildSteps(approach, numsArr) {
         cacheHits: 0,
         currentReturn: null,
         activeNodeId: null,
-        memo: [...memoArray],
+        memo: [...zeroMemo],
+        frames: [{ name: 'main()', args: `n=?` }],
+        treeNodes: getVisibleNodes(),
+        treeEdges: getVisibleEdges(),
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height
+      }
+    });
+
+    // Step 0b: Read n from stdin
+    steps.push({
+      code: 'm_read_n',
+      badge: `Read n = ${n} (total number of houses)`,
+      badgeType: 'info',
+      state: {
+        nums,
+        n,
+        totalCalls: 0,
+        cacheHits: 0,
+        currentReturn: null,
+        activeNodeId: null,
+        memo: [...zeroMemo],
         frames: [{ name: 'main()', args: `n=${n}` }],
         treeNodes: getVisibleNodes(),
         treeEdges: getVisibleEdges(),
@@ -892,10 +1133,96 @@ function buildSteps(approach, numsArr) {
       }
     });
 
+    // Step 0c: Declare nums array
+    steps.push({
+      code: 'm_read_arr',
+      badge: `Declare array: nums = new int[${n}] (${n} slots allocated, default 0)`,
+      badgeType: 'info',
+      state: {
+        nums: new Array(n).fill(0),
+        n,
+        totalCalls: 0,
+        cacheHits: 0,
+        currentReturn: null,
+        activeNodeId: null,
+        memo: [...zeroMemo],
+        frames: [{ name: 'main()', args: `n=${n}` }],
+        treeNodes: getVisibleNodes(),
+        treeEdges: getVisibleEdges(),
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height
+      }
+    });
+
+    // Steps 0d+: Read each element via for loop
+    {
+      const pNums = new Array(n).fill(0);
+      for (let j = 0; j < n; j++) {
+        steps.push({
+          code: 'm_for_read',
+          badge: `Input loop: j = ${j} < ${n} → TRUE. About to read nums[${j}]`,
+          badgeType: 'info',
+          state: {
+            nums: [...pNums],
+            n,
+            totalCalls: 0,
+            cacheHits: 0,
+            currentReturn: null,
+            activeNodeId: null,
+            memo: [...zeroMemo],
+            frames: [{ name: 'main()', args: `n=${n}, j=${j}` }],
+            treeNodes: getVisibleNodes(),
+            treeEdges: getVisibleEdges(),
+            treeWidth: staticTree.width,
+            treeHeight: staticTree.height
+          }
+        });
+        pNums[j] = nums[j];
+        steps.push({
+          code: 'm_read_elem',
+          badge: `nums[${j}] = ${nums[j]} ← House ${j} cash value stored`,
+          badgeType: 'info',
+          state: {
+            nums: [...pNums],
+            n,
+            totalCalls: 0,
+            cacheHits: 0,
+            currentReturn: null,
+            activeNodeId: null,
+            memo: [...zeroMemo],
+            frames: [{ name: 'main()', args: `n=${n}, j=${j}` }],
+            treeNodes: getVisibleNodes(),
+            treeEdges: getVisibleEdges(),
+            treeWidth: staticTree.width,
+            treeHeight: staticTree.height
+          }
+        });
+      }
+      steps.push({
+        code: 'm_for_read',
+        badge: `Input loop exit: j = ${n} < ${n} → FALSE. All ${n} values read: [${nums.join(', ')}]`,
+        badgeType: 'success',
+        state: {
+          nums: [...pNums],
+          n,
+          totalCalls: 0,
+          cacheHits: 0,
+          currentReturn: null,
+          activeNodeId: null,
+          memo: [...zeroMemo],
+          frames: [{ name: 'main()', args: `n=${n}` }],
+          treeNodes: getVisibleNodes(),
+          treeEdges: getVisibleEdges(),
+          treeWidth: staticTree.width,
+          treeHeight: staticTree.height
+        }
+      });
+    }
+
     // Step 1: Allocate memo
     steps.push({
       code: 'm_alloc_memo',
-      badge: `Allocate lookup table memo[0...${n - 1}] of size ${n}`,
+      badge: `int[] memo = new int[${n}]; Allocated array of size ${n} (default Java int values are 0)`,
       badgeType: 'info',
       state: {
         nums,
@@ -904,7 +1231,7 @@ function buildSteps(approach, numsArr) {
         cacheHits: 0,
         currentReturn: null,
         activeNodeId: null,
-        memo: [...memoArray],
+        memo: [...zeroMemo],
         frames: [{ name: 'main()', args: `n=${n}` }],
         treeNodes: getVisibleNodes(),
         treeEdges: getVisibleEdges(),
@@ -916,7 +1243,7 @@ function buildSteps(approach, numsArr) {
     // Step 2: Initialize memo with -1
     steps.push({
       code: 'm_fill_memo',
-      badge: `Initialize all cache entries in memo table to -1 (indicating uncalculated state)`,
+      badge: `Arrays.fill(memo, -1); Filling all cache entries in memo table with sentinel value -1 (uncalculated state)`,
       badgeType: 'info',
       state: {
         nums,
@@ -935,17 +1262,94 @@ function buildSteps(approach, numsArr) {
     });
 
     function recurseMemo(i) {
-      if (i < 0) return 0;
       const myNodeId = nextNodeId++;
       callCounter++;
       nodeStateMap[myNodeId].state = 'active';
 
-      stackFrames.push({ name: `solve(i = ${i})`, args: `house[${i}]=$${nums[i]}` });
+      stackFrames.push({
+        name: `solve(i = ${i})`,
+        args: i >= 0 ? `house[${i}]=$${nums[i]}` : 'i < 0'
+      });
 
       // Step: Function entry
       steps.push({
         code: 'c_entry',
-        badge: `Entering solve(i = ${i}, memo) [Call #${callCounter}] for House ${i} ($${nums[i]})`,
+        badge: i >= 0
+          ? `Entering solve(i = ${i}, memo) [Call #${callCounter}] for House ${i} ($${nums[i]})`
+          : `Entering solve(i = ${i}, memo) [Call #${callCounter}] (Base case: i < 0)`,
+        badgeType: 'info',
+        state: {
+          nums,
+          n,
+          totalCalls: callCounter,
+          cacheHits,
+          currentReturn: null,
+          activeNodeId: myNodeId,
+          activeHouseIdx: i >= 0 ? i : null,
+          memo: [...memoArray],
+          frames: [...stackFrames],
+          treeNodes: getVisibleNodes(),
+          treeEdges: getVisibleEdges(),
+          treeWidth: staticTree.width,
+          treeHeight: staticTree.height
+        }
+      });
+
+      // Step: Check i < 0 (base neg)
+      steps.push({
+        code: 'c_base_neg',
+        badge: `Check base: i < 0 &rarr; ${i} < 0 is ${i < 0 ? 'TRUE (no houses left to rob &rarr; return $0)' : 'FALSE (i &ge; 0, proceed to i==0 check)'}`,
+        badgeType: 'info',
+        state: {
+          nums,
+          n,
+          totalCalls: callCounter,
+          cacheHits,
+          currentReturn: null,
+          activeNodeId: myNodeId,
+          activeHouseIdx: i >= 0 ? i : null,
+          memo: [...memoArray],
+          frames: [...stackFrames],
+          treeNodes: getVisibleNodes(),
+          treeEdges: getVisibleEdges(),
+          treeWidth: staticTree.width,
+          treeHeight: staticTree.height
+        }
+      });
+
+      if (i < 0) {
+        nodeStateMap[myNodeId].state = 'solved';
+        nodeStateMap[myNodeId].retVal = 0;
+
+        steps.push({
+          code: 'c_ret_neg',
+          badge: `Base case: solve(i = ${i}, memo) returns $0 (no money looted)`,
+          badgeType: 'success',
+          state: {
+            nums,
+            n,
+            totalCalls: callCounter,
+            cacheHits,
+            currentReturn: 0,
+            activeNodeId: myNodeId,
+            activeHouseIdx: null,
+            memo: [...memoArray],
+            frames: [...stackFrames],
+            treeNodes: getVisibleNodes(),
+            treeEdges: getVisibleEdges(),
+            treeWidth: staticTree.width,
+            treeHeight: staticTree.height
+          }
+        });
+
+        stackFrames.pop();
+        return 0;
+      }
+
+      // Step: Check i == 0 condition
+      steps.push({
+        code: 'c_base_zero',
+        badge: `Check base condition: i == 0 &rarr; ${i === 0 ? 'TRUE (only house 0, return nums[0])' : 'FALSE (proceed to cache check)'}`,
         badgeType: 'info',
         state: {
           nums,
@@ -969,11 +1373,10 @@ function buildSteps(approach, numsArr) {
         const ret = nums[0];
         nodeStateMap[myNodeId].state = 'solved';
         nodeStateMap[myNodeId].retVal = ret;
-        memoArray[0] = ret;
 
         steps.push({
-          code: 'c_base_zero',
-          badge: `Base case matched: solve(i = 0) returns nums[0] = $${ret}. Stored in memo[0].`,
+          code: 'c_ret_zero',
+          badge: `Base case: solve(i = 0) returns nums[0] = $${ret}.`,
           badgeType: 'success',
           state: {
             nums,
@@ -1025,7 +1428,7 @@ function buildSteps(approach, numsArr) {
         nodeStateMap[myNodeId].retVal = hitVal;
 
         steps.push({
-          code: 'c_memo_check',
+          code: 'c_ret_memo',
           badge: `[CACHE HIT] memo[${i}] = $${hitVal} already cached! Returning in O(1) time without evaluating subproblems!`,
           badgeType: 'success',
           state: {
@@ -1095,7 +1498,7 @@ function buildSteps(approach, numsArr) {
         }
       });
 
-      const robPrevVal = (i - 2 >= 0) ? recurseMemo(i - 2) : 0;
+      const robPrevVal = recurseMemo(i - 2);
       const robTotal = nums[i] + robPrevVal;
 
       const maxLoot = Math.max(skipVal, robTotal);
@@ -1149,6 +1552,27 @@ function buildSteps(approach, numsArr) {
       stackFrames.pop();
       return maxLoot;
     }
+
+    // Step: Call solve(nums, n-1, memo)
+    steps.push({
+      code: 'm_call_rob',
+      badge: `main() invokes solve(nums, i = ${n - 1}, memo) to compute max loot`,
+      badgeType: 'info',
+      state: {
+        nums,
+        n,
+        totalCalls: 0,
+        cacheHits: 0,
+        currentReturn: null,
+        activeNodeId: null,
+        memo: [...memoArray],
+        frames: [{ name: 'main()', args: `n=${n}` }],
+        treeNodes: getVisibleNodes(),
+        treeEdges: getVisibleEdges(),
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height
+      }
+    });
 
     const finalAnswer = recurseMemo(n - 1);
 
@@ -1208,10 +1632,27 @@ function buildSteps(approach, numsArr) {
       }));
     }
 
-    // Step 0: Input read
+    // Step 0a: Initialize scanner / reader
+    steps.push({
+      code: 'm_scanner',
+      badge: `Initializing input reader (Java: new Scanner(System.in), C: int n;, JS: fs.readFileSync)`,
+      badgeType: 'info',
+      state: {
+        nums,
+        n,
+        i: 0,
+        iterations: 0,
+        totalOps: 0,
+        currentReturn: null,
+        dpCells: getDPCells(),
+        frames: [{ name: 'main()', args: `n=?` }]
+      }
+    });
+
+    // Step 0b: Read n from stdin
     steps.push({
       code: 'm_read_n',
-      badge: `Input: ${n} houses [${nums.join(', ')}]. Starting Bottom-Up Tabulation.`,
+      badge: `Read n = ${n} (total number of houses)`,
       badgeType: 'info',
       state: {
         nums,
@@ -1224,6 +1665,76 @@ function buildSteps(approach, numsArr) {
         frames: [{ name: 'main()', args: `n=${n}` }]
       }
     });
+
+    // Step 0c: Declare nums array
+    steps.push({
+      code: 'm_read_arr',
+      badge: `Declare array: nums = new int[${n}] (${n} slots allocated, default 0)`,
+      badgeType: 'info',
+      state: {
+        nums: new Array(n).fill(0),
+        n,
+        i: 0,
+        iterations: 0,
+        totalOps: 0,
+        currentReturn: null,
+        dpCells: getDPCells(),
+        frames: [{ name: 'main()', args: `n=${n}` }]
+      }
+    });
+
+    // Steps 0d+: Read each element via for loop
+    {
+      const pNums = new Array(n).fill(0);
+      for (let j = 0; j < n; j++) {
+        steps.push({
+          code: 'm_for_read',
+          badge: `Input loop: j = ${j} < ${n} → TRUE. About to read nums[${j}]`,
+          badgeType: 'info',
+          state: {
+            nums: [...pNums],
+            n,
+            i: 0,
+            iterations: 0,
+            totalOps: 0,
+            currentReturn: null,
+            dpCells: getDPCells(),
+            frames: [{ name: 'main()', args: `n=${n}, j=${j}` }]
+          }
+        });
+        pNums[j] = nums[j];
+        steps.push({
+          code: 'm_read_elem',
+          badge: `nums[${j}] = ${nums[j]} ← House ${j} cash value stored`,
+          badgeType: 'info',
+          state: {
+            nums: [...pNums],
+            n,
+            i: 0,
+            iterations: 0,
+            totalOps: 0,
+            currentReturn: null,
+            dpCells: getDPCells(),
+            frames: [{ name: 'main()', args: `n=${n}, j=${j}` }]
+          }
+        });
+      }
+      steps.push({
+        code: 'm_for_read',
+        badge: `Input loop exit: j = ${n} < ${n} → FALSE. All ${n} values read: [${nums.join(', ')}]`,
+        badgeType: 'success',
+        state: {
+          nums: [...pNums],
+          n,
+          i: 0,
+          iterations: 0,
+          totalOps: 0,
+          currentReturn: null,
+          dpCells: getDPCells(),
+          frames: [{ name: 'main()', args: `n=${n}` }]
+        }
+      });
+    }
 
     // Step 1: Call rob(nums)
     steps.push({
@@ -1242,12 +1753,46 @@ function buildSteps(approach, numsArr) {
       }
     });
 
-    // Step 2: Base check for n == 1
+    // Step 2a: Check n == 0 (c_base_empty)
+    steps.push({
+      code: 'c_base_empty',
+      badge: `Check base: n == 0 &rarr; ${n === 0 ? 'TRUE (no houses, return 0)' : `FALSE (n = ${n}, continue)`}`,
+      badgeType: 'info',
+      state: {
+        nums,
+        n,
+        i: 0,
+        iterations: 0,
+        totalOps: 1,
+        currentReturn: null,
+        dpCells: getDPCells(),
+        frames: [{ name: 'main()', args: `n=${n}` }, { name: 'rob()', args: `n=${n}` }]
+      }
+    });
+
+    // Step 2b: Check n == 1 condition (c_base_one)
+    steps.push({
+      code: 'c_base_one',
+      badge: `Check base: n == 1 &rarr; ${n === 1 ? 'TRUE (only 1 house, return nums[0])' : `FALSE (n = ${n}, proceed to allocate DP)`}`,
+      badgeType: 'info',
+      state: {
+        nums,
+        n,
+        i: 0,
+        iterations: 0,
+        totalOps: 1,
+        currentReturn: null,
+        dpCells: getDPCells(),
+        frames: [{ name: 'main()', args: `n=${n}` }, { name: 'rob()', args: `n=${n}` }]
+      }
+    });
+
+    // Step 2c: If n == 1 early return
     if (n === 1) {
       dpArr[0] = nums[0];
       steps.push({
-        code: 'c_base_one',
-        badge: `Only 1 house: dp[0] = nums[0] = $${nums[0]}. Return directly.`,
+        code: 'c_ret_one',
+        badge: `Base case: n == 1, dp[0] = nums[0] = $${nums[0]}. Return directly.`,
         badgeType: 'success',
         state: {
           nums,
@@ -1361,6 +1906,23 @@ function buildSteps(approach, numsArr) {
 
     const totalIterations = Math.max(0, n - 2);
 
+    // For-loop exit: i >= n
+    steps.push({
+      code: 'c_for_loop',
+      badge: `For loop exit: i = ${n} &rarr; (${n} < ${n}) is FALSE. Loop finished after ${totalIterations} iteration(s).`,
+      badgeType: 'info',
+      state: {
+        nums,
+        n,
+        i: n,
+        iterations: totalIterations,
+        totalOps: ops,
+        currentReturn: null,
+        dpCells: getDPCells(n - 1),
+        frames: [{ name: 'main()', args: `n=${n}` }, { name: 'rob()', args: `loop done` }]
+      }
+    });
+
     // Step 7: Return dp[n - 1]
     steps.push({
       code: 'c_ret_dpn',
@@ -1431,21 +1993,6 @@ const tableHeight = ref(38);
 const leftWidth = ref(54);
 const rightTab = ref('code');
 
-// Warning Popup Modal State
-const showWarningModal = ref(false);
-const warningModalTitle = ref('Input Limit Notice');
-const warningModalMsg = ref('');
-const warningModalLimit = ref(6);
-const requestedCount = ref(0);
-
-function closeWarningModal() {
-  showWarningModal.value = false;
-}
-
-const maxAllowedHouses = computed(() => {
-  if (currentApproach.value === 'tabulation') return 16;
-  return 6; // 'recursion' and 'memoization'
-});
 
 const stepsData = reactive({ steps: buildSteps('recursion', [2, 7, 9, 3, 1]) });
 const steps = computed(() => stepsData.steps);
@@ -1461,29 +2008,6 @@ const pseudocodeLines = computed(() => {
   return PSEUDOCODES[currentApproach.value] || PSEUDOCODES.recursion;
 });
 
-const showPresetsDropdown = ref(false);
-const presetDropdownRef = ref(null);
-
-function selectPreset(val) {
-  applyPreset(val);
-  showPresetsDropdown.value = false;
-}
-
-function handleDocClick(e) {
-  if (presetDropdownRef.value && !presetDropdownRef.value.contains(e.target)) {
-    showPresetsDropdown.value = false;
-  }
-}
-
-function parseNums(str) {
-  const parts = str.split(/[\s,]+/).map(v => parseInt(v.trim(), 10)).filter(v => !isNaN(v) && v >= 0);
-  return parts.length > 0 ? parts : [2, 7, 9, 3, 1];
-}
-
-function applyPreset(arr) {
-  customInputStr.value = arr.join(', ');
-  applyInput();
-}
 
 function applyApproach(appId) {
   currentApproach.value = appId;
@@ -1492,30 +2016,14 @@ function applyApproach(appId) {
 
 let playTimer = null;
 
+function parseNums(str) {
+  const parts = str.split(/[\s,]+/).map(v => parseInt(v.trim(), 10)).filter(v => !isNaN(v) && v >= 0);
+  return parts.length > 0 ? parts : [2, 7, 9, 3, 1];
+}
+
 function applyInput() {
   const parsed = parseNums(customInputStr.value);
-  const maxLimit = maxAllowedHouses.value;
-
-  if (parsed.length > maxLimit) {
-    const origLen = parsed.length;
-    requestedCount.value = origLen;
-    warningModalLimit.value = maxLimit;
-    currentNums.value = parsed.slice(0, maxLimit);
-    customInputStr.value = currentNums.value.join(', ');
-
-    const approachName = APPROACHES.find(a => a.id === currentApproach.value)?.label || 'Algorithm';
-    if (currentApproach.value === 'tabulation') {
-      warningModalTitle.value = 'Tabulation Array Limit (Max: 16 Houses)';
-      warningModalMsg.value = `You entered ${origLen} houses. To maintain optimal presentation visibility, input has been capped to the first 16 houses.`;
-    } else {
-      warningModalTitle.value = `${approachName} Limit (Max: 6 Houses)`;
-      warningModalMsg.value = `Input of ${origLen} houses exceeds the maximum limit for ${approachName} (max: 6). Processing has been capped at 6 houses to prevent exponential tree call overhead.`;
-    }
-    showWarningModal.value = true;
-  } else {
-    currentNums.value = parsed;
-  }
-
+  currentNums.value = parsed;
   playing.value = false;
   stepsData.steps = buildSteps(currentApproach.value, currentNums.value);
   si.value = 0;
@@ -1554,7 +2062,7 @@ function onKeydown(e) {
     e.preventDefault();
     stepBy(-1);
   } else if (e.key === 'Escape') {
-    closeWarningModal();
+    // no-op
   }
 }
 
@@ -1642,7 +2150,6 @@ let cleanupFns = [];
 
 onMounted(() => {
   document.addEventListener('keydown', onKeydown);
-  document.addEventListener('click', handleDocClick);
   cleanupFns.push(initHResizer(hResizerRef.value, leftWidth, 30, 75));
   cleanupFns.push(initVResizer(vizResizerRef.value, vizHeight, 100, 360));
   cleanupFns.push(initVResizer(tableResizerRef.value, tableHeight, 30, 140));
@@ -1650,7 +2157,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('keydown', onKeydown);
-  document.removeEventListener('click', handleDocClick);
   clearTimeout(playTimer);
   cleanupFns.forEach(fn => fn && fn());
 });
@@ -1696,28 +2202,6 @@ onUnmounted(() => {
               <!-- <span class="ll-input-hint">(max {{ maxAllowedHouses }})</span> -->
             </div>
 
-            <!-- Presets Dropdown Button -->
-            <div class="ll-dropdown-wrap" ref="presetDropdownRef">
-              <button
-                class="ll-dropdown-btn"
-                :class="{ active: showPresetsDropdown }"
-                @click.stop="showPresetsDropdown = !showPresetsDropdown"
-                title="Choose a preset houses array"
-              >
-                 &#9662;
-              </button>
-              <div v-if="showPresetsDropdown" class="ll-dropdown-menu">
-                <button
-                  v-for="(p, pi) in PRESETS"
-                  :key="pi"
-                  class="ll-dropdown-item"
-                  @click="selectPreset(p.val)"
-                >
-                  <span class="ll-drop-label">{{ p.label }}</span>
-                  <span class="ll-drop-desc" v-if="p.desc">{{ p.desc }}</span>
-                </button>
-              </div>
-            </div>
 
             <button class="ll-viz-btn" @click="applyInput">&#9654; Visualize</button>
 
@@ -1931,7 +2415,7 @@ onUnmounted(() => {
                                   'll-memo-empty': mVal === -1
                                 }"
                               >
-                                {{ mVal !== -1 ? `$${mVal}` : '?' }}
+                                {{ mVal !== -1 ? `$${mVal}` : -1 }}
                               </div>
                               <span class="ll-memo-idx">memo[{{ mIdx }}]</span>
                             </div>
@@ -2123,44 +2607,7 @@ onUnmounted(() => {
             <span class="ll-speed-wrap">Speed <input type="range" min="100" max="2000" step="100" v-model.number="speed" /></span>
           </div>
 
-          <!-- Warning Modal for Input Limit Exceeded -->
-          <transition name="ll-modal-fade">
-            <div v-if="showWarningModal" class="ll-modal-backdrop" @click.self="closeWarningModal">
-              <div class="ll-modal-card" @click.stop>
-                <!-- Modal Header -->
-                <div class="ll-modal-header">
-                  <div class="ll-modal-title-wrap">
-                    <div class="ll-modal-icon-badge">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="ll-modal-svg-icon">
-                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                        <line x1="12" y1="9" x2="12" y2="13"/>
-                        <line x1="12" y1="17" x2="12.01" y2="17"/>
-                      </svg>
-                    </div>
-                    <span class="ll-modal-title">{{ warningModalTitle }}</span>
-                  </div>
-                  <button class="ll-modal-close-btn" @click="closeWarningModal" title="Close warning">&times;</button>
-                </div>
 
-                <!-- Modal Body -->
-                <div class="ll-modal-body">
-                  <div class="ll-modal-badge-row">
-                    <span class="ll-modal-tag-entered">Entered: {{ requestedCount }} Houses</span>
-                    <span class="ll-modal-arrow">&rarr;</span>
-                    <span class="ll-modal-tag-applied">Adjusted to Max: {{ warningModalLimit }} Houses</span>
-                  </div>
-                  <p class="ll-modal-message">{{ warningModalMsg }}</p>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="ll-modal-footer">
-                  <button class="ll-modal-confirm-btn" @click="closeWarningModal">
-                    Got it, Proceed &#10003;
-                  </button>
-                </div>
-              </div>
-            </div>
-          </transition>
         </div>
       </div>
     </div>
@@ -2192,7 +2639,7 @@ onUnmounted(() => {
   --radius: 8px; --radius-sm: 6px;
   background: var(--bg); color: var(--text);
   font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12.5px;
-  display: flex; flex-direction: column; overflow: hidden; width: 100%; height:100vh;
+display: flex; flex-direction: column; overflow: hidden; width: 100%; height: 58vh;
 }
 
 @keyframes ll-pop { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }

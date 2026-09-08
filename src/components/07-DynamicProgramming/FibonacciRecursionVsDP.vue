@@ -31,8 +31,8 @@ const CODES = {
       ['',             '    }'],
       ['',             ''],
       ['',             '    public static void main(String[] args) {'],
-      ['c_input',      '        Scanner sc = new Scanner(System.in);'],
-      ['c_input',      '        int n = sc.nextInt();'],
+      ['c_input_a',    '        Scanner sc = new Scanner(System.in);'],
+      ['c_input_b',    '        int n = sc.nextInt();'],
       ['c_main_call',  '        int result = fib(n);'],
       ['c_main_ret',   '        System.out.println(result);'],
       ['',             '    }'],
@@ -51,8 +51,8 @@ const CODES = {
       ['',             '}'],
       ['',             ''],
       ['',             'int main() {'],
-      ['c_input',      '    int n;'],
-      ['c_input',      '    scanf("%d", &n);'],
+      ['c_input_a',    '    int n;'],
+      ['c_input_b',    '    scanf("%d", &n);'],
       ['c_main_call',  '    int result = fib(n);'],
       ['c_main_ret',   '    printf("%d\\n", result);'],
       ['',             '    return 0;'],
@@ -72,8 +72,8 @@ const CODES = {
       ['',             '}'],
       ['',             ''],
       ['',             'int main() {'],
-      ['c_input',      '    int n;'],
-      ['c_input',      '    cin >> n;'],
+      ['c_input_a',    '    int n;'],
+      ['c_input_b',    '    cin >> n;'],
       ['c_main_call',  '    int result = fib(n);'],
       ['c_main_ret',   '    cout << result << endl;'],
       ['',             '    return 0;'],
@@ -88,7 +88,7 @@ const CODES = {
       ['c_ret_sum',    '    return left + right'],
       ['',             ''],
       ['',             'if __name__ == "__main__":'],
-      ['c_input',      '    n = int(input())'],
+      ['c_input_b',    '    n = int(input())'],
       ['c_main_call',  '    result = fib(n)'],
       ['c_main_ret',   '    print(result)']
     ],
@@ -102,9 +102,9 @@ const CODES = {
       ['c_ret_sum',    '  return left + right;'],
       ['',             '}'],
       ['',             ''],
-      ['c_input',      'const readline = require("readline").createInterface({ input: process.stdin, output: process.stdout });'],
-      ['c_input',      'readline.question("", input => {'],
-      ['c_input',      '  const n = parseInt(input);'],
+      ['c_input_a',    'const readline = require("readline").createInterface({ input: process.stdin, output: process.stdout });'],
+      ['c_input_b',    'readline.question("", input => {'],
+      ['c_input_c',    '  const n = parseInt(input);'],
       ['c_main_call',  '  const result = fib(n);'],
       ['c_main_ret',   '  console.log(result);'],
       ['',             '  readline.close();'],
@@ -118,8 +118,12 @@ const CODES = {
       ['',             ''],
       ['',             'public class Main {'],
       ['c_entry',      '    static int fib(int n, int[] memo) {'],
-      ['c_base_check', '        if (n <= 1) return n;'],
-      ['c_memo_check', '        if (memo[n] != -1) return memo[n]; // Cache Hit'],
+      ['c_base_check', '        if (n <= 1) {'],
+      ['c_ret_base',   '            return n;'],
+      ['',             '        }'],
+      ['c_memo_check', '        if (memo[n] != -1) {'],
+      ['c_memo_ret',   '            return memo[n]; // Cache Hit'],
+      ['',             '        }'],
       ['c_rec_left',   '        int left = fib(n - 1, memo);'],
       ['c_rec_right',  '        int right = fib(n - 2, memo);'],
       ['c_ret_sum',    '        memo[n] = left + right;'],
@@ -127,10 +131,10 @@ const CODES = {
       ['',             '    }'],
       ['',             ''],
       ['',             '    public static void main(String[] args) {'],
-      ['c_input',      '        Scanner sc = new Scanner(System.in);'],
-      ['c_input',      '        int n = sc.nextInt();'],
+      ['c_input_a',    '        Scanner sc = new Scanner(System.in);'],
+      ['c_input_b',    '        int n = sc.nextInt();'],
       ['c_memo_alloc', '        int[] memo = new int[n + 1];'],
-      ['c_memo_alloc', '        Arrays.fill(memo, -1);'],
+      ['c_memo_fill',  '        Arrays.fill(memo, -1);'],
       ['c_main_call',  '        int result = fib(n, memo);'],
       ['c_main_ret',   '        System.out.println(result);'],
       ['',             '    }'],
@@ -141,8 +145,12 @@ const CODES = {
       ['',             '#include <string.h>'],
       ['',             ''],
       ['c_entry',      'int fib(int n, int memo[]) {'],
-      ['c_base_check', '    if (n <= 1) return n;'],
-      ['c_memo_check', '    if (memo[n] != -1) return memo[n]; // Cache Hit'],
+      ['c_base_check', '    if (n <= 1) {'],
+      ['c_ret_base',   '        return n;'],
+      ['',             '    }'],
+      ['c_memo_check', '    if (memo[n] != -1) {'],
+      ['c_memo_ret',   '        return memo[n]; // Cache Hit'],
+      ['',             '    }'],
       ['c_rec_left',   '    int left = fib(n - 1, memo);'],
       ['c_rec_right',  '    int right = fib(n - 2, memo);'],
       ['c_ret_sum',    '    memo[n] = left + right;'],
@@ -150,10 +158,10 @@ const CODES = {
       ['',             '}'],
       ['',             ''],
       ['',             'int main() {'],
-      ['c_input',      '    int n;'],
-      ['c_input',      '    scanf("%d", &n);'],
+      ['c_input_a',    '    int n;'],
+      ['c_input_b',    '    scanf("%d", &n);'],
       ['c_memo_alloc', '    int memo[n + 1];'],
-      ['c_memo_alloc', '    memset(memo, -1, sizeof(memo));'],
+      ['c_memo_fill',  '    memset(memo, -1, sizeof(memo));'],
       ['c_main_call',  '    int result = fib(n, memo);'],
       ['c_main_ret',   '    printf("%d\\n", result);'],
       ['',             '    return 0;'],
@@ -165,8 +173,12 @@ const CODES = {
       ['',             'using namespace std;'],
       ['',             ''],
       ['c_entry',      'int fib(int n, vector<int>& memo) {'],
-      ['c_base_check', '    if (n <= 1) return n;'],
-      ['c_memo_check', '    if (memo[n] != -1) return memo[n]; // Cache Hit'],
+      ['c_base_check', '    if (n <= 1) {'],
+      ['c_ret_base',   '        return n;'],
+      ['',             '    }'],
+      ['c_memo_check', '    if (memo[n] != -1) {'],
+      ['c_memo_ret',   '        return memo[n]; // Cache Hit'],
+      ['',             '    }'],
       ['c_rec_left',   '    int left = fib(n - 1, memo);'],
       ['c_rec_right',  '    int right = fib(n - 2, memo);'],
       ['c_ret_sum',    '    memo[n] = left + right;'],
@@ -174,8 +186,8 @@ const CODES = {
       ['',             '}'],
       ['',             ''],
       ['',             'int main() {'],
-      ['c_input',      '    int n;'],
-      ['c_input',      '    cin >> n;'],
+      ['c_input_a',    '    int n;'],
+      ['c_input_b',    '    cin >> n;'],
       ['c_memo_alloc', '    vector<int> memo(n + 1, -1);'],
       ['c_main_call',  '    int result = fib(n, memo);'],
       ['c_main_ret',   '    cout << result << endl;'],
@@ -185,15 +197,15 @@ const CODES = {
     python: [
       ['c_entry',      'def fib(n, memo):'],
       ['c_base_check', '    if n <= 1: return n'],
-      ['c_memo_check', '    if n in memo: return memo[n]  # Cache Hit'],
+      ['c_memo_check', '    if memo[n] != -1: return memo[n]  # Cache Hit'],
       ['c_rec_left',   '    left = fib(n - 1, memo)'],
       ['c_rec_right',  '    right = fib(n - 2, memo)'],
       ['c_ret_sum',    '    memo[n] = left + right'],
       ['c_dp_ret',     '    return memo[n]'],
       ['',             ''],
       ['',             'if __name__ == "__main__":'],
-      ['c_input',      '    n = int(input())'],
-      ['c_memo_alloc', '    memo = {}'],
+      ['c_input_b',    '    n = int(input())'],
+      ['c_memo_alloc', '    memo = [-1] * (n + 1)'],
       ['c_main_call',  '    result = fib(n, memo)'],
       ['c_main_ret',   '    print(result)']
     ],
@@ -207,9 +219,9 @@ const CODES = {
       ['c_dp_ret',     '  return memo[n];'],
       ['',             '}'],
       ['',             ''],
-      ['c_input',      'const readline = require("readline").createInterface({ input: process.stdin, output: process.stdout });'],
-      ['c_input',      'readline.question("", input => {'],
-      ['c_input',      '  const n = parseInt(input);'],
+      ['c_input_a',    'const readline = require("readline").createInterface({ input: process.stdin, output: process.stdout });'],
+      ['c_input_b',    'readline.question("", input => {'],
+      ['c_input_c',    '  const n = parseInt(input);'],
       ['c_memo_alloc', '  const memo = new Array(n + 1).fill(-1);'],
       ['c_main_call',  '  const result = fib(n, memo);'],
       ['c_main_ret',   '  console.log(result);'],
@@ -223,7 +235,9 @@ const CODES = {
       ['',             ''],
       ['',             'public class Main {'],
       ['c_entry',      '    static int fib(int n) {'],
-      ['c_base_check', '        if (n <= 1) return n;'],
+      ['c_base_check', '        if (n <= 1) {'],
+      ['c_ret_base',   '            return n;'],
+      ['',             '        }'],
       ['c_dp_alloc',   '        int[] dp = new int[n + 1];'],
       ['c_dp_base0',   '        dp[0] = 0;'],
       ['c_dp_base1',   '        dp[1] = 1;'],
@@ -234,8 +248,8 @@ const CODES = {
       ['',             '    }'],
       ['',             ''],
       ['',             '    public static void main(String[] args) {'],
-      ['c_input',      '        Scanner sc = new Scanner(System.in);'],
-      ['c_input',      '        int n = sc.nextInt();'],
+      ['c_input_a',    '        Scanner sc = new Scanner(System.in);'],
+      ['c_input_b',    '        int n = sc.nextInt();'],
       ['c_main_call',  '        int result = fib(n);'],
       ['c_main_ret',   '        System.out.println(result);'],
       ['',             '    }'],
@@ -246,7 +260,9 @@ const CODES = {
       ['',             '#include <stdlib.h>'],
       ['',             ''],
       ['c_entry',      'int fib(int n) {'],
-      ['c_base_check', '    if (n <= 1) return n;'],
+      ['c_base_check', '    if (n <= 1) {'],
+      ['c_ret_base',   '        return n;'],
+      ['',             '    }'],
       ['c_dp_alloc',   '    int dp[n + 1];'],
       ['c_dp_base0',   '    dp[0] = 0;'],
       ['c_dp_base1',   '    dp[1] = 1;'],
@@ -257,8 +273,8 @@ const CODES = {
       ['',             '}'],
       ['',             ''],
       ['',             'int main() {'],
-      ['c_input',      '    int n;'],
-      ['c_input',      '    scanf("%d", &n);'],
+      ['c_input_a',    '    int n;'],
+      ['c_input_b',    '    scanf("%d", &n);'],
       ['c_main_call',  '    int result = fib(n);'],
       ['c_main_ret',   '    printf("%d\\n", result);'],
       ['',             '    return 0;'],
@@ -270,7 +286,9 @@ const CODES = {
       ['',             'using namespace std;'],
       ['',             ''],
       ['c_entry',      'int fib(int n) {'],
-      ['c_base_check', '    if (n <= 1) return n;'],
+      ['c_base_check', '    if (n <= 1) {'],
+      ['c_ret_base',   '        return n;'],
+      ['',             '    }'],
       ['c_dp_alloc',   '    vector<int> dp(n + 1);'],
       ['c_dp_base0',   '    dp[0] = 0;'],
       ['c_dp_base1',   '    dp[1] = 1;'],
@@ -281,8 +299,8 @@ const CODES = {
       ['',             '}'],
       ['',             ''],
       ['',             'int main() {'],
-      ['c_input',      '    int n;'],
-      ['c_input',      '    cin >> n;'],
+      ['c_input_a',    '    int n;'],
+      ['c_input_b',    '    cin >> n;'],
       ['c_main_call',  '    int result = fib(n);'],
       ['c_main_ret',   '    cout << result << endl;'],
       ['',             '    return 0;'],
@@ -299,7 +317,7 @@ const CODES = {
       ['c_dp_ret',     '    return dp[n]'],
       ['',             ''],
       ['',             'if __name__ == "__main__":'],
-      ['c_input',      '    n = int(input())'],
+      ['c_input_b',    '    n = int(input())'],
       ['c_main_call',  '    result = fib(n)'],
       ['c_main_ret',   '    print(result)']
     ],
@@ -315,9 +333,9 @@ const CODES = {
       ['c_dp_ret',     '  return dp[n];'],
       ['',             '}'],
       ['',             ''],
-      ['c_input',      'const readline = require("readline").createInterface({ input: process.stdin, output: process.stdout });'],
-      ['c_input',      'readline.question("", input => {'],
-      ['c_input',      '  const n = parseInt(input);'],
+      ['c_input_a',    'const readline = require("readline").createInterface({ input: process.stdin, output: process.stdout });'],
+      ['c_input_b',    'readline.question("", input => {'],
+      ['c_input_c',    '  const n = parseInt(input);'],
       ['c_main_call',  '  const result = fib(n);'],
       ['c_main_ret',   '  console.log(result);'],
       ['',             '  readline.close();'],
@@ -336,12 +354,14 @@ const PSEUDOCODES = {
     '    return left + right          // Overlapping subproblems recomputed!'
   ],
   memoization: [
-    'memo = array/map initialized with -1',
+    'memo = array of size (n + 1) initialized with -1',
     'function fib(n, memo):',
     '    if n <= 1: return n',
     '    if memo[n] != -1:            // Cache lookup (O(1) hit)',
     '        return memo[n]',
-    '    memo[n] = fib(n - 1, memo) + fib(n - 2, memo) // Cache result',
+    '    left = fib(n - 1, memo)      // Compute left subproblem',
+    '    right = fib(n - 2, memo)     // Compute right subproblem',
+    '    memo[n] = left + right       // Update array after both computed',
     '    return memo[n]'
   ],
   tabulation: [
@@ -475,9 +495,7 @@ function generateStaticTree(approach, targetN) {
 /* ==================================================================== */
 function buildSteps(approach, targetN) {
   const steps = [];
-  const maxLimit = approach === 'tabulation' ? 20 : 5;
-  const rawN = Math.max(0, parseInt(targetN, 10) || 0);
-  const n = Math.min(rawN, maxLimit);
+  const n = Math.max(0, parseInt(targetN, 10) || 0);
 
   /* ------------------------------------------------------------------ */
   /* APPROACH 1: BRUTE FORCE RECURSION                                   */
@@ -520,10 +538,30 @@ function buildSteps(approach, targetN) {
       }));
     }
 
-    // Step 0: Input ingestion
+    // Step 0a: Declare scanner / reader
     steps.push({
-      badge: `User input: n = ${n}. Starting naive recursive Fibonacci execution.`,
-      code: 'c_input',
+      badge: `Initializing input scanner / reader (Java: Scanner sc, C/C++: int n declaration, JS: readline setup).`,
+      code: 'c_input_a',
+      vars: [frame('main()', [['n', '?']])],
+      state: {
+        approach: 'recursion',
+        n,
+        curN: n,
+        totalCalls: 0,
+        redundantCalls: 0,
+        currentReturn: null,
+        treeNodes: [],
+        treeEdges: [],
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height,
+        activeNodeId: null
+      }
+    });
+
+    // Step 0b: Read n from stdin
+    steps.push({
+      badge: `User input: n = ${n}. Read from standard input. Starting naive recursive Fibonacci execution.`,
+      code: 'c_input_b',
       vars: [frame('main()', [['n', String(n)]])],
       state: {
         approach: 'recursion',
@@ -800,10 +838,33 @@ function buildSteps(approach, targetN) {
       }));
     }
 
-    // Step 0: Input ingestion
+    const zeroMemo = new Array(n + 1).fill(0);
+
+    // Step 0a: Declare scanner / reader
     steps.push({
-      badge: `User input: n = ${n}. Starting Top-Down DP with Memoization.`,
-      code: 'c_input',
+      badge: `Initializing input scanner / reader (Java: Scanner sc, C/C++: int n declaration, JS: readline setup).`,
+      code: 'c_input_a',
+      vars: [frame('main()', [['n', '?']])],
+      state: {
+        approach: 'memoization',
+        n,
+        curN: n,
+        totalCalls: 0,
+        cacheHits: 0,
+        currentReturn: null,
+        treeNodes: [],
+        treeEdges: [],
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height,
+        memo: [...zeroMemo],
+        activeNodeId: null
+      }
+    });
+
+    // Step 0b: Read n from stdin
+    steps.push({
+      badge: `User input: n = ${n}. Read from standard input. Starting Top-Down DP with Memoization.`,
+      code: 'c_input_b',
       vars: [frame('main()', [['n', String(n)]])],
       state: {
         approach: 'memoization',
@@ -816,15 +877,36 @@ function buildSteps(approach, targetN) {
         treeEdges: [],
         treeWidth: staticTree.width,
         treeHeight: staticTree.height,
-        memo: [...memo],
+        memo: [...zeroMemo],
         activeNodeId: null
       }
     });
 
-    // Step 1: Allocate memo cache
+    // Step 1: Allocate memo cache array
     steps.push({
-      badge: `Allocating memo cache table memo[0...${n}] initialized with -1 (uncached).`,
+      badge: `int[] memo = new int[${n + 1}]; Allocated array of size ${n + 1} (default Java int array values are 0).`,
       code: 'c_memo_alloc',
+      vars: [frame('main()', [['n', String(n)], ['memo.length', String(n + 1)]])],
+      state: {
+        approach: 'memoization',
+        n,
+        curN: n,
+        totalCalls: 0,
+        cacheHits: 0,
+        currentReturn: null,
+        treeNodes: [],
+        treeEdges: [],
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height,
+        memo: [...zeroMemo],
+        activeNodeId: null
+      }
+    });
+
+    // Step 2: Arrays.fill(memo, -1)
+    steps.push({
+      badge: `Arrays.fill(memo, -1); Filling array entries with sentinel value -1 (uncached state).`,
+      code: 'c_memo_fill',
       vars: [frame('main()', [['n', String(n)], ['memo.length', String(n + 1)]])],
       state: {
         approach: 'memoization',
@@ -842,7 +924,7 @@ function buildSteps(approach, targetN) {
       }
     });
 
-    // Step 2: Main calls fib(n, memo)
+    // Step 3: Main calls fib(n, memo)
     steps.push({
       badge: `main(): Invoking fib(${n}, memo).`,
       code: 'c_main_call',
@@ -921,12 +1003,11 @@ function buildSteps(approach, targetN) {
       });
 
       if (currentN <= 1) {
-        memo[currentN] = currentN;
         nodeObj.state = 'solved';
         nodeObj.retVal = currentN;
 
         steps.push({
-          badge: `fib(${currentN}) is base case → returns ${currentN}. Stored in memo[${currentN}] = ${currentN}.`,
+          badge: `fib(${currentN}) is base case → returns ${currentN}.`,
           code: 'c_ret_base',
           vars: currentStack.map((f, idx) => idx === currentStack.length - 1
             ? frame(f.title, [['n', String(currentN)], ['return', String(currentN)]])
@@ -975,7 +1056,7 @@ function buildSteps(approach, targetN) {
       if (isCacheHit) {
         steps.push({
           badge: `⚡ Instant O(1) Return! Returning cached value memo[${currentN}] = ${memo[currentN]} without expanding branch!`,
-          code: 'c_memo_check',
+          code: 'c_memo_ret',
           vars: currentStack.map((f, idx) => idx === currentStack.length - 1
             ? frame(f.title, [['n', String(currentN)], ['cache_return', String(memo[currentN])]])
             : frame(f.title, f.rows)
@@ -1027,7 +1108,7 @@ function buildSteps(approach, targetN) {
       // Right recursive call
       const afterLeftStack = [...stackFrames, { title: `fib(${currentN})`, rows: [['n', String(currentN)], ['left', String(leftVal)]] }];
       steps.push({
-        badge: `fib(${currentN}): Left returned ${leftVal}. Recursing right child fib(${currentN - 2}, memo).`,
+        badge: `fib(${currentN}): Left returned ${leftVal} (stored in variable 'left'). Recursing right child fib(${currentN - 2}, memo).`,
         code: 'c_rec_right',
         vars: afterLeftStack.map(f => frame(f.title, f.rows)),
         state: {
@@ -1062,7 +1143,7 @@ function buildSteps(approach, targetN) {
       }];
 
       steps.push({
-        badge: `memo[${currentN}] = ${leftVal} + ${rightVal} = ${totalVal}. Result cached into memo table!`,
+        badge: `Both subproblems computed (left = ${leftVal}, right = ${rightVal}). Updating array memo[${currentN}] = left + right = ${totalVal}.`,
         code: 'c_ret_sum',
         vars: finishStack.map(f => frame(f.title, f.rows)),
         state: {
@@ -1142,15 +1223,30 @@ function buildSteps(approach, targetN) {
   if (approach === 'tabulation') {
     const dpCells = Array.from({ length: n + 1 }, (_, idx) => ({
       idx,
-      val: '?',
+      val: 0,
       state: 'uncalc'
     }));
 
-    // Step 0: Input ingestion
-    // Step 0: Input read
+    // Step 0a: Declare scanner / reader
     steps.push({
-      badge: `User input: n = ${n}. Starting Bottom-Up Tabulation.`,
-      code: 'c_input',
+      badge: `Initializing input scanner / reader (Java: Scanner sc, C/C++: int n declaration, JS: readline setup).`,
+      code: 'c_input_a',
+      vars: [frame('main()', [['n', '?']])],
+      state: {
+        approach: 'tabulation',
+        n,
+        iterations: 0,
+        totalOps: 0,
+        i: -1,
+        dpCells: dpCells.map(c => ({ ...c })),
+        currentReturn: null
+      }
+    });
+
+    // Step 0b: Read n from stdin
+    steps.push({
+      badge: `User input: n = ${n}. Read from standard input. Starting Bottom-Up Tabulation.`,
+      code: 'c_input_b',
       vars: [frame('main()', [['n', String(n)]])],
       state: {
         approach: 'tabulation',
@@ -1215,7 +1311,7 @@ function buildSteps(approach, targetN) {
       dpCells[n] = { idx: n, val: n, state: 'solved' };
       steps.push({
         badge: `n = ${n} is a base case → return ${n}.`,
-        code: 'c_base_check',
+        code: 'c_ret_base',
         vars: [frame('main()', [['n', String(n)]]), frame('fib(n)', [['n', String(n)], ['return', String(n)]])],
         state: {
           approach: 'tabulation',
@@ -1421,21 +1517,6 @@ const tableHeight = ref(38);
 const leftWidth = ref(54);
 const rightTab = ref('code');
 
-// Warning Popup Modal State
-const showWarningModal = ref(false);
-const warningModalTitle = ref('Input Limit Notice');
-const warningModalMsg = ref('');
-const warningModalLimit = ref(5);
-const requestedValue = ref(0);
-
-function closeWarningModal() {
-  showWarningModal.value = false;
-}
-
-const maxAllowedN = computed(() => {
-  if (currentApproach.value === 'tabulation') return 20;
-  return 5; // 'recursion' and 'memoization'
-});
 
 const stepsData = reactive({ steps: buildSteps('recursion', 5) });
 const steps = computed(() => stepsData.steps);
@@ -1455,29 +1536,9 @@ let playTimer = null;
 
 function applyApproach(newApproach) {
   currentApproach.value = newApproach;
-  const maxN = newApproach === 'tabulation' ? 20 : 5;
   let val = parseInt(inpN.value, 10);
   if (isNaN(val) || val < 0) val = 0;
-
-  if (val > maxN) {
-    const origVal = val;
-    val = maxN;
-    inpN.value = val;
-    requestedValue.value = origVal;
-    warningModalLimit.value = maxN;
-    if (newApproach === 'tabulation') {
-      warningModalTitle.value = 'Tabulation Limit (Max: 20)';
-      warningModalMsg.value = `Input n = ${origVal} exceeds the maximum allowed limit for DP Tabulation. The input has been adjusted to n = 20 for optimal display.`;
-    } else {
-      const approachName = newApproach === 'recursion' ? 'Brute Force Recursion' : 'DP Memoization';
-      warningModalTitle.value = `${approachName} Limit (Max: 5)`;
-      warningModalMsg.value = `Input n = ${origVal} exceeds the maximum allowed limit for ${approachName}. The input has been adjusted to n = 5 to preserve recursion tree readability.`;
-    }
-    showWarningModal.value = true;
-  } else {
-    inpN.value = val;
-  }
-
+  inpN.value = val;
   playing.value = false;
   stepsData.steps = buildSteps(newApproach, val);
   si.value = 0;
@@ -1486,27 +1547,7 @@ function applyApproach(newApproach) {
 function applyInput() {
   let val = parseInt(inpN.value, 10);
   if (isNaN(val) || val < 0) val = 0;
-  const maxN = maxAllowedN.value;
-
-  if (val > maxN) {
-    const origVal = val;
-    val = maxN;
-    inpN.value = val;
-    requestedValue.value = origVal;
-    warningModalLimit.value = maxN;
-    if (currentApproach.value === 'tabulation') {
-      warningModalTitle.value = 'Tabulation Limit (Max: 20)';
-      warningModalMsg.value = `Input n = ${origVal} exceeds the maximum limit for DP Tabulation (max: 20). Processing has been capped at n = 20.`;
-    } else {
-      const approachName = currentApproach.value === 'recursion' ? 'Brute Force Recursion' : 'DP Memoization';
-      warningModalTitle.value = `${approachName} Limit (Max: 5)`;
-      warningModalMsg.value = `Input n = ${origVal} exceeds the maximum limit for ${approachName} (max: 5). Processing has been capped at n = 5 to prevent exponential recursion call overhead.`;
-    }
-    showWarningModal.value = true;
-  } else {
-    inpN.value = val;
-  }
-
+  inpN.value = val;
   playing.value = false;
   stepsData.steps = buildSteps(currentApproach.value, val);
   si.value = 0;
@@ -1671,10 +1712,8 @@ onBeforeUnmount(() => {
                 v-model.number="inpN"
                 class="ll-num-input"
                 :min="0"
-                :max="maxAllowedN"
                 @keyup.enter="applyInput"
               />
-              <span class="ll-input-hint">(max {{ maxAllowedN }})</span>
             </div>
 
             <button class="ll-viz-btn" @click="applyInput">&#9654; Visualize</button>
@@ -1863,7 +1902,7 @@ onBeforeUnmount(() => {
                                 'll-memo-empty': val === -1
                               }"
                             >
-                              {{ val === -1 ? '?' : val }}
+                              {{ val }}
                             </div>
                             <div class="ll-memo-idx">[{{ idx }}]</div>
                           </div>
@@ -2060,44 +2099,7 @@ onBeforeUnmount(() => {
             <span class="ll-speed-wrap">Speed <input type="range" min="100" max="2000" step="100" v-model.number="speed" /></span>
           </div>
 
-          <!-- Warning Modal for Input Limit Exceeded -->
-          <transition name="ll-modal-fade">
-            <div v-if="showWarningModal" class="ll-modal-backdrop" @click.self="closeWarningModal">
-              <div class="ll-modal-card" @click.stop>
-                <!-- Modal Header -->
-                <div class="ll-modal-header">
-                  <div class="ll-modal-title-wrap">
-                    <div class="ll-modal-icon-badge">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="ll-modal-svg-icon">
-                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                        <line x1="12" y1="9" x2="12" y2="13"/>
-                        <line x1="12" y1="17" x2="12.01" y2="17"/>
-                      </svg>
-                    </div>
-                    <span class="ll-modal-title">{{ warningModalTitle }}</span>
-                  </div>
-                  <button class="ll-modal-close-btn" @click="closeWarningModal" title="Close warning">&times;</button>
-                </div>
 
-                <!-- Modal Body -->
-                <div class="ll-modal-body">
-                  <div class="ll-modal-badge-row">
-                    <span class="ll-modal-tag-entered">Entered: n = {{ requestedValue }}</span>
-                    <span class="ll-modal-arrow">&rarr;</span>
-                    <span class="ll-modal-tag-applied">Adjusted to Max: n = {{ warningModalLimit }}</span>
-                  </div>
-                  <p class="ll-modal-message">{{ warningModalMsg }}</p>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="ll-modal-footer">
-                  <button class="ll-modal-confirm-btn" @click="closeWarningModal">
-                    Got it, Proceed &#10003;
-                  </button>
-                </div>
-              </div>
-            </div>
-          </transition>
         </div>
       </div>
     </div>
@@ -2128,7 +2130,7 @@ onBeforeUnmount(() => {
   --radius: 8px; --radius-sm: 6px;
   background: var(--bg); color: var(--text);
   font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12.5px;
-  display: flex; flex-direction: column; overflow: hidden; width: 100%; height:100vh; /* modified */
+  display: flex; flex-direction: column; height: 50vh; min-height: 600px; overflow: hidden; width: 100%;
 }
 
 @keyframes ll-pop { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
