@@ -1,12 +1,20 @@
-<FibonacciRecursionVsDP topic="Dynamic Programming" subTopic="Fibonacci Number" />
-
----
-
 <ClimbingStairs topic="Dynamic Programming" subTopic="Climbing Stairs Problem" />
 
 ---
 
-<HouseRobber topic="Dynamic Programming" subTopic="House Robber Problem" />
+<HouseRobber topic="Dynamic Programming" subTopic="House Robber I" />
+
+---
+
+<HouseRobber2 topic="Dynamic Programming" subTopic="House Robber II" />
+
+---
+
+<Knapsack01 topic="Dynamic Programming" subTopic="0/1 Knapsack I" />
+
+---
+
+<LongestIncreasingSubsequence topic="Dynamic Programming" subTopic="Longest Increasing Subsequence" />
 
 ---
 
@@ -14,10 +22,14 @@
 
 ---
 
-<Knapsack01 topic="Dynamic Programming" subTopic="0/1 Knapsack Problem" />
+<LongestPalindromicSubsequenceDP topic="Dynamic Programming" subTopic="Longest Palindromic Subsequence" />
 
 ---
 
-<LongestIncreasingSubsequence topic="Dynamic Programming" subTopic="Longest Increasing Subsequence" />
+<EditDistanceDP topic="Dynamic Programming" subTopic="Edit Distance" />
+
+---
+
+<WildcardMatchingDP topic="Dynamic Programming" subTopic="Wildcard Matching" />
 
 ---
