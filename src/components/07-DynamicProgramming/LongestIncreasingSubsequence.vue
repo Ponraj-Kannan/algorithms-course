@@ -37,10 +37,10 @@ const CODES = {
       ['',             '    }'],
       ['',             ''],
       ['',             '    public static void main(String[] args) {'],
-      ['m_scanner',    '        Scanner sc = new Scanner(System.in);'],
-      ['m_read_arr',   '        int n = sc.nextInt();'],
-      ['',             '        int[] arr = new int[n];'],
-      ['',             '        for (int i = 0; i < n; i++) {'],
+      ['',             '        Scanner sc = new Scanner(System.in);'],
+      ['m_read_n',     '        int n = sc.nextInt();'],
+      ['m_alloc_arr',  '        int[] arr = new int[n];'],
+      ['m_read_arr',   '        for (int i = 0; i < n; i++) {'],
       ['',             '            arr[i] = sc.nextInt();'],
       ['',             '        }'],
       ['m_call_lis',   '        int ans = lis(arr, 0, -1);'],
@@ -50,6 +50,7 @@ const CODES = {
     ],
     c: [
       ['',             '#include <stdio.h>'],
+      ['',             '#include <stdlib.h>'],
       ['',             '#define MAX(a, b) ((a) > (b) ? (a) : (b))'],
       ['',             ''],
       ['c_entry',      'int lis(int arr[], int n, int i, int prevIdx) {'],
@@ -65,12 +66,9 @@ const CODES = {
       ['',             '}'],
       ['',             ''],
       ['',             'int main() {'],
-      ['m_read_arr',   '    int n;'],
-      ['',             '    if (scanf("%d", &n) != 1) {'],
-      ['',             '        return 0;'],
-      ['',             '    }'],
-      ['',             '    int arr[n];'],
-      ['',             '    for (int i = 0; i < n; i++) {'],
+      ['m_read_n',     '    int n; scanf("%d", &n);'],
+      ['m_alloc_arr',  '    int arr[n];'],
+      ['m_read_arr',   '    for (int i = 0; i < n; i++) {'],
       ['',             '        scanf("%d", &arr[i]);'],
       ['',             '    }'],
       ['m_call_lis',   '    int ans = lis(arr, n, 0, -1);'],
@@ -97,12 +95,9 @@ const CODES = {
       ['',             '}'],
       ['',             ''],
       ['',             'int main() {'],
-      ['m_read_arr',   '    int n;'],
-      ['',             '    if (!(cin >> n)) {'],
-      ['',             '        return 0;'],
-      ['',             '    }'],
-      ['',             '    vector<int> arr(n);'],
-      ['',             '    for (int i = 0; i < n; i++) {'],
+      ['m_read_n',     '    int n; cin >> n;'],
+      ['m_alloc_arr',  '    vector<int> arr(n);'],
+      ['m_read_arr',   '    for (int i = 0; i < n; i++) {'],
       ['',             '        cin >> arr[i];'],
       ['',             '    }'],
       ['m_call_lis',   '    int ans = lis(arr, 0, -1);'],
@@ -123,11 +118,10 @@ const CODES = {
       ['c_ret_max',    '    return max(take, not_take)'],
       ['',             ''],
       ['',             'if __name__ == "__main__":'],
-      ['m_read_arr',   '    lines = sys.stdin.read().split()'],
-      ['',             '    if not lines:'],
-      ['',             '        sys.exit(0)'],
-      ['',             '    n = int(lines[0])'],
-      ['',             '    arr = [int(x) for x in lines[1:n + 1]]'],
+      ['',             '    tokens = sys.stdin.read().split()'],
+      ['m_read_n',     '    n = int(tokens[0])'],
+      ['m_alloc_arr',  '    arr = [0] * n'],
+      ['m_read_arr',   '    for i in range(n): arr[i] = int(tokens[i + 1])'],
       ['m_call_lis',   '    ans = lis(arr, 0, -1)'],
       ['m_print',      '    print(ans)'],
       ['m_done',       '    sys.exit(0)']
@@ -147,9 +141,10 @@ const CODES = {
       ['c_ret_max',    '    return Math.max(take, notTake);'],
       ['',             '}'],
       ['',             ''],
-      ['m_read_arr',   'const input = fs.readFileSync(0, "utf-8").trim().split(/\\s+/);'],
-      ['',             'const n = parseInt(input[0], 10);'],
-      ['',             'const arr = input.slice(1, n + 1).map(Number);'],
+      ['',             'const tokens = fs.readFileSync(0, "utf-8").trim().split(/\\s+/);'],
+      ['m_read_n',     'const n = parseInt(tokens[0], 10);'],
+      ['m_alloc_arr',  'const arr = new Array(n);'],
+      ['m_read_arr',   'for (let i = 0; i < n; i++) { arr[i] = parseInt(tokens[i + 1], 10); }'],
       ['m_call_lis',   'const ans = lis(arr, 0, -1);'],
       ['m_print',      'console.log(ans);'],
       ['m_done',       'process.exit(0);']
@@ -178,10 +173,10 @@ const CODES = {
       ['',             '    }'],
       ['',             ''],
       ['',             '    public static void main(String[] args) {'],
-      ['m_scanner',    '        Scanner sc = new Scanner(System.in);'],
-      ['m_read_arr',   '        int n = sc.nextInt();'],
-      ['',             '        int[] arr = new int[n];'],
-      ['',             '        for (int i = 0; i < n; i++) {'],
+      ['',             '        Scanner sc = new Scanner(System.in);'],
+      ['m_read_n',     '        int n = sc.nextInt();'],
+      ['m_alloc_arr',  '        int[] arr = new int[n];'],
+      ['m_read_arr',   '        for (int i = 0; i < n; i++) {'],
       ['',             '            arr[i] = sc.nextInt();'],
       ['',             '        }'],
       ['m_alloc_memo', '        int[][] memo = new int[n + 1][n + 1];'],
@@ -195,10 +190,11 @@ const CODES = {
     ],
     c: [
       ['',             '#include <stdio.h>'],
+      ['',             '#include <stdlib.h>'],
       ['',             '#include <string.h>'],
       ['',             '#define MAX(a, b) ((a) > (b) ? (a) : (b))'],
       ['',             ''],
-      ['c_entry',      'int solve(int arr[], int n, int i, int prevIdx, int memo[n + 1][n + 1]) {'],
+      ['c_entry',      'int solve(int arr[], int n, int i, int prevIdx, int memo[100][100]) {'],
       ['c_base',       '    if (i == n) {'],
       ['c_base_ret',   '        return 0;'],
       ['',             '    }'],
@@ -215,15 +211,12 @@ const CODES = {
       ['',             '}'],
       ['',             ''],
       ['',             'int main() {'],
-      ['m_read_arr',   '    int n;'],
-      ['',             '    if (scanf("%d", &n) != 1) {'],
-      ['',             '        return 0;'],
-      ['',             '    }'],
-      ['',             '    int arr[n];'],
-      ['',             '    for (int i = 0; i < n; i++) {'],
+      ['m_read_n',     '    int n; scanf("%d", &n);'],
+      ['m_alloc_arr',  '    int arr[n];'],
+      ['m_read_arr',   '    for (int i = 0; i < n; i++) {'],
       ['',             '        scanf("%d", &arr[i]);'],
       ['',             '    }'],
-      ['m_alloc_memo', '    int memo[n + 1][n + 1];'],
+      ['m_alloc_memo', '    int memo[100][100];'],
       ['m_fill_memo',  '    memset(memo, -1, sizeof(memo));'],
       ['m_call_lis',   '    int ans = solve(arr, n, 0, -1, memo);'],
       ['m_print',      '    printf("%d\\n", ans);'],
@@ -253,18 +246,13 @@ const CODES = {
       ['',             '}'],
       ['',             ''],
       ['',             'int main() {'],
-      ['m_read_arr',   '    int n;'],
-      ['',             '    if (!(cin >> n)) {'],
-      ['',             '        return 0;'],
-      ['',             '    }'],
-      ['',             '    vector<int> arr(n);'],
-      ['',             '    for (int i = 0; i < n; i++) {'],
+      ['m_read_n',     '    int n; cin >> n;'],
+      ['m_alloc_arr',  '    vector<int> arr(n);'],
+      ['m_read_arr',   '    for (int i = 0; i < n; i++) {'],
       ['',             '        cin >> arr[i];'],
       ['',             '    }'],
-      ['m_alloc_memo', '    vector<vector<int>> memo(n + 1, vector<int>(n + 1));'],
-      ['m_fill_memo',  '    for (auto& row : memo) {'],
-      ['',             '        fill(row.begin(), row.end(), -1);'],
-      ['',             '    }'],
+      ['m_alloc_memo', '    int memoSize = n + 1;'],
+      ['m_fill_memo',  '    vector<vector<int>> memo(memoSize, vector<int>(memoSize, -1));'],
       ['m_call_lis',   '    int ans = solve(arr, 0, -1, memo);'],
       ['m_print',      '    cout << ans << endl;'],
       ['m_done',       '    return 0;'],
@@ -286,13 +274,12 @@ const CODES = {
       ['c_ret_memo',   '    return memo[i][prev_idx + 1]'],
       ['',             ''],
       ['',             'if __name__ == "__main__":'],
-      ['m_read_arr',   '    lines = sys.stdin.read().split()'],
-      ['',             '    if not lines:'],
-      ['',             '        sys.exit(0)'],
-      ['',             '    n = int(lines[0])'],
-      ['',             '    arr = [int(x) for x in lines[1:n + 1]]'],
-      ['m_alloc_memo', '    memo = [[-1] * (n + 1) for _ in range(n + 1)]'],
-      ['m_fill_memo',  '    # cache filled with -1 sentinel values'],
+      ['',             '    tokens = sys.stdin.read().split()'],
+      ['m_read_n',     '    n = int(tokens[0])'],
+      ['m_alloc_arr',  '    arr = [0] * n'],
+      ['m_read_arr',   '    for i in range(n): arr[i] = int(tokens[i + 1])'],
+      ['m_alloc_memo', '    memo_dim = n + 1'],
+      ['m_fill_memo',  '    memo = [[-1] * (n + 1) for _ in range(n + 1)]'],
       ['m_call_lis',   '    ans = solve(arr, 0, -1, memo)'],
       ['m_print',      '    print(ans)'],
       ['m_done',       '    sys.exit(0)']
@@ -316,11 +303,12 @@ const CODES = {
       ['c_ret_memo',   '    return memo[i][prevIdx + 1];'],
       ['',             '}'],
       ['',             ''],
-      ['m_read_arr',   'const input = fs.readFileSync(0, "utf-8").trim().split(/\\s+/);'],
-      ['',             'const n = parseInt(input[0], 10);'],
-      ['',             'const arr = input.slice(1, n + 1).map(Number);'],
-      ['m_alloc_memo', 'const memo = Array.from({ length: n + 1 }, () => new Array(n + 1));'],
-      ['m_fill_memo',  'memo.forEach(row => row.fill(-1));'],
+      ['',             'const tokens = fs.readFileSync(0, "utf-8").trim().split(/\\s+/);'],
+      ['m_read_n',     'const n = parseInt(tokens[0], 10);'],
+      ['m_alloc_arr',  'const arr = new Array(n);'],
+      ['m_read_arr',   'for (let i = 0; i < n; i++) { arr[i] = parseInt(tokens[i + 1], 10); }'],
+      ['m_alloc_memo', 'const memoDim = n + 1;'],
+      ['m_fill_memo',  'const memo = Array.from({ length: n + 1 }, () => new Array(n + 1).fill(-1));'],
       ['m_call_lis',   'const ans = solve(arr, 0, -1, memo);'],
       ['m_print',      'console.log(ans);'],
       ['m_done',       'process.exit(0);']
@@ -352,10 +340,10 @@ const CODES = {
       ['',             '    }'],
       ['',             ''],
       ['',             '    public static void main(String[] args) {'],
-      ['m_scanner',    '        Scanner sc = new Scanner(System.in);'],
-      ['m_read_arr',   '        int n = sc.nextInt();'],
-      ['',             '        int[] arr = new int[n];'],
-      ['',             '        for (int i = 0; i < n; i++) {'],
+      ['',             '        Scanner sc = new Scanner(System.in);'],
+      ['m_read_n',     '        int n = sc.nextInt();'],
+      ['m_alloc_arr',  '        int[] arr = new int[n];'],
+      ['m_read_arr',   '        for (int i = 0; i < n; i++) {'],
       ['',             '            arr[i] = sc.nextInt();'],
       ['',             '        }'],
       ['m_call_lis',   '        int ans = lengthOfLIS(arr);'],
@@ -389,12 +377,9 @@ const CODES = {
       ['',             '}'],
       ['',             ''],
       ['',             'int main() {'],
-      ['m_read_arr',   '    int n;'],
-      ['',             '    if (scanf("%d", &n) != 1) {'],
-      ['',             '        return 0;'],
-      ['',             '    }'],
-      ['',             '    int arr[n];'],
-      ['',             '    for (int i = 0; i < n; i++) {'],
+      ['m_read_n',     '    int n; scanf("%d", &n);'],
+      ['m_alloc_arr',  '    int arr[n];'],
+      ['m_read_arr',   '    for (int i = 0; i < n; i++) {'],
       ['',             '        scanf("%d", &arr[i]);'],
       ['',             '    }'],
       ['m_call_lis',   '    int ans = lengthOfLIS(arr, n);'],
@@ -428,12 +413,9 @@ const CODES = {
       ['',             '}'],
       ['',             ''],
       ['',             'int main() {'],
-      ['m_read_arr',   '    int n;'],
-      ['',             '    if (!(cin >> n)) {'],
-      ['',             '        return 0;'],
-      ['',             '    }'],
-      ['',             '    vector<int> arr(n);'],
-      ['',             '    for (int i = 0; i < n; i++) {'],
+      ['m_read_n',     '    int n; cin >> n;'],
+      ['m_alloc_arr',  '    vector<int> arr(n);'],
+      ['m_read_arr',   '    for (int i = 0; i < n; i++) {'],
       ['',             '        cin >> arr[i];'],
       ['',             '    }'],
       ['m_call_lis',   '    int ans = lengthOfLIS(arr);'],
@@ -459,11 +441,10 @@ const CODES = {
       ['c_ret_dp',     '    return max_lis'],
       ['',             ''],
       ['',             'if __name__ == "__main__":'],
-      ['m_read_arr',   '    lines = sys.stdin.read().split()'],
-      ['',             '    if not lines:'],
-      ['',             '        sys.exit(0)'],
-      ['',             '    n = int(lines[0])'],
-      ['',             '    arr = [int(x) for x in lines[1:n + 1]]'],
+      ['',             '    tokens = sys.stdin.read().split()'],
+      ['m_read_n',     '    n = int(tokens[0])'],
+      ['m_alloc_arr',  '    arr = [0] * n'],
+      ['m_read_arr',   '    for i in range(n): arr[i] = int(tokens[i + 1])'],
       ['m_call_lis',   '    ans = length_of_lis(arr)'],
       ['m_print',      '    print(ans)'],
       ['m_done',       '    sys.exit(0)']
@@ -490,9 +471,10 @@ const CODES = {
       ['c_ret_dp',     '    return maxLIS;'],
       ['',             '}'],
       ['',             ''],
-      ['m_read_arr',   'const input = fs.readFileSync(0, "utf-8").trim().split(/\\s+/);'],
-      ['',             'const n = parseInt(input[0], 10);'],
-      ['',             'const arr = input.slice(1, n + 1).map(Number);'],
+      ['',             'const tokens = fs.readFileSync(0, "utf-8").trim().split(/\\s+/);'],
+      ['m_read_n',     'const n = parseInt(tokens[0], 10);'],
+      ['m_alloc_arr',  'const arr = new Array(n);'],
+      ['m_read_arr',   'for (let i = 0; i < n; i++) { arr[i] = parseInt(tokens[i + 1], 10); }'],
       ['m_call_lis',   'const ans = lengthOfLIS(arr);'],
       ['m_print',      'console.log(ans);'],
       ['m_done',       'process.exit(0);']
@@ -712,10 +694,46 @@ function buildSteps(approach, rawArr) {
       }));
     }
 
-    // Step 0: Read array
+    // Step: Read n
+    steps.push({
+      code: 'm_read_n',
+      badge: `Read n = ${n}`,
+      badgeType: 'info',
+      state: {
+        arr, n,
+        totalCalls: 0,
+        treeNodes: [],
+        treeEdges: [],
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height,
+        activeNodeId: null,
+        currentReturn: null,
+        frames: []
+      }
+    });
+
+    // Step: Allocate array
+    steps.push({
+      code: 'm_alloc_arr',
+      badge: `Allocate array of size n = ${n}`,
+      badgeType: 'info',
+      state: {
+        arr, n,
+        totalCalls: 0,
+        treeNodes: [],
+        treeEdges: [],
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height,
+        activeNodeId: null,
+        currentReturn: null,
+        frames: []
+      }
+    });
+
+    // Step: Read array
     steps.push({
       code: 'm_read_arr',
-      badge: `Input Array: [${arr.join(', ')}] (n=${n})`,
+      badge: `Read array elements: [${arr.join(', ')}] (n=${n})`,
       badgeType: 'info',
       state: {
         arr, n,
@@ -1007,7 +1025,47 @@ function buildSteps(approach, rawArr) {
       }));
     }
 
-    // Step 0: Input read
+    // Step: Read n
+    steps.push({
+      code: 'm_read_n',
+      badge: `Read n = ${n}`,
+      badgeType: 'info',
+      state: {
+        arr, n,
+        totalCalls: 0,
+        cacheHits: 0,
+        treeNodes: [],
+        treeEdges: [],
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height,
+        activeNodeId: null,
+        currentReturn: null,
+        memo: zeroMemo.map(r => [...r]),
+        frames: [{ name: 'main()', args: `n=${n}` }]
+      }
+    });
+
+    // Step: Allocate array
+    steps.push({
+      code: 'm_alloc_arr',
+      badge: `Allocate array of size n = ${n}`,
+      badgeType: 'info',
+      state: {
+        arr, n,
+        totalCalls: 0,
+        cacheHits: 0,
+        treeNodes: [],
+        treeEdges: [],
+        treeWidth: staticTree.width,
+        treeHeight: staticTree.height,
+        activeNodeId: null,
+        currentReturn: null,
+        memo: zeroMemo.map(r => [...r]),
+        frames: [{ name: 'main()', args: `n=${n}` }]
+      }
+    });
+
+    // Step: Read array elements
     steps.push({
       code: 'm_read_arr',
       badge: `Input Array: [${arr.join(', ')}] (n=${n}). Starting Top-Down DP with 2D Memoization.`,
@@ -1410,7 +1468,31 @@ function buildSteps(approach, rawArr) {
       }));
     }
 
-    // Step 0: Input read
+    // Step: Read n
+    steps.push({
+      code: 'm_read_n',
+      badge: `Read n = ${n}`,
+      badgeType: 'info',
+      state: {
+        arr, n, i: -1, j: -1, maxLIS: 1,
+        dpCells: getDPCells(),
+        frames: [{ name: 'main()', args: `n=${n}` }]
+      }
+    });
+
+    // Step: Allocate array
+    steps.push({
+      code: 'm_alloc_arr',
+      badge: `Allocate array of size n = ${n}`,
+      badgeType: 'info',
+      state: {
+        arr, n, i: -1, j: -1, maxLIS: 1,
+        dpCells: getDPCells(),
+        frames: [{ name: 'main()', args: `n=${n}` }]
+      }
+    });
+
+    // Step: Read array elements
     steps.push({
       code: 'm_read_arr',
       badge: `Input Array: [${arr.join(', ')}] (n=${n}). Starting Bottom-Up 1D DP Tabulation.`,
@@ -1646,6 +1728,7 @@ function buildSteps(approach, rawArr) {
 /* REACTIVE STATE & CONTROLS                                            */
 /* ==================================================================== */
 const currentApproach = ref('recursion');
+const inputN = ref(8);
 const inputArrText = ref('10, 9, 2, 5, 3, 7, 101, 18');
 const lang = ref('java');
 const speed = ref(650);
@@ -1676,6 +1759,13 @@ function parseInputArray(text) {
     .filter(x => !isNaN(x));
 }
 
+watch(inputArrText, (newVal) => {
+  const parsed = parseInputArray(newVal);
+  if (parsed.length > 0) {
+    inputN.value = parsed.length;
+  }
+});
+
 const maxAllowedLength = computed(() => {
   return currentApproach.value === 'tabulation' ? 8 : 5;
 });
@@ -1701,7 +1791,12 @@ let playTimer = null;
 function applyApproach(newApproach) {
   currentApproach.value = newApproach;
   const maxLen = newApproach === 'tabulation' ? 8 : 5;
-  const arr = parseInputArray(inputArrText.value);
+  const parsed = parseInputArray(inputArrText.value);
+  let nVal = parseInt(inputN.value, 10);
+  if (isNaN(nVal) || nVal < 0) {
+    nVal = parsed.length;
+  }
+  let arr = parsed.slice(0, nVal);
 
   if (arr.length > maxLen) {
     requestedLength.value = arr.length;
@@ -1710,6 +1805,8 @@ function applyApproach(newApproach) {
     warningModalTitle.value = `${appName} Limit (Max: ${maxLen})`;
     warningModalMsg.value = `Input array has ${arr.length} elements, which exceeds the maximum limit of ${maxLen} for ${appName}. Array will be capped at the first ${maxLen} elements to preserve layout clarity.`;
     showWarningModal.value = true;
+    arr = arr.slice(0, maxLen);
+    inputN.value = arr.length;
   }
 
   playing.value = false;
@@ -1719,7 +1816,18 @@ function applyApproach(newApproach) {
 
 function applyInput() {
   const maxLen = maxAllowedLength.value;
-  const arr = parseInputArray(inputArrText.value);
+  const parsed = parseInputArray(inputArrText.value);
+  let nVal = parseInt(inputN.value, 10);
+  if (isNaN(nVal) || nVal < 0) {
+    nVal = parsed.length;
+    inputN.value = nVal;
+  }
+
+  let arr = parsed.slice(0, nVal);
+  if (arr.length < nVal) {
+    nVal = arr.length;
+    inputN.value = nVal;
+  }
 
   if (arr.length > maxLen) {
     requestedLength.value = arr.length;
@@ -1728,6 +1836,9 @@ function applyInput() {
     warningModalTitle.value = `${appName} Limit (Max: ${maxLen})`;
     warningModalMsg.value = `Input array has ${arr.length} elements, exceeding maximum limit of ${maxLen}. Processing has been capped at the first ${maxLen} elements.`;
     showWarningModal.value = true;
+    arr = arr.slice(0, maxLen);
+    nVal = arr.length;
+    inputN.value = nVal;
   }
 
   playing.value = false;
@@ -1875,7 +1986,21 @@ onUnmounted(() => {
               </button>
             </div>
 
-            <!-- Custom Input Text -->
+            <!-- Custom Input Text: n -->
+            <div class="ll-input-group">
+              <label>n =</label>
+              <input
+                type="number"
+                v-model.number="inputN"
+                class="ll-text-input ll-n-input"
+                placeholder="8"
+                min="0"
+                :max="maxAllowedLength"
+                @keyup.enter="applyInput"
+              />
+            </div>
+
+            <!-- Custom Input Text: arr -->
             <div class="ll-input-group">
               <label>arr =</label>
               <input
@@ -1885,7 +2010,7 @@ onUnmounted(() => {
                 placeholder="10, 9, 2, 5, 3, 7, 101, 18"
                 @keyup.enter="applyInput"
               />
-              <span class="ll-input-hint">(max {{ maxAllowedLength }} items)</span>
+              <span class="ll-input-hint">(max {{ maxAllowedLength }})</span>
             </div>
 
             <button class="ll-viz-btn" @click="applyInput">&#9654; Visualize</button>
@@ -2190,7 +2315,7 @@ onUnmounted(() => {
                     :key="i"
                     class="ll-codeline"
                     :class="{ 'll-hl': line[0] && line[0] === s.code }"
-                  >{{ line[1] === '' ? ' ' : line[1] }}</span></pre>
+                  >{{ (line[1] !== undefined ? line[1] : line[0]) === '' ? ' ' : (line[1] !== undefined ? line[1] : line[0]) }}</span></pre>
                 </div>
 
                 <!-- Pseudocode Tab -->
@@ -2365,6 +2490,7 @@ onUnmounted(() => {
 .ll-input-group label { font-size: 11px; color: var(--muted); font-weight: 700; }
 .ll-text-input { background: var(--surface); border: 1px solid var(--border2); color: var(--text); border-radius: var(--radius-sm); padding: 3px 6px; font-size: 11px; font-family: monospace; width: 140px; }
 .ll-text-input:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px rgba(240,77,77,.1); }
+.ll-n-input { width: 44px !important; text-align: center; }
 .ll-input-hint { font-size: 10px; color: var(--muted); }
 
 .ll-viz-btn { background: var(--coral); color: #fff; border: none; padding: 5px 12px; border-radius: var(--radius-sm); cursor: pointer; font-size: 11.5px; font-weight: 600; box-shadow: var(--shadow-sm); transition: filter .15s; }
@@ -2521,25 +2647,164 @@ onUnmounted(() => {
 .ll-speed-wrap { display: flex; align-items: center; gap: 6px; }
 .ll-speed-wrap input { width: 80px; accent-color: var(--coral); }
 
-/* Warning Modal */
-.ll-modal-backdrop { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(3px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 16px; }
-.ll-modal-card { background: #ffffff; width: 100%; max-width: 440px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); overflow: hidden; border: 1px solid var(--border); animation: ll-pop 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
-.ll-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: #fff7ed; border-bottom: 1px solid #ffedd5; }
-.ll-modal-title-wrap { display: flex; align-items: center; gap: 10px; }
-.ll-modal-icon-badge { width: 32px; height: 32px; border-radius: 50%; background: #ffedd5; color: #c2410c; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.ll-modal-svg-icon { width: 18px; height: 18px; }
-.ll-modal-title { font-size: 14px; font-weight: 700; color: #9a3412; }
-.ll-modal-close-btn { background: transparent; border: none; font-size: 20px; color: #9a3412; cursor: pointer; padding: 0; line-height: 1; }
-.ll-modal-body { padding: 18px; color: var(--text2); font-size: 12.5px; line-height: 1.5; }
-.ll-modal-badge-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-.ll-modal-tag-entered { background: #fef2f2; color: #dc2626; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; font-family: monospace; }
-.ll-modal-arrow { color: var(--muted); font-weight: 700; }
-.ll-modal-tag-applied { background: #f0fdf4; color: #16a34a; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; font-family: monospace; }
-.ll-modal-message { margin: 0; color: var(--text); }
-.ll-modal-footer { padding: 12px 18px; background: var(--surface2); border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
-.ll-modal-confirm-btn { background: var(--coral); color: #ffffff; border: none; padding: 7px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: filter 0.15s; }
-.ll-modal-confirm-btn:hover { filter: brightness(1.08); }
+/* ==================================================================== */
+/* WARNING POPUP MODAL STYLING                                          */
+/* ==================================================================== */
+.ll-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
 
-.ll-modal-fade-enter-active, .ll-modal-fade-leave-active { transition: opacity 0.2s ease; }
-.ll-modal-fade-enter-from, .ll-modal-fade-leave-to { opacity: 0; }
+.ll-modal-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #fee2e2;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  width: 440px;
+  max-width: 92vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: ll-pop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ll-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #fff5f5;
+  border-bottom: 1px solid #fee2e2;
+}
+
+.ll-modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ll-modal-icon-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fee2e2;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ll-modal-svg-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.ll-modal-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #991b1b;
+}
+
+.ll-modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.ll-modal-close-btn:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.ll-modal-body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ll-modal-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.ll-modal-tag-entered {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+.ll-modal-arrow {
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.ll-modal-tag-applied {
+  background: #dcfce7;
+  color: #16a34a;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+.ll-modal-message {
+  font-size: 12px;
+  line-height: 1.55;
+  color: #334155;
+  margin: 0;
+}
+
+.ll-modal-footer {
+  padding: 10px 16px 14px;
+  display: flex;
+  justify-content: flex-end;
+  background: #fafafa;
+  border-top: 1px solid #f1f5f9;
+}
+
+.ll-modal-confirm-btn {
+  background: #ef5050;
+  color: #ffffff;
+  border: none;
+  padding: 7px 18px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.ll-modal-confirm-btn:hover {
+  filter: brightness(1.08);
+}
+
+.ll-modal-fade-enter-active, .ll-modal-fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.ll-modal-fade-enter-from, .ll-modal-fade-leave-to {
+  opacity: 0;
+}
 </style>
