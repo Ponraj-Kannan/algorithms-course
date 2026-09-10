@@ -2224,7 +2224,7 @@ onUnmounted(() => {
   --radius: 8px; --radius-sm: 6px;
   background: var(--bg); color: var(--text);
   font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12.5px;
-  display: flex; flex-direction: column; height: 50vh; min-height: 600px; overflow: hidden; width: 100%;
+  display: flex; flex-direction: column; height: 75vh; min-height: 600px; overflow: hidden; width: 100%;
 }
 
 @keyframes ll-pop { from { transform: scale(.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -2267,7 +2267,7 @@ onUnmounted(() => {
 .ll-left-col { display: flex; flex-direction: column; overflow: hidden; min-width: 220px; max-width: 75%; }
 .ll-resizer { width: 5px; cursor: col-resize; background: var(--border); flex-shrink: 0; transition: background .15s; position: relative; z-index: 20; }
 .ll-resizer:hover, .ll-resizer.drag { background: var(--coral); }
-.ll-right-col { display: flex; flex-direction: column; flex: 1; overflow: hidden; min-width: 0; }
+.ll-right-col { display: flex; flex-direction: column; flex: 1; overflow: hidden; min-width: 0;}
 
 /* Top Items / Houses Banner */
 .ll-house-banner { padding: 4px 10px; background: var(--surface2); border-bottom: 1px solid var(--border); flex-shrink: 0; }
@@ -2411,7 +2411,7 @@ onUnmounted(() => {
 .ll-badge-success { border-left-color: var(--green); background: var(--green-light); color: #166534; font-weight: 600; }
 
 /* Right Column: Code & Theory */
-.ll-code-panel { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+.ll-code-panel { display: flex; flex-direction: column; height: 100%; overflow: hidden; max-height: 75%;}
 .ll-code-header { display: flex; align-items: center; gap: 6px; padding: 5px 12px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; box-shadow: var(--shadow-sm); flex-wrap: wrap; }
 .ll-tabbar { display: flex; gap: 3px; flex-wrap: wrap; }
 .ll-tab-btn { background: var(--surface2); border: 1px solid var(--border2); color: var(--text2); padding: 4px 9px; border-radius: var(--radius-sm); cursor: pointer; font-size: 10.5px; font-weight: 600; transition: all .15s; white-space: nowrap; }
@@ -2421,11 +2421,11 @@ onUnmounted(() => {
 .ll-lang-select:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px rgba(240,77,77,.1); }
 
 .ll-code-scroll { flex: 1; overflow: auto; padding: 10px 14px; background: #f8fafc; min-width: 0; }
-.ll-pre { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 11px; line-height: 1.5; white-space: pre; color: var(--text); margin: 0; }
+.ll-pre { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 11px; line-height: 1.5; white-space: pre; color: var(--text); margin: 0; min-height: 500px;}
 .ll-codeline { display: block; padding: 0 14px; margin: 0 -14px; }
 .ll-hl { background: #dcfce7; color: #15803d; border-radius: 3px; border-left: 3px solid var(--green); font-weight: 600; }
 
-.ll-info-scroll { flex: 1; overflow: auto; padding: 12px 16px; background: var(--surface); color: var(--text2); font-size: 12px; line-height: 1.55; }
+.ll-info-scroll { flex: 1; overflow: auto; padding: 12px 16px; background: var(--surface); color: var(--text2); font-size: 12px; padding-bottom:100px;}
 .ll-info-scroll h3 { margin: 0 0 6px; color: var(--text); font-size: 13px; font-weight: 700; }
 .ll-info-scroll h3:not(:first-child) { margin-top: 14px; }
 .ll-info-scroll p { margin: 0 0 6px; }

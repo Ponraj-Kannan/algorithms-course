@@ -1729,7 +1729,7 @@ onBeforeUnmount(() => {
 .ll-left-col { display: flex; flex-direction: column; overflow: hidden; min-width: 220px; max-width: 75%; }
 .ll-resizer { width: 5px; cursor: col-resize; background: var(--border); flex-shrink: 0; transition: background .15s; position: relative; z-index: 20; }
 .ll-resizer:hover, .ll-resizer.drag { background: var(--coral); }
-.ll-right-col { display: flex; flex-direction: column; flex: 1; overflow: hidden; min-width: 0; }
+.ll-right-col { display: flex; flex-direction: column; flex: 1; overflow: hidden; min-width: 0; height: 78%; }
 
 .ll-viz-wrap { flex-shrink: 0; background: var(--surface); border-bottom: 1px solid var(--border); position: relative; overflow-x: auto; overflow-y: auto; }
 .ll-perm-area { display: flex; flex-direction: column; align-items: stretch; min-height: 100%; width: 100%; min-width: 0; box-sizing: border-box; }
@@ -1879,7 +1879,7 @@ onBeforeUnmount(() => {
 .ll-codeline { display: block; padding: 0 14px; margin: 0 -14px; }
 .ll-hl { background: #dcfce7; color: #15803d; border-radius: 3px; border-left: 3px solid var(--green); font-weight: 600; }
 
-.ll-info-scroll { flex: 1; overflow: auto; padding: 12px 16px; background: var(--surface); color: var(--text2); font-size: 12px; line-height: 1.55; }
+.ll-info-scroll { flex: 1; overflow: auto; padding: 12px 16px; background: var(--surface); color: var(--text2); font-size: 12px; padding-bottom:100px;}
 .ll-info-scroll h3 { margin: 0 0 6px; color: var(--text); font-size: 13px; font-weight: 700; }
 .ll-info-scroll h3:not(:first-child) { margin-top: 14px; }
 .ll-info-scroll p { margin: 0 0 6px; }
