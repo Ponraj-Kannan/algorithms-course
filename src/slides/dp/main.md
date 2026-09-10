@@ -1,7 +1,3 @@
-<FibonacciRecursionVsDP topic="Dynamic Programming" subTopic="Fibonacci Recursion Vs DP" />
-
----
-
 <ClimbingStairs topic="Dynamic Programming" subTopic="Climbing Stairs Problem" />
 
 ---
@@ -42,10 +38,10 @@
 
 ---
 
-<CoinChange2DP topic="Dynamic Programming" subTopic="Coin Change II (Number of Ways)" />
+<CoinChange2DP topic="Dynamic Programming" subTopic="Coin Change II" />
 
 ---
 
-<MinimumPathSumDP topic="Dynamic Programming" subTopic="Minimum Path Sum (LeetCode 64)" />
+<MinimumPathSumDP topic="Dynamic Programming" subTopic="Minimum Path Sum" />
 
 ---
