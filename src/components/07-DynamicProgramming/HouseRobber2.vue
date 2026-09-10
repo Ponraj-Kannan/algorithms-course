@@ -2500,7 +2500,7 @@ onUnmounted(() => {
 .ll-lang-select:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px rgba(240,77,77,.1); }
 
 .ll-code-scroll { flex: 1; overflow: auto; padding: 10px 14px; background: #f8fafc; min-width: 0; }
-.ll-pre { font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-size: 11px; line-height: 1.5; white-space: pre; color: var(--text); margin: 0; min-height: 750px;}
+.ll-pre { font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-size: 11px; line-height: 1.5; white-space: pre; color: var(--text); margin: 0; min-height: 800px;}
 .ll-codeline { display: block; padding: 0 14px; margin: 0 -14px; }
 .ll-hl { background: #dcfce7; color: #15803d; border-radius: 3px; border-left: 3px solid var(--green); font-weight: 600; }
 
