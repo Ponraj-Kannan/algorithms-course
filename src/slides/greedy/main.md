@@ -3,7 +3,7 @@
     <GreedyVsBFS topic="Greedy Algorithms" subTopic="Greedy vs BFS" />
   </template>
 </Slide2>
-      
+
 ---
 
 <ActivitySelectionProblem topic="Greedy Algorithms" subTopic="Activity Selection Problem" />
@@ -35,3 +35,7 @@
 ---
 
 <CandyProblem topic="Greedy Algorithms" subTopic="Candy Problem" />
+
+---
+
+<NQueens topic="Backtracking Algorithms" subTopic="N-Queens"/>
