@@ -2651,122 +2651,130 @@ const TIME_SCALE = computed(() => {
   color: #15803d !important;
 }
 
-/* Right Column Code Panel */
+/* Right Column: Code Panel */
 .ll-code-panel {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: var(--surface);
   overflow: hidden;
 }
 
 .ll-code-header {
   display: flex;
   align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
-  background: var(--surface2);
-  padding: 0 8px;
+  box-shadow: var(--shadow-sm);
   flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .ll-tabbar {
   display: flex;
-  gap: 2px;
+  gap: 3px;
+  flex-wrap: wrap;
 }
 
 .ll-tab-btn {
-  background: transparent;
-  border: none;
-  padding: 5px 10px;
-  font-size: 11px;
+  padding: 4px 9px;
+  font-size: 10.5px;
   font-weight: 600;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
   color: var(--text2);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all .15s;
+  transition: all .15s ease;
+  white-space: nowrap;
 }
-
-.ll-tab-btn:hover {
-  color: var(--coral);
-}
-
+.ll-tab-btn:hover { border-color: var(--coral); color: var(--coral); }
 .ll-tab-btn.active {
-  color: var(--coral);
-  border-bottom-color: var(--coral);
-  background: var(--surface);
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #fff;
 }
 
 .ll-lang-select {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  color: var(--text);
-  padding: 2px 8px;
-  border-radius: var(--radius-sm);
-  font-size: 10.5px;
-  font-weight: 600;
   margin-left: auto;
+  padding: 4px 24px 4px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  color: var(--text);
   cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2394a3b8'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  min-width: 95px;
+  transition: border-color .15s;
+}
+.ll-lang-select:focus {
+  outline: none;
+  border-color: var(--coral);
+  box-shadow: 0 0 0 3px rgba(240,77,77,.1);
 }
 
 .ll-code-scroll {
   flex: 1;
   overflow: auto;
-  padding: 6px 10px;
-  background: #ffffff;
-  height: 100%;
-  padding-bottom: 30%;
+  background: #f8fafc;
+  padding: 10px 14px;
+  min-width: 0;
 }
 
 .ll-pre {
   margin: 0;
-  font-family: 'Consolas', 'Fira Code', monospace;
-  font-size: 10.5px;
-  line-height: 1.55;
-  color: #334155;
-  padding-bottom: 50px;
+  font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text);
+  white-space: pre;
+  padding-bottom: 150px;
 }
 
 .ll-codeline {
   display: block;
-  padding: 0 6px;
-  border-radius: 2px;
-  white-space: pre-wrap;
-  word-break: break-all;
+  padding: 0 14px;
+  margin: 0 -14px;
 }
 
 .ll-hl {
-  background: #dcfce7 !important;
-  color: #15803d !important;
-  font-weight: 700;
+  background: #dcfce7;
+  color: #15803d;
+  font-weight: 600;
   border-left: 3px solid var(--green);
-  padding-left: 3px;
+  border-radius: 3px;
 }
 
 /* Faculty Lecture & Proof Tab */
 .ll-info-scroll {
   flex: 1;
   overflow: auto;
-  padding: 10px 14px;
-  color: var(--text);
-  line-height: 1.6;
-}
-
-.ll-info-scroll h3 {
-  margin: 0 0 6px;
-  font-size: 13px;
-  color: var(--coral-dark);
-}
-
-.ll-info-scroll h4 {
-  margin: 10px 0 4px;
-  font-size: 11.5px;
-  color: var(--text);
-}
-
-.ll-info-scroll p, .ll-info-scroll ul {
-  font-size: 10.5px;
-  margin: 0 0 8px;
+  padding: 12px 16px;
+  background: var(--surface);
   color: var(--text2);
+  font-size: 12px;
+  line-height: 1.55;
+}
+.ll-info-scroll h3 { font-size: 13px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
+.ll-info-scroll h3:not(:first-child) { margin-top: 14px; }
+.ll-info-scroll h4 { font-size: 12px; font-weight: 700; color: var(--text); margin: 10px 0 4px; }
+.ll-info-scroll p { margin: 0 0 6px; }
+.ll-info-scroll ul { margin: 0 0 10px 16px; padding: 0; }
+.ll-info-scroll li { margin-bottom: 3px; }
+.ll-info-scroll code {
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  background: var(--surface2);
+  padding: 1px 4px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--coral-dark);
 }
 
 .ll-math-box {
