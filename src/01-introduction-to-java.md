@@ -17,7 +17,3 @@ src: ./slides/graph/main.md
 ---
 src: ./slides/dp/main.md
 ---
-
----
-src: ./slides/greedy/main.md
----
