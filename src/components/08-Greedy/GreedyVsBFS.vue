@@ -3,7 +3,7 @@
     <div class="wrap">
 
       <header class="page-header">
-        <h1>Why greedy best-first search wins the race</h1>
+        <!-- <h1>Why greedy best-first search wins the race</h1> -->
         <p class="subtitle">Both searches start from the same cell and chase the same goal. Watch how many cells each one has to check before it gets there — that difference is the whole argument.</p>
       </header>
 
@@ -508,10 +508,6 @@ function handleResetClick() {
   margin:0 auto;
   padding: 14px 18px 20px;
   height: 75vh;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(23,34,48,0.15) transparent;
-  padding-bottom: 130px;
 }
 
 /* ---------- Header ---------- */
