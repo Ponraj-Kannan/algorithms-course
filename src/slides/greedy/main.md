@@ -1,6 +1,9 @@
-
-<GreedyVsBFS topic="Greedy Algorithms" subTopic="Greedy vs BFS" />
-
+<Slide2 topic="Why Greedy ?">
+  <template #content>
+    <GreedyVsBFS topic="Greedy Algorithms" subTopic="Greedy vs BFS" />
+  </template>
+</Slide2>
+      
 ---
 
 <ActivitySelectionProblem topic="Greedy Algorithms" subTopic="Activity Selection Problem" />
