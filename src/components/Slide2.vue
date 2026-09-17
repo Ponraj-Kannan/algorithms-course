@@ -45,6 +45,7 @@ defineProps({
 
 .cont {
   background-color: #ef5050;
+  height: 140px;
 }
 
 .navbar {
@@ -57,6 +58,7 @@ defineProps({
   background-color: #ffffff;
   position: fixed;
   width: 94.7%;
+  z-index: 50;
 }
 
 .navbar > img {
@@ -65,15 +67,16 @@ defineProps({
 
 .navbar-title {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   background-color: #ef5050;
   color: #ffffff;
   width: 80%;
-  padding-left: 10px;
+  padding: 2px 10px;
   margin-left: -10px;
   border-radius: 5px;
 }
+
 .row-main {
   width: 100%;
   height: 90%;
