@@ -87,3 +87,11 @@
 ---
 
 <NQueens topic="Backtracking Algorithms" subTopic="N-Queens"/>
+
+---
+
+<RatInAMaze topic="Backtracking Algorithms" subTopic="Rat in a Maze" />
+
+---
+
+<WordSearch topic="Backtracking Algorithms" subTopic="Word Search" />
