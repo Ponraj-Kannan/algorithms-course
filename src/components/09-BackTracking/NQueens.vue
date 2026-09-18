@@ -962,12 +962,12 @@ onBeforeUnmount(() => {
               <div class="ll-viz-wrap" :style="{ height: vizHeight + 'px' }">
                 <div class="ll-perm-area">
                   <!-- Real-time Stats Chips -->
-                  <div class="ll-ptrs">
-                    <div class="ll-ptr-chip">N = <b class="ll-c-blue">{{ s.n || inputN }}</b></div>
-                    <div class="ll-ptr-chip">Row = <b class="ll-c-orange">{{ s.row !== undefined && s.row >= 0 ? s.row : '—' }}</b></div>
-                    <div class="ll-ptr-chip">Col = <b class="ll-c-purple">{{ s.col !== undefined && s.col >= 0 ? s.col : '—' }}</b></div>
-                    <div class="ll-ptr-chip">Queens Placed = <b class="ll-c-green">{{ s.placedCount || 0 }} / {{ s.n || inputN }}</b></div>
-                    <div class="ll-ptr-chip">Solutions = <b class="ll-c-green">{{ s.solCount || 0 }}</b></div>
+                  <div class="ll-ptrs ll-ptrs-compact" @wheel.passive="onChipsWheel">
+                    <span class="ll-ptr-chip-inline"><span class="ll-chip-label">N = <b class="ll-c-blue">{{ s.n || inputN }}</b></span></span>
+                    <span class="ll-ptr-chip-inline"><span class="ll-chip-label">Row = <b class="ll-c-orange">{{ s.row !== undefined && s.row >= 0 ? s.row : '—' }}</b></span></span>
+                    <span class="ll-ptr-chip-inline"><span class="ll-chip-label">Col = <b class="ll-c-purple">{{ s.col !== undefined && s.col >= 0 ? s.col : '—' }}</b></span></span>
+                    <span class="ll-ptr-chip-inline"><span class="ll-chip-label">Queens Placed = <b class="ll-c-green">{{ s.placedCount || 0 }} / {{ s.n || inputN }}</b></span></span>
+                    <span class="ll-ptr-chip-inline"><span class="ll-chip-label">Solutions = <b class="ll-c-green">{{ s.solCount || 0 }}</b></span></span>
                   </div>
 
                   <!-- Chessboard Container -->
@@ -1477,9 +1477,35 @@ onBeforeUnmount(() => {
 /* Viz Area */
 .ll-viz-wrap { flex-shrink: 0; background: var(--surface); border-bottom: 1px solid var(--border); position: relative; overflow-x: auto; overflow-y: auto; }
 .ll-perm-area { display: flex; flex-direction: column; align-items: stretch; min-height: 100%; width: 100%; min-width: 0; box-sizing: border-box; }
-.ll-ptrs { display: flex; gap: 8px; flex-wrap: wrap; padding: 8px 16px 4px; min-height: 36px; width: 100%; box-sizing: border-box; min-width: 0; }
+.ll-ptrs { display: flex; gap: 8px; flex-wrap: wrap; padding: 4px 14px; min-height: 28px; width: 100%; box-sizing: border-box; min-width: 0; align-items: center; }
+.ll-ptrs-compact {
+  flex-wrap: nowrap;
+  gap: 6px;
+  padding: 3px 14px 5px;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.ll-ptrs-compact::-webkit-scrollbar {
+  height: 3px;
+}
+.ll-ptrs-compact::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ll-ptrs-compact::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+.ll-ptrs-compact::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
 .ll-ptr-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px 10px; font-size: 12px; font-family: monospace; box-shadow: var(--shadow-sm); white-space: nowrap; flex-shrink: 0; }
+.ll-ptr-chip-inline { display: inline-flex; align-items: center; gap: 4px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 2px 8px; font-size: 11px; font-family: monospace; white-space: nowrap; flex-shrink: 0; line-height: 1.4; }
+.ll-chip-label { color: var(--text-muted, #8899aa); font-weight: 500; margin-right: 2px; }
 .ll-c-blue { color: var(--blue); } .ll-c-orange { color: var(--orange); } .ll-c-green { color: var(--green); } .ll-c-purple { color: var(--purple); } .ll-c-red { color: var(--red); }
+
 
 /* Chessboard Layout */
 .ll-board-container {

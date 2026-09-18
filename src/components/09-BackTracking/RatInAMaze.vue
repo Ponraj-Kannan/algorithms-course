@@ -1807,6 +1807,7 @@ onBeforeUnmount(() => {
 .ll-chip-label { color: var(--text-muted, #8899aa); font-weight: 500; margin-right: 2px; }
 .ll-c-blue { color: var(--blue); } .ll-c-orange { color: var(--orange); } .ll-c-green { color: var(--green); } .ll-c-purple { color: var(--purple); } .ll-c-red { color: var(--red); }
 
+
 /* Maze Board Layout */
 .ll-board-container {
   display: flex;
