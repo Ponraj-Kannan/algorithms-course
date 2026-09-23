@@ -95,3 +95,19 @@
 ---
 
 <WordSearch topic="Backtracking Algorithms" subTopic="Word Search" />
+
+---
+
+<CombinationSum topic="Backtracking Algorithms" subTopic="Combination Sum" />
+
+---
+
+<DistinctPermutations topic="Backtracking Algorithms" subTopic="Distinct Permutations of a String" />
+
+---
+
+<CheckKnightTourConfiguration topic="Backtracking Algorithms" subTopic="CheckKnightTourConfiguration" />
+
+---
+
+<KnightTour topic="Backtracking Algorithms" subTopic="The Knight's Tour Problem" />
