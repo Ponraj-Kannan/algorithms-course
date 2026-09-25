@@ -784,8 +784,8 @@ onBeforeUnmount(() => {
           <!-- Control Panel Toolbar -->
           <div class="ll-toolbar">
             <div class="ll-input-group">
-              <label>Board Size (N):</label>
-              <input
+              <label>Board:</label>
+              <!-- <input
                 type="number"
                 min="3"
                 max="8"
@@ -793,7 +793,7 @@ onBeforeUnmount(() => {
                 class="ll-text-input"
                 @keyup.enter="applyInput"
                 style="width: 48px;"
-              />
+              /> -->
             </div>
 
             <!-- Preset Configuration Selector -->
@@ -804,7 +804,7 @@ onBeforeUnmount(() => {
                 @click="loadPreset('ex1')"
                 title="LeetCode Example 1: Valid 5×5 Tour"
               >
-                Ex 1: Valid 5×5
+                Valid 5×5
               </button>
               <button
                 class="ll-preset-btn"
@@ -812,7 +812,7 @@ onBeforeUnmount(() => {
                 @click="loadPreset('ex2')"
                 title="LeetCode Example 2: Invalid Jump"
               >
-                Ex 2: Invalid Jump
+                Invalid Jump
               </button>
               <button
                 class="ll-preset-btn"
@@ -820,7 +820,7 @@ onBeforeUnmount(() => {
                 @click="loadPreset('ex3')"
                 title="Test Case 3: Invalid Start (grid[0][0] != 0)"
               >
-                Ex 3: Bad Start
+                Bad Start
               </button>
               <button
                 class="ll-preset-btn"
@@ -864,35 +864,10 @@ onBeforeUnmount(() => {
 
                   <!-- Chessboard Container (Knight Tour Visualization) -->
                   <div class="ll-board-container">
-                    <!-- Move Delta & Progress Info Card -->
-                    <div class="ll-tour-info-card">
-                      <div class="ll-tour-info-item">
-                        <span class="ll-tour-label">Current Move:</span>
-                        <span class="ll-tour-val">
-                          <b class="ll-c-purple">Step {{ s.step !== undefined ? s.step : '—' }}</b>
-                          <span class="ll-arrow">➔</span>
-                          <b class="ll-c-green">Step {{ s.targetStep !== undefined ? s.targetStep : '—' }}</b>
-                        </span>
-                      </div>
-                      <div class="ll-tour-info-divider"></div>
-                      <div class="ll-tour-info-item">
-                        <span class="ll-tour-label">Knight Vector:</span>
-                        <span class="ll-tour-val" :class="s.isVectorValid ? 'll-c-green' : s.jumpStatus === 'no_move_found' ? 'll-c-red' : 'll-c-blue'">
-                          {{ s.vectorStr || '(Δr: —, Δc: —)' }}
-                        </span>
-                      </div>
-                      <div class="ll-tour-info-divider"></div>
-                      <div class="ll-tour-info-item">
-                        <span class="ll-tour-label">Tour Progress:</span>
-                        <span class="ll-tour-val">
-                          <b>{{ s.step !== undefined ? s.step + 1 : 0 }}</b> / {{ (s.n || currentN) * (s.n || currentN) }}
-                          <span class="ll-pct">({{ Math.round(((s.step !== undefined ? s.step + 1 : 0) / ((s.n || currentN) * (s.n || currentN))) * 100) }}%)</span>
-                        </span>
-                      </div>
-                    </div>
 
                     <!-- Chessboard Frame -->
-                    <div class="ll-board-frame">
+                    <div class="gp-tier-title">Chessboard Matrix <code>int[][] grid</code></div>
+                    <div class="ll-board-frame kt-board-frame">
                       <!-- Column Headers -->
                       <div class="ll-col-indices">
                         <div class="ll-axis-spacer"></div>
@@ -973,13 +948,6 @@ onBeforeUnmount(() => {
                         </div>
                       </div>
                     </div>
-
-                    <!-- Knight Invariant Indicator -->
-                    <div class="ll-rule-pill">
-                      <span class="ll-rule-tag">L-Shape Condition:</span>
-                      <code>|Δr|·|Δc| = 2</code> &nbsp;&harr;&nbsp; <code>Δr² + Δc² = 5</code>
-                      <span class="ll-rule-desc">(&plusmn;2 rows, &plusmn;1 col OR &plusmn;1 row, &plusmn;2 cols)</span>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -989,12 +957,11 @@ onBeforeUnmount(() => {
 
               <!-- Color Legend -->
               <div class="ll-legend">
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-knight"></span>Knight (♞)</span>
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-target"></span>Next Target (Step + 1)</span>
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-candidate"></span>Candidate Move (?)</span>
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-valid"></span>Valid Jump (✓)</span>
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-visited"></span>Visited Path</span>
-                <span class="ll-leg"><span class="ll-legdot ll-legdot-conflict"></span>Conflict / Illegal (✕)</span>
+                <span class="ll-leg"><span class="ll-legdot ll-legdot-target"></span>Next Target</span>
+                <span class="ll-leg"><span class="ll-legdot ll-legdot-candidate"></span>Candidate Move ?</span>
+                <span class="ll-leg"><span class="ll-legdot ll-legdot-valid"></span>Valid Jump</span>
+                <!-- <span class="ll-leg"><span class="ll-legdot ll-legdot-visited"></span>Visited Path</span> -->
+                <span class="ll-leg"><span class="ll-legdot ll-legdot-conflict"></span>Conflict / Illegal</span>
               </div>
 
               <!-- Variable Frames & Call Stack -->
@@ -1523,9 +1490,22 @@ onBeforeUnmount(() => {
 .ll-board-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 8px 16px 12px;
-  gap: 8px;
+  align-items: flex-start;
+  padding: 6px 14px 10px;
+  gap: 5px;
+}
+
+.gp-tier-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--muted);
+  margin-top: 4px;
+  margin-bottom: 2px;
+  font-family: 'Consolas', monospace;
+  border-left: 3px solid var(--coral);
+  padding-left: 6px;
 }
 
 .ll-tour-info-card {
@@ -1582,23 +1562,24 @@ onBeforeUnmount(() => {
 }
 
 .ll-board-frame {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
-  background: #cbd5e1;
-  border: 2px solid #94a3b8;
-  border-radius: 6px;
-  padding: 4px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  box-shadow: var(--shadow-sm);
 }
+
+.kt-board-frame { gap: 4px; }
 
 .ll-col-indices {
   display: flex;
-  align-items: center;
-  height: 20px;
+  margin-bottom: 2px;
 }
 
 .ll-axis-spacer {
-  width: 22px;
+  width: 28px;
   height: 20px;
 }
 
@@ -1608,15 +1589,20 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: monospace;
   font-size: 11px;
   font-weight: 700;
-  color: #64748b;
+  color: var(--muted);
+  font-family: monospace;
+  margin: 0 1px;
 }
 
 .ll-row-label {
-  width: 22px;
+  width: 28px;
   height: 44px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  font-family: monospace;
 }
 
 .ll-axis-cur {
@@ -1627,32 +1613,35 @@ onBeforeUnmount(() => {
 .ll-board-rows {
   display: flex;
   flex-direction: column;
+  gap: 1px;
 }
 
 .ll-board-row {
   display: flex;
   align-items: center;
+  gap: 1px;
 }
 
 .ll-chess-cell {
-  width: 44px;
-  height: 44px;
+  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid #cbd5e1;
-  font-family: monospace;
-  position: relative;
-  transition: all .2s ease;
+  border-radius: 3px;
   user-select: none;
+  transition: all .18s;
+  width: 44px;
+  height: 44px;
+  font-family: monospace;
 }
 
 .ll-cell-light {
-  background-color: #f8fafc;
+  background-color: #f0d9b5;
 }
 
 .ll-cell-dark {
-  background-color: #e2e8f0;
+  background-color: #b58863;
 }
 
 .ll-cell-knight {
@@ -1702,46 +1691,60 @@ onBeforeUnmount(() => {
   position: absolute;
   top: 2px;
   left: 3px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  color: #64748b;
+  color: rgba(0,0,0,.35);
   line-height: 1;
   z-index: 2;
+  font-family: monospace;
+}
+
+/* Light text on dark (brown) squares */
+.ll-cell-dark .ll-step-num {
+  color: rgba(255,255,255,.55);
+}
+
+/* Dark text on light (tan) squares */
+.ll-cell-light .ll-step-num {
+  color: rgba(0,0,0,.4);
 }
 
 .ll-step-num-active {
-  color: #0f172a;
+  color: #1d4ed8 !important;
   font-weight: 900;
 }
 
 .ll-knight-piece {
   font-size: 26px;
   line-height: 1;
-  color: #1e1b4b;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  color: #7a5a3f;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   z-index: 12;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
 
 .ll-candidate-marker {
   font-size: 15px;
   font-weight: 900;
-  color: #7c3aed;
+  color: #6d28d9;
   z-index: 5;
+  text-shadow: 0 1px 2px rgba(0,0,0,.15);
 }
 
 .ll-valid-marker {
   font-size: 17px;
   font-weight: 900;
-  color: #16a34a;
+  color: #15803d;
   z-index: 5;
+  text-shadow: 0 1px 2px rgba(0,0,0,.12);
 }
 
 .ll-conflict-marker {
   font-size: 17px;
   font-weight: 900;
-  color: #dc2626;
+  color: #b91c1c;
   z-index: 5;
+  text-shadow: 0 1px 2px rgba(0,0,0,.12);
 }
 
 .ll-trail-badge {
@@ -1750,8 +1753,9 @@ onBeforeUnmount(() => {
   right: 3px;
   font-size: 14px;
   line-height: 1;
-  color: #16a34a;
+  color: #15803d;
   font-weight: 900;
+  text-shadow: 0 1px 2px rgba(0,0,0,.1);
 }
 
 .ll-target-pulse {

@@ -634,10 +634,10 @@ onBeforeUnmount(() => {
               <input type="number" min="3" max="6" v-model.number="inputN" class="ll-text-input" style="width:48px" @keyup.enter="applyInput" />
             </div>
             <div class="ll-preset-group">
-              <button class="ll-preset-btn" @click="loadPreset(3)" title="3x3 — quick dead ends">N=3</button>
-              <button class="ll-preset-btn" @click="loadPreset(4)" title="4x4 — no solution">N=4</button>
-              <button class="ll-preset-btn" @click="loadPreset(5)" title="5x5 — solvable">N=5</button>
-              <button class="ll-preset-btn" @click="loadPreset(6)" title="6x6 — solvable">N=6</button>
+              <button class="ll-preset-btn" @click="loadPreset(3)" title="3x3 — quick dead ends">3</button>
+              <button class="ll-preset-btn" @click="loadPreset(4)" title="4x4 — no solution">4</button>
+              <button class="ll-preset-btn" @click="loadPreset(5)" title="5x5 — solvable">5</button>
+              <button class="ll-preset-btn" @click="loadPreset(6)" title="6x6 — solvable">6</button>
             </div>
             <button class="ll-viz-btn" @click="applyInput">&#9654; Visualize</button>
             <div class="ll-nav-controls">
@@ -709,7 +709,7 @@ onBeforeUnmount(() => {
                     </div>
 
                     <!-- Tier 2: 8 Move Vectors -->
-                    <div class="gp-tier-title">Tier 2 &mdash; 8 Knight Move Vectors &amp; Bounds Check</div>
+                    <!-- <div class="gp-tier-title">Tier 2 &mdash; 8 Knight Move Vectors &amp; Bounds Check</div>
                     <div class="kt-moves-grid">
                       <div
                         v-for="(lbl, ki) in ['(+2,+1)','(+1,+2)','(-1,+2)','(-2,+1)','(-2,-1)','(-1,-2)','(+1,-2)','(+2,-1)']"
@@ -729,10 +729,10 @@ onBeforeUnmount(() => {
                         <span v-else-if="s.k === ki && s.safeStatus === 'valid'" class="kt-val-badge">[VALID MOVE]</span>
                         <span v-else class="kt-idle-badge">—</span>
                       </div>
-                    </div>
+                    </div> -->
 
                     <!-- Tier 3: Move Sequence Tray -->
-                    <div class="gp-tier-title">Tier 3 &mdash; Move Sequence <code>Step 0 &rarr; Step {{ displayN * displayN - 1 }}</code></div>
+                    <!-- <div class="gp-tier-title">Tier 3 &mdash; Move Sequence <code>Step 0 &rarr; Step {{ displayN * displayN - 1 }}</code></div>
                     <div class="kt-seq-panel">
                       <div class="kt-seq-meta">Steps visited: <b class="ll-c-green">{{ cellsVisited }}</b> / <b class="ll-c-blue">{{ displayN * displayN }}</b></div>
                       <div class="kt-seq-slots">
@@ -747,10 +747,10 @@ onBeforeUnmount(() => {
                         </div>
                         <div v-if="moveSequence.length === 0" class="kt-seq-empty">No moves yet</div>
                       </div>
-                    </div>
+                    </div> -->
 
                     <!-- Tier 4: Dead-End / Backtrack Monitor -->
-                    <div class="gp-tier-title">Tier 4 &mdash; Backtrack Monitor</div>
+                    <!-- <div class="gp-tier-title">Tier 4 &mdash; Backtrack Monitor</div>
                     <div class="kt-deadend-panel" :class="{ 'kt-de-active': s.isDeadEnd || s.isBacktrack, 'kt-de-solved': s.solved }">
                       <template v-if="s.solved">
                         <span class="kt-de-icon kt-de-solved-icon">OK</span>
@@ -768,10 +768,10 @@ onBeforeUnmount(() => {
                         <span class="kt-de-icon kt-de-idle-icon">--</span>
                         <div><div class="kt-de-title">Monitoring</div><div class="kt-de-detail">Watching for dead ends. Condition: all 8 moves blocked at current cell → backtrack.</div></div>
                       </template>
-                    </div>
+                    </div> -->
 
                     <!-- Tier 5: Memory Stats -->
-                    <div class="gp-tier-title">Tier 5 &mdash; Memory &amp; Statistics</div>
+                    <!-- <div class="gp-tier-title">Tier 5 &mdash; Memory &amp; Statistics</div>
                     <div class="gp-mem-bar">
                       <span class="gp-mem-item"><span class="gp-mem-label">Board Memory:</span> <code>{{ memBoard }}</code></span>
                       <span class="gp-mem-sep">|</span>
@@ -780,7 +780,7 @@ onBeforeUnmount(() => {
                       <span class="gp-mem-item"><span class="gp-mem-label">Backtracks:</span> <code>{{ displayBacktracks }}</code></span>
                       <span class="gp-mem-sep">|</span>
                       <span class="gp-mem-item"><span class="gp-mem-label">Stack Depth:</span> <code>{{ stackDepthStr }}</code></span>
-                    </div>
+                    </div> -->
 
                   </div>
                   <!-- END ll-board-container -->
@@ -791,12 +791,11 @@ onBeforeUnmount(() => {
 
               <!-- Legend -->
               <div class="ll-legend">
-                <span class="ll-leg"><span class="ll-legdot kt-legdot-knight"></span>[KNIGHT] Current</span>
-                <span class="ll-leg"><span class="ll-legdot kt-legdot-visited"></span>[VISITED] Placed</span>
-                <span class="ll-leg"><span class="ll-legdot kt-legdot-unvisited"></span>[UNVISITED: -1]</span>
-                <span class="ll-leg"><span class="ll-legdot kt-legdot-target"></span>[TARGET] Candidate</span>
-                <span class="ll-leg"><span class="ll-legdot kt-legdot-bt"></span>[BACKTRACK]</span>
-                <span class="ll-leg"><span class="ll-legdot kt-legdot-done"></span>[COMPLETE]</span>
+                <span class="ll-leg"><span class="ll-legdot kt-legdot-visited"></span>VISITED</span>
+                <span class="ll-leg"><span class="ll-legdot kt-legdot-unvisited"></span>UNVISITED</span>
+                <span class="ll-leg"><span class="ll-legdot kt-legdot-target"></span>TARGET</span>
+                <span class="ll-leg"><span class="ll-legdot kt-legdot-bt"></span>BACKTRACK</span>
+                <span class="ll-leg"><span class="ll-legdot kt-legdot-done"></span>COMPLETE</span>
               </div>
 
               <!-- Call Stack -->
@@ -1051,7 +1050,7 @@ onBeforeUnmount(() => {
 .ll-legdot { width:11px; height:11px; border-radius:3px; flex-shrink:0; display:inline-block; }
 .kt-legdot-knight { background:#1e293b; border:1.5px solid var(--orange); }
 .kt-legdot-visited { background:#eff6ff; border:1.5px solid #93c5fd; }
-.kt-legdot-unvisited { background:#b58863; border:1.5px solid #94a3b8; }
+.kt-legdot-unvisited { background:#b58863; border:1.5px solid #775940; }
 .kt-legdot-target { background:#fef9c3; border:1.5px dashed #f59e0b; }
 .kt-legdot-bt { background:#fee2e2; border:1.5px solid var(--red); }
 .kt-legdot-done { background:#dcfce7; border:1.5px solid var(--green); }

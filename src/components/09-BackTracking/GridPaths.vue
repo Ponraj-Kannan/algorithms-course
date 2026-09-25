@@ -732,7 +732,7 @@ onBeforeUnmount(() => {
                     </div>
 
                     <!-- Tier 5: Memory Footprint Summary Bar -->
-                    <div class="gp-tier-title">Tier 5 &mdash; Memory Footprint</div>
+                    <!-- <div class="gp-tier-title">Tier 5 &mdash; Memory Footprint</div>
                     <div class="gp-mem-bar">
                       <span class="gp-mem-item"><span class="gp-mem-label">Grid Matrix:</span> <code>{{ memGrid }}</code></span>
                       <span class="gp-mem-sep">|</span>
@@ -741,7 +741,7 @@ onBeforeUnmount(() => {
                       <span class="gp-mem-item"><span class="gp-mem-label">allPaths:</span> <code>{{ memAllPaths }}</code></span>
                       <span class="gp-mem-sep">|</span>
                       <span class="gp-mem-item"><span class="gp-mem-label">Stack Depth:</span> <code>{{ stackDepth }}</code></span>
-                    </div>
+                    </div> -->
 
                   </div>
                   <!-- END ll-board-container -->

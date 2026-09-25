@@ -746,7 +746,7 @@ onBeforeUnmount(() => {
                     </div>
 
                     <!-- Tier 6: Memory Metrics Readout -->
-                    <div class="gp-tier-title">Tier 6 &mdash; Memory Metrics</div>
+                    <!-- <div class="gp-tier-title">Tier 6 &mdash; Memory Metrics</div>
                     <div class="gp-mem-bar">
                       <span class="gp-mem-item"><span class="gp-mem-label">Character Array:</span> <code>{{ memChars }}</code></span>
                       <span class="gp-mem-sep">|</span>
@@ -757,7 +757,7 @@ onBeforeUnmount(() => {
                       <span class="gp-mem-item"><span class="gp-mem-label">Stack Depth:</span> <code>{{ stackDepthStr }}</code></span>
                       <span class="gp-mem-sep">|</span>
                       <span class="gp-mem-item"><span class="gp-mem-label">Perms Found:</span> <code>{{ memResults }}</code></span>
-                    </div>
+                    </div> -->
 
                   </div>
                   <!-- END ll-board-container -->
@@ -769,11 +769,10 @@ onBeforeUnmount(() => {
 
               <!-- Color Legend -->
               <div class="ll-legend">
-                <span class="ll-leg"><span class="ll-legdot dp-legdot-active"></span>[ACTIVE] Current i</span>
-                <span class="ll-leg"><span class="ll-legdot dp-legdot-visited"></span>[VISITED] Locked [T]</span>
-                <span class="ll-leg"><span class="ll-legdot dp-legdot-valid"></span>[VALID] Chosen</span>
-                <span class="ll-leg"><span class="ll-legdot dp-legdot-dup"></span>[DUPLICATE PRUNED]</span>
-                <span class="ll-leg"><span class="ll-legdot dp-legdot-match"></span>[MATCH] Perm found</span>
+                <span class="ll-leg"><span class="ll-legdot dp-legdot-visited"></span>VISITED</span>
+                <span class="ll-leg"><span class="ll-legdot dp-legdot-valid"></span>VALID</span>
+                <span class="ll-leg"><span class="ll-legdot dp-legdot-dup"></span>DUPLICATE PRUNED</span>
+                <span class="ll-leg"><span class="ll-legdot dp-legdot-match"></span>MATCH</span>
               </div>
 
               <!-- Recursion Call Stack Frame Area -->
