@@ -21,7 +21,3 @@ src: ./slides/dp/main.md
 ---
 src: ./slides/backtracking/main.md
 ---
-
----
-src: ./slides/twopointers/main.md
----
