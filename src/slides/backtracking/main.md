@@ -45,4 +45,11 @@
 <ValidPalindromeII topic="Two Pointer Algorithms" subTopic="Valid Palindrome II" />
 
 
+---
+
+<MergeSortedArray topic="Two Pointer Algorithms" subTopic="Merge Sorted Array" />
+
+---
+
+<MoveZeroes topic="Two Pointer Algorithms" subTopic="Move Zeroes" />
 
