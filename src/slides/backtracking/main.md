@@ -38,8 +38,4 @@
 
 ---
 
-<ReverseVowelsOfAString topic="Two Pointer Algorithms" subTopic="Reverse Vowels of a String" />
-
----
-
 <ValidPalindromeII topic="String Algorithms" subTopic="Valid Palindrome II" />
