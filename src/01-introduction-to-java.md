@@ -23,5 +23,5 @@ src: ./slides/backtracking/main.md
 ---
 
 ---
-src: "./slides/slidingwindow/main.md"
+src: ./slides/slidingwindow/main.md
 ---
