@@ -1,21 +1,17 @@
-
 <ReverseString topic="Two Pointer Algorithms" subTopic="Reverse String" />
 
 ---
 
-<ReverseVowelsOfAString topic="Two Pointer Algorithms" subTopic="Reverse Vowels of a String" />
+<MergeStringsAlternately topic="Two Pointer Algorithms" subTopic="Merge Strings Alternately" />
 
 ---
 
-<ValidPalindromeII topic="String Algorithms" subTopic="Valid Palindrome II" />
+<ValidPalindromeII topic="Two Pointer Algorithms" subTopic="Valid Palindrome II" />
+
 
 ---
 
 <MergeSortedArray topic="Two Pointer Algorithms" subTopic="Merge Sorted Array" />
-
----
-
-<MoveZeroes topic="Two Pointer Algorithms" subTopic="Move Zeroes" />
 
 ---
 
