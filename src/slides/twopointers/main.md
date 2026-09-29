@@ -16,3 +16,19 @@
 ---
 
 <RemoveDuplicatesFromSortedArray topic="Two Pointer Algorithms" subTopic="Remove Duplicates from Sorted Array" />
+
+---
+
+<ThreeSum topic="Two Pointer Algorithms" subTopic="3Sum" />
+
+---
+
+<RotateArray topic="Two Pointer Algorithms" subTopic="Rotate Array" />
+
+---
+
+<TrappingRainWater topic="Two Pointer Algorithms" subTopic="Trapping Rain Water" />
+
+---
+
+<ContainerWithMostWater topic="Two Pointer Algorithms" subTopic="Container With Most Water" />
