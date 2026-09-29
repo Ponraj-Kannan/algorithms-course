@@ -652,8 +652,8 @@ onBeforeUnmount(()=>{
 </template>
 
 <style scoped>
-.ll-root*{box-sizing:border-box;}
-.ll-root*,.ll-root,.row-main{scrollbar-width:none!important;-ms-overflow-style:none!important;}
+.ll-root *{box-sizing:border-box;}
+.ll-root *,.ll-root,.row-main{scrollbar-width:none!important;-ms-overflow-style:none!important;}
 .ll-root *::-webkit-scrollbar,.ll-root::-webkit-scrollbar,.row-main::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;}
 .ll-root{
   --coral:#F04D4D;--coral-dark:#d93e3e;--coral-light:#fff0f0;
